@@ -207,6 +207,37 @@ class Obras extends model
 		return $array;
 	}
 
+	public function getInfoObraCliente($id, $id_company, $id_cliente)
+	{
+
+		$array = array();
+
+		$sql = $this->db->prepare("
+		
+		SELECT * FROM  
+			obra obr
+			INNER JOIN servico sev ON(obr.id_servico = sev.id)
+			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
+			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
+			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)	
+			
+			WHERE obr.id = :id AND obr.id_company = :id_company AND obr.id_cliente = :id_cliente");
+		$sql->bindValue(':id', $id);
+		$sql->bindValue(':id_company', $id_company);
+		$sql->bindValue(':id_cliente', $id_cliente);
+
+		$sql->execute();
+
+
+		if ($sql->rowCount() > 0) {
+			$array = $sql->fetch();
+		} else { 
+			return false;
+		}
+
+		return $array;
+	}
+
 	public function delete($id, $id_company)
 	{
 

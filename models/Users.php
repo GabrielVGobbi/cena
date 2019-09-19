@@ -97,12 +97,21 @@ class Users extends model
 		} else
 			return 0;
 	}
-
+	
 	public function getId()
 	{
 		if (isset($this->userInfo['id'])) {
 
 			return $this->userInfo['id'];
+		} else
+			return 0;
+	}
+
+	public function getIdCliente()
+	{
+		if (isset($this->userInfo['id_cliente'])) {
+
+			return $this->userInfo['id_cliente'];
 		} else
 			return 0;
 	}

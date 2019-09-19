@@ -21,30 +21,39 @@
                     <!-- /.box-header -->
                     <!-- form start -->
                     <div class="box-body">
-                        <table class="table table-striped">
-                            <thead>
-                                <tr>
-                                    <th>Nome da Etapa</th>
-                                    <th style="width: 240px">&nbsp;</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach ($etapasAdministrativas as $etpAdm) : ?>
+                        <div class="table-responsive">
+                            <table class="table table-bordered">
+                                <thead>
                                     <tr>
-                                        <td><?php echo $etpAdm['etp_nome']; ?></td>
+                                        <th style="width:120px;"> Ações </th>
+                                        <th style="width:;">Nome da Etapa</th>
+                                        <th style="width:10%; ">&nbsp;</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($etapasAdministrativas as $etpAdm) : ?>
+                                    <?php include('modalEditarEtapa.php'); ?>
+                                        <tr>
+                                            <td>
+                                                <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpAdm['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/adm"><i class="ion ion-trash-a"></i></a>
+                                                <a type="button" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info" id="modalEditarEtapa_open<?php echo $etpAdm['id'];?>"><i class="ion-android-create"></i></a>
+                                            </td>
+
+                                            <td><?php echo $etpAdm['etp_nome']; ?></td>
+                                            <td>
+                                                <a href="<?php echo BASE_URL; ?>concessionarias/add_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpAdm['id']; ?>/adm" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Adicionar</a>
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <tr>
+                                        <td colspan="2"><input placeholder="Add Etapa Administrativa" id="etapa_input_adm" type="text" value="" name="add_etapa"></td>
                                         <td>
-                                            <a href="<?php echo BASE_URL; ?>concessionarias/add_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpAdm['id']; ?>/adm" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Adicionar</a>
+                                            <button id="new_etapa_adm" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Novo</button>
                                         </td>
                                     </tr>
-                                <?php endforeach; ?>
-                                <tr>
-                                    <td><input placeholder="Add Etapa Administrativa" id="etapa_input_adm" type="text" value="" name="add_etapa"></td>
-                                    <td>
-                                        <button id="new_etapa_adm" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Novo</button>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -73,7 +82,6 @@
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
-                                
                             </tbody>
                         </table>
                     </div>
@@ -86,6 +94,12 @@
 
 <script>
     $(function() {
+
+        $('#modalEditarEtapa_open'+<?php echo $etpAdm['id'];?>).on('click', function(){
+            aler('oi');
+            $('#modalCadastro').modal('show');
+        });
+
         $('#new_etapa_adm').on('click', function(event) {
 
             var q = $('#etapa_input_adm').val();

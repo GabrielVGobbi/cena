@@ -142,7 +142,13 @@ class controller
 
 
 
-		include 'views/obras/etapas/check.php';
+		include ('views/obras/etapas/check.php');
+	}
+
+	public function loadEtapaCheckCliente($check, $etp, $id_obra, $tipo)
+	{
+
+		include ('views/obrasClientes/etapas/check.php');
 	}
 
 	public function getQuntDocEtapa($id_etapa_obra)
@@ -163,7 +169,7 @@ class controller
 					$msg = 'Concluido';
 					$check = 'success';
 					$atraso = 'success';
-					echo '0';
+				
 				} else {
 					$data_abertura = $data_abertura;
 					$data_abertura = str_replace('/', '-', $data_abertura);
@@ -205,6 +211,7 @@ class controller
 			include 'views/obras/tempo.php';
 
 		}else {
+	
 			
 		}
 

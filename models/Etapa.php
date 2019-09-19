@@ -134,15 +134,14 @@ class Etapa extends model
         }
     }
 
-    public function delete($id, $id_company)
+    public function delete($id_etapa, $id_company)
     {
         $tipo = 'Deletado';
 
-        if (isset($Parametros['id' . $this->tabela]) && $Parametros['id' . $this->tabela] != '') {
+        if (isset($id_etapa) && $id_etapa != '') {
 
-            $sql = $this->db->prepare("DELETE FROM $this->tabela WHERE id_$this->tabela = :id AND id_company = :id_company");
-            $sql->bindValue(":id", $id);
-            $sql->bindValue(":id_company", $id_company);
+            $sql = $this->db->prepare("DELETE FROM etapa WHERE id = :id_etapa");
+            $sql->bindValue(":id_etapa", $id_etapa);
 
             if ($sql->execute()) {
                 controller::alert('success', 'Deletado com sucesso!!');

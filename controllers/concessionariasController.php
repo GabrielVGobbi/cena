@@ -167,6 +167,22 @@ class concessionariasController extends controller
         }
     }
 
+    public function delete_etapa($id, $id_concessionaria, $id_servico, $tipo)
+    {
+
+        if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_delete')) {
+
+            if($id != ''){
+                $result = $this->etapa->delete($id, $this->user->getCompany());
+            }
+
+            header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/editService'.'/'.$id_concessionaria.'/'.$id_servico.'?tipo='.$tipo);
+            exit();
+        } else {
+            $this->loadViewError();
+        }
+    }
+
 
     public function addValicao($result)
     {

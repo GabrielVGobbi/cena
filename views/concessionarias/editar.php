@@ -51,7 +51,7 @@
 												<?php foreach ($servicos_concessionaria as $scon) : ?>
 													<tr>
 														<td>
-															<a type="button" data-toggle="tooltip" title="" data-original-title="Tarefas" class="btn btn-info" href="<?php echo BASE_URL; ?>/concessionarias/editService/<?php echo $tableInfo['id']; ?>/<?php echo $scon['id']; ?>"><i class="ion ion-clipboard"></i></a>
+															<a type="button" data-toggle="tooltip" title="" data-original-title="Tarefas" class="btn btn-info" href="<?php echo BASE_URL; ?>concessionarias/editService/<?php echo $tableInfo['id']; ?>/<?php echo $scon['id']; ?>"><i class="ion ion-clipboard"></i></a>
 															<a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>servicos/delete/<?php echo $scon['id']; ?>"><i class="ion ion-trash-a"></i></a>
 														</td>
 														<td><?php echo $scon['id']; ?></td>
