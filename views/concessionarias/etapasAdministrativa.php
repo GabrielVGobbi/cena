@@ -32,11 +32,11 @@
                                 </thead>
                                 <tbody>
                                     <?php foreach ($etapasAdministrativas as $etpAdm) : ?>
-                                    <?php include('modalEditarEtapa.php'); ?>
+                                        <?php include('modalEditarEtapa.php'); ?>
                                         <tr>
                                             <td>
                                                 <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpAdm['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/adm"><i class="ion ion-trash-a"></i></a>
-                                                <a type="button" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info" id="modalEditarEtapa_open<?php echo $etpAdm['id'];?>"><i class="ion-android-create"></i></a>
+                                                <a type="button" class="btn btn-info" onclick="modalEditar(<?php echo $etpAdm['id']; ?>, 'Adm')"><i class="ion-android-create"></i></a>
                                             </td>
 
                                             <td><?php echo $etpAdm['etp_nome']; ?></td>
@@ -95,10 +95,7 @@
 <script>
     $(function() {
 
-        $('#modalEditarEtapa_open'+<?php echo $etpAdm['id'];?>).on('click', function(){
-            aler('oi');
-            $('#modalCadastro').modal('show');
-        });
+
 
         $('#new_etapa_adm').on('click', function(event) {
 

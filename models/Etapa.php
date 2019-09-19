@@ -103,22 +103,25 @@ class Etapa extends model
         return $this->db->lastInsertId();
     }
 
-    public function edit($Parametros)
+    public function edit($id_company,$Parametros)
     {
         $tipo = 'Editado';
 
-        if (isset($Parametros['id' . $this->tabela]) && $Parametros['id' . $this->tabela] != '') {
+        $etp_nome = $Parametros['nome_etapa'];
+        $id_etapa  = $Parametros['id_etapa'];
+
+        if (isset($id_etapa) && $id_etapa != '') {
             try {
 
-                $sql = $this->db->prepare("UPDATE $this->tabela SET 
+                $sql = $this->db->prepare("UPDATE etapa SET 
 					
-					example = :example
+					etp_nome = :etp_nome
 
-					WHERE id_$this->tabela = :id
+					WHERE id = :id_etapa
 	        	");
 
-                $sql->bindValue(":example", $example);
-                $sql->bindValue(":id", $Parametros['id' . $this->tabela]);
+                $sql->bindValue(":etp_nome", $etp_nome);
+                $sql->bindValue(":id_etapa", $id_etapa);
 
                 if ($sql->execute()) {
                     controller::alert('success', 'Editado com sucesso!!');
@@ -126,11 +129,12 @@ class Etapa extends model
                     controller::alert('danger', 'Erro ao fazer a edição!!');
                 }
             } catch (PDOExecption $e) {
+
                 $sql->rollback();
                 error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
             }
         } else {
-            controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
+            controller::alert('danger', 'Não foi selecionado nada!!');
         }
     }
 
@@ -359,7 +363,6 @@ class Etapa extends model
     {
         $tipo = 'Editado';
 
-error_log(print_r($Parametros,1));
 
         if (isset($id_etapa) && $id_etapa != '') {
 

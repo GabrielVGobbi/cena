@@ -1,38 +1,45 @@
-function lerMensagem(id_not_user, link){
-    
-    $(function(){
+function modalEditar(id, tipo) {
+
+    $('#modalEditar'+ tipo + id).modal('show');
+
+
+}
+
+function lerMensagem(id_not_user, link) {
+
+    $(function () {
 
         $.ajax({
 
             url: BASE_URL + 'ajax/lerNotificacao',
             type: 'POST',
             data: {
-                id_not_user: id_not_user 
+                id_not_user: id_not_user
             },
             dataType: 'json',
-            success: function(json) {
-             
+            success: function (json) {
+
                 window.location.href = link;
 
             },
         });
-        
+
     });
-    
+
 }
 
 
-$(function() {
+$(function () {
     $('[data-toggle="popover"]').popover({ html: true });
 
-    $(document).on('click', '.pop-hide', function() {
+    $(document).on('click', '.pop-hide', function () {
         $('.popover').popover('hide');
     });
 
 });
 
-$(function() {
-    
+$(function () {
+
     //Initialize Select2 Elements
     $('.select2').select2()
 
@@ -41,29 +48,29 @@ $(function() {
 
     //Datemask dd/mm/yyyy
     $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
-        //Datemask2 mm/dd/yyyy
+    //Datemask2 mm/dd/yyyy
     $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
-        //Money Euro
+    //Money Euro
     $('[data-mask]').inputmask()
 
     //Date range picker
     $('#reservation').daterangepicker()
-        //Date range picker with time picker
+    //Date range picker with time picker
     $('#reservationtime').daterangepicker({ timePicker: true, timePickerIncrement: 30, format: 'MM/DD/YYYY h:mm A' })
-        //Date range as a button
+    //Date range as a button
     $('#daterange-btn').daterangepicker({
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            startDate: moment().subtract(29, 'days'),
-            endDate: moment()
+        ranges: {
+            'Today': [moment(), moment()],
+            'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+            'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+            'This Month': [moment().startOf('month'), moment().endOf('month')],
+            'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
         },
-        function(start, end) {
+        startDate: moment().subtract(29, 'days'),
+        endDate: moment()
+    },
+        function (start, end) {
             $('#daterange-btn span').html(start.format('MMMM D, YYYY') + ' - ' + end.format('MMMM D, YYYY'))
         }
     )
@@ -75,15 +82,15 @@ $(function() {
 
     //iCheck for checkbox and radio inputs
     $('input[type="checkbox"].minimal, input[type="radio"].minimal').iCheck({
-            checkboxClass: 'icheckbox_minimal-blue',
-            radioClass: 'iradio_minimal-blue'
-        })
-        //Red color scheme for iCheck
+        checkboxClass: 'icheckbox_minimal-blue',
+        radioClass: 'iradio_minimal-blue'
+    })
+    //Red color scheme for iCheck
     $('input[type="checkbox"].minimal-red, input[type="radio"].minimal-red').iCheck({
-            checkboxClass: 'icheckbox_minimal-red',
-            radioClass: 'iradio_minimal-red'
-        })
-        //Flat red color scheme for iCheck
+        checkboxClass: 'icheckbox_minimal-red',
+        radioClass: 'iradio_minimal-red'
+    })
+    //Flat red color scheme for iCheck
     $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
         checkboxClass: 'icheckbox_flat-yellow',
         radioClass: 'iradio_flat-green'
@@ -91,7 +98,7 @@ $(function() {
 
     //Colorpicker
     $('.my-colorpicker1').colorpicker()
-        //color picker with addon
+    //color picker with addon
     $('.my-colorpicker2').colorpicker()
 
     //Timepicker
@@ -99,7 +106,7 @@ $(function() {
         showInputs: false
     })
 })
-$(function() {
+$(function () {
 
 
 
@@ -111,29 +118,29 @@ $(function() {
 
 
     //marcar todos os CheckBox
-    $('#marcarTodos').on('ifChecked', function(event) {
-        $('.check').each(function() {
+    $('#marcarTodos').on('ifChecked', function (event) {
+        $('.check').each(function () {
             $(this).iCheck('check');
         });
     });
 
     //Desmarcar todos os checkbox 
-    $('#marcarTodos').on('ifUnchecked', function(event) {
-        $('.check').each(function() {
+    $('#marcarTodos').on('ifUnchecked', function (event) {
+        $('.check').each(function () {
             $(this).iCheck('uncheck');
         });
     });
 
 
-    $('#mercado_live').on('ifChecked', function(event) {
+    $('#mercado_live').on('ifChecked', function (event) {
         $('.dados-ml').show();
     });
 
-    $('#mercado_live').on('ifUnchecked', function(event) {
+    $('#mercado_live').on('ifUnchecked', function (event) {
         $('.dados-ml').hide();
     });
 
-    $(".mailbox-star").click(function(e) {
+    $(".mailbox-star").click(function (e) {
         e.preventDefault();
         //detect type
         var $this = $(this).find("a > i");
@@ -156,9 +163,9 @@ function openFiltro($name) {
     $('#filtro_' + $name).toggle();
 }
 
-$(function() {
+$(function () {
 
-    $('.new_servico').on('click', function(e) {
+    $('.new_servico').on('click', function (e) {
 
         e.preventDefault();
 
@@ -169,7 +176,7 @@ $(function() {
 
     });
 
-    $('.new_documento').on('click', function(e) {
+    $('.new_documento').on('click', function (e) {
 
         e.preventDefault();
 
@@ -180,7 +187,7 @@ $(function() {
 
     });
 
-    $('.new_etapa').on('click', function(e) {
+    $('.new_etapa').on('click', function (e) {
 
         e.preventDefault();
 
@@ -193,26 +200,26 @@ $(function() {
 
     });
 
-    $('.new_service').on('click', function(e) {
+    $('.new_service').on('click', function (e) {
 
         $('#new_service').toggle();
         $('#service_ok').toggle();
 
     });
 
-    $('.new_obra').on('click', function(e) {
+    $('.new_obra').on('click', function (e) {
 
         $('#new_obra').toggle();
         $('#obra_ok').toggle();
 
-        $('.file_doc').attr('name','documento_arquivo');
+        $('.file_doc').attr('name', 'documento_arquivo');
 
     });
 
-    
 
 
-    $('.service_add').on('change', function(e) {
+
+    $('.service_add').on('change', function (e) {
 
         if ($(".service_add>option:selected").text() != 'selecione') {
 
@@ -235,23 +242,23 @@ function add_service(obj) {
     if (name != '' && name != undefined) {
 
         swal({
-                title: "Tem certeza",
-                text: "Você esta adicionando um Serviço: " + name,
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+            title: "Tem certeza",
+            text: "Você esta adicionando um Serviço: " + name,
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
             .then((willDelete) => {
 
             });
     } else {
         swal({
-                title: "Por favor",
-                text: "O Campo de adição não pode ser vazio!!",
-                icon: "warning",
-                buttons: true,
-                dangerMode: true,
-            })
+            title: "Por favor",
+            text: "O Campo de adição não pode ser vazio!!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+        })
             .then((willDelete) => {
 
             });
@@ -260,8 +267,8 @@ function add_service(obj) {
 
 
 
-function darAcessoCliente(id){
+function darAcessoCliente(id) {
 
-    $('#acessoUsuario'+id).modal('toggle');
+    $('#acessoUsuario' + id).modal('toggle');
 }
 

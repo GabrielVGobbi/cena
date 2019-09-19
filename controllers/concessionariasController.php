@@ -51,7 +51,7 @@ class concessionariasController extends controller
             $this->dataInfo['getCount']   = $this->concessionaria->getCount($this->user->getCompany());
             $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
-            $this->dataInfo['servico']    = $this->servico->getAll('0','', $this->user->getCompany());
+            $this->dataInfo['servico']    = $this->servico->getAll('0', '', $this->user->getCompany());
             $this->dataInfo['documento']  = $this->documento->getAll('', $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = 'Concessionaria';
@@ -73,12 +73,11 @@ class concessionariasController extends controller
                 unset($_SESSION['formError']);
             }
 
-            $this->dataInfo['servico']    = $this->servico->getAll('0','', $this->user->getCompany());
+            $this->dataInfo['servico']    = $this->servico->getAll('0', '', $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = 'Cadastro de Concessionaria';
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/cadastrar", $this->dataInfo);
-
         } else {
             $this->loadViewError();
         }
@@ -90,9 +89,8 @@ class concessionariasController extends controller
 
             $id = $this->concessionaria->add($this->user->getCompany(), $_POST);
 
-            header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/editService'.'/'.$id.'/'.$_POST['servico']);
+            header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id . '/' . $_POST['servico']);
             exit();
-
         } else {
             echo "erro faltando o razao social";
         }
@@ -100,16 +98,13 @@ class concessionariasController extends controller
 
     public function edit($id)
     {
-       
+
 
         if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_edit')) {
 
             $this->dataInfo['tableInfo']                    = $this->concessionaria->getInfo($id, $this->user->getCompany());
             $this->dataInfo['servicos_concessionaria']      = $this->concessionaria->getServicoByConc($id, $this->user->getCompany());
-            $this->dataInfo['servico']                      = $this->servico->getAll('0','', $this->user->getCompany());
-
-
-            
+            $this->dataInfo['servico']                      = $this->servico->getAll('0', '', $this->user->getCompany());
 
             if (isset($_POST['razao_social']) && isset($_POST['id'])) {
 
@@ -117,7 +112,7 @@ class concessionariasController extends controller
 
                 $this->addValicao($result);
 
-                header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/edit'.'/'.$id);
+                header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit' . '/' . $id);
                 exit();
             }
             $this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
@@ -129,16 +124,15 @@ class concessionariasController extends controller
 
     public function editService($id, $id_servico)
     {
-       
+
 
         if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_edit')) {
 
-            $this->dataInfo['tableInfo']                    = $this->concessionaria->getConcessionariaByService($id,$id_servico, $this->user->getCompany());
+            $this->dataInfo['tableInfo']                    = $this->concessionaria->getConcessionariaByService($id, $id_servico, $this->user->getCompany());
 
-            $this->dataInfo['titlePage'] = $this->dataInfo['tableInfo']['razao_social'].' x '.$this->dataInfo['tableInfo']['sev_nome'];
+            $this->dataInfo['titlePage'] = $this->dataInfo['tableInfo']['razao_social'] . ' x ' . $this->dataInfo['tableInfo']['sev_nome'];
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/edit_servico", $this->dataInfo);
-
         } else {
 
             $this->loadViewError();
@@ -172,11 +166,11 @@ class concessionariasController extends controller
 
         if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_delete')) {
 
-            if($id != ''){
+            if ($id != '') {
                 $result = $this->etapa->delete($id, $this->user->getCompany());
             }
 
-            header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/editService'.'/'.$id_concessionaria.'/'.$id_servico.'?tipo='.$tipo);
+            header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
             exit();
         } else {
             $this->loadViewError();
@@ -200,27 +194,39 @@ class concessionariasController extends controller
         return $_SESSION['form'];
     }
 
-    public function add_etapa($id_concessionaria, $id_servico, $id_etapa, $tipo){
+    public function add_etapa($id_concessionaria, $id_servico, $id_etapa, $tipo)
+    {
 
-        
+        $id = $this->etapa->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
 
-            $id = $this->etapa->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
-
-            header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/editService'.'/'.$id_concessionaria.'/'.$id_servico.'?tipo='.$tipo);
-            exit();
-
-       
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
+        exit();
     }
 
-    public function remove_etapa($id_concessionaria, $id_servico, $id_etapa, $tipo){
-
-        
+    public function remove_etapa($id_concessionaria, $id_servico, $id_etapa, $tipo)
+    {
 
         $id = $this->etapa->removeEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
 
-        header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/editService'.'/'.$id_concessionaria.'/'.$id_servico.'?tipo='.$tipo);
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
         exit();
+    }
 
-   
-}
+    public function edit_etapa($id_concessionaria,$id_servico, $tipo )
+    {
+        if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_edit')) {
+
+            if (isset($_POST['nome_etapa']) && isset($_POST['id_etapa'])) {
+
+                $this->etapa->edit($this->user->getCompany(), $_POST, $_FILES);
+
+                header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
+                exit();
+            }
+
+        } else {
+
+            $this->loadViewError();
+        }
+    }
 }

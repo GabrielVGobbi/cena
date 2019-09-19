@@ -24,13 +24,20 @@
                         <table class="table table-striped">
                             <thead>
                                 <tr>
-                                    <th>Nome da Etapa</th>
-                                    <th style="width: 240px">&nbsp;</th>
+                                    <th style="width:120px;"> Ações </th>
+                                    <th style="width:;">Nome da Etapa</th>
+                                    <th style="width:10%; ">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <?php foreach ($etapasConcessionaria as $etpObra) : ?>
+                                    <?php include('modalEditarEtapa.php'); ?>
+
                                     <tr>
+                                        <td>
+                                            <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpObra['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/obra"><i class="ion ion-trash-a"></i></a>
+                                            <a type="button" class="btn btn-info" onclick="modalEditar(<?php echo $etpObra['id']; ?>, 'Obr')"><i class="ion-android-create"></i></a>
+                                        </td>
                                         <td><?php echo $etpObra['etp_nome']; ?></td>
                                         <td>
                                             <a href="<?php echo BASE_URL; ?>concessionarias/add_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpObra['id']; ?>/obra" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Adicionar</a>
@@ -38,7 +45,7 @@
                                     </tr>
                                 <?php endforeach; ?>
                                 <tr>
-                                    <td><input placeholder="Add Etapa Obra" id="etapa_input_obra" type="text" value="" name="add_etapa"></td>
+                                    <td colspan="2"><input placeholder="Add Etapa Obra" id="etapa_input_obra" type="text" value="" name="add_etapa"></td>
                                     <td>
                                         <button id="new_etapa_obr" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Novo</button>
                                     </td>
@@ -69,7 +76,7 @@
                                     <tr>
                                         <td><?php echo $etpSC['etp_nome']; ?></td>
                                         <td>
-                                            <a href="<?php echo BASE_URL; ?>concessionarias/remove_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpSC['id']; ?>/obra" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-left"></i> Remover</a></a>
+                                            <a href="<?php echo BASE_URL; ?>concessionarias/remove_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpSC['id']; ?>/obra" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-left"></i> Remover</a></td>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>
