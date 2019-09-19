@@ -190,7 +190,7 @@ class Cliente extends model
 	{
 
 
-		$login = lcfirst($Parametros['login']);
+		$login = mb_strtolower($Parametros['login'], 'utf-8');
 		$pass  = ($Parametros['password']);
 
 		$sql = $this->db->prepare("INSERT INTO users SET 
