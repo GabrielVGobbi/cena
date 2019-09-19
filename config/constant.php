@@ -11,3 +11,7 @@ define("OBRA", 3);
 define("ADMINISTRATIVA", 1);
 
 define("gitSSH", "rR96&cCgq,sn");
+
+define("EmailLand", "1&zK21-.7^+B");
+
+
