@@ -45,6 +45,8 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
                     <span class="text pull-right"> <?php echo ($etp['observacao'] != '' ? 'Obs: '.$etp['observacao'] : ''); ?></span>
 
+                    <!-- se dados não estiverem vazio aparece o info -->
+                    <?php controller::loadInfo($etp); ?>
 
 
                 </a>

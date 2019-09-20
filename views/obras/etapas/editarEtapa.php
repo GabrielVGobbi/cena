@@ -68,6 +68,13 @@
                           </div>
                         </div>
 
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Observações do sistema</label>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                          </div>
+                        </div>
+
 
                       <?php elseif ($array[0]['nome'] === 'CONCESSIONARIA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
@@ -110,6 +117,13 @@
                           <div class="form-group">
                             <label>Observações</label>
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Observações do sistema</label>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
                           </div>
                         </div>
 
@@ -156,6 +170,13 @@
                           <div class="form-group">
                             <label>Observações</label>
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Observações do sistema</label>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
                           </div>
                         </div>
 

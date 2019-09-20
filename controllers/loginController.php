@@ -31,7 +31,6 @@ class loginController extends controller {
 			if($u->doLogin($login, $pass)){
 				
 				header("location:".BASE_URL."home");
-				controller::alert('warning', 'existe etapas Proximas');
 				exit;
 			
 			} else {

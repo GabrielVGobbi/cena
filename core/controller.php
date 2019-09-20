@@ -227,6 +227,18 @@ class controller
 		include 'views/obras/etapas/obraEtapaTipo.php';
 	}
 
+	public function loadInfo($valores)
+	{
+		if($valores['data_abertura'] != '' || $valores['data_abertura']  != '' ||
+			$valores['prazo_atendimento'] != '' || $valores['data_pedido'] != '' || 
+			$valores['data_programada'] != '' || $valores['data_iniciada'] != '' ||
+			$valores['tempo_atividade'] != ''  
+		){
+			echo '<i style="color:#002bff" class="fa fa-fw fa-info"></i>';
+		}
+		
+	}
+
 	public function getDocumentoEtapaObra($id_etapa_obra)
 	{
 

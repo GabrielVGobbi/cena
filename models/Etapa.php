@@ -381,6 +381,8 @@ class Etapa extends model
                 $adm['data_pedido_administrativo'] = $Parametros['data_pedido_administrativo'];
                 $adm['cliente_responsavel_administrativo'] = $Parametros['cliente_responsavel_administrativo'];
                 $adm['observacao'] = $Parametros['observacao'];
+                $adm['observacao_sistema'] = $Parametros['observacao_sistema'];
+
 
 
                 $this->etapaAdministrativo($id_etapa, $adm, $id_company, $id_user);
@@ -399,6 +401,9 @@ class Etapa extends model
                 $com['data_abertura_concessionaria'] = $Parametros['data_abertura_concessionaria'];
                 $com['prazo_atendimento_concessionaria'] = $Parametros['prazo_atendimento_concessionaria'];
                 $com['observacao'] = $Parametros['observacao'];
+                $com['observacao_sistema'] = $Parametros['observacao_sistema'];
+
+
 
                 $com['nova_data'] = controller::SomarData(controller::returnDate($com['data_abertura_concessionaria']), $com['prazo_atendimento_concessionaria']);
 
@@ -420,6 +425,8 @@ class Etapa extends model
                 $obr['data_iniciada_obra'] = $Parametros['data_iniciada_obra'];
                 $obr['tempo_atividade_obra'] = $Parametros['tempo_atividade_obra'];
                 $obr['observacao'] = $Parametros['observacao'];
+                $obr['observacao_sistema'] = $Parametros['observacao_sistema'];
+
 
                 $this->etapaObra($id_etapa, $obr, $id_company, $id_user);
             }
@@ -445,6 +452,7 @@ class Etapa extends model
                 data_pedido = :data_pedido,
                 cliente_responsavel = :cliente_responsavel,
                 observacao = :observacao, 
+                observacao_sistema = :observacao_sistema, 
                 etp_nome_etapa_obra = :etp_nome_etapa_obra
                 
 
@@ -455,6 +463,7 @@ class Etapa extends model
             $sql->bindValue(":data_pedido", $Parametros['data_pedido_administrativo']);
             $sql->bindValue(":cliente_responsavel", $Parametros['cliente_responsavel_administrativo']);
             $sql->bindValue(":observacao", $Parametros['observacao']);
+            $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
             $sql->bindValue(":ordem", '');
@@ -503,6 +512,7 @@ class Etapa extends model
                 prazo_atendimento = :prazo_atendimento,
                 data_prazo_total = :data_prazo_total,
                 observacao = :observacao, 
+                observacao_sistema = :observacao_sistema, 
                 etp_nome_etapa_obra = :etp_nome_etapa_obra
                 
 
@@ -515,7 +525,9 @@ class Etapa extends model
             $sql->bindValue(":prazo_atendimento", $Parametros['prazo_atendimento_concessionaria']);
             $sql->bindValue(":data_prazo_total", $nova_data);
             $sql->bindValue(":observacao", $Parametros['observacao']);
+            $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
+
 
 
             $sql->bindValue(":id", $id_etapa);
@@ -565,6 +577,7 @@ class Etapa extends model
 
     public function etapaObra($id_etapa, $Parametros, $id_company, $id_user)
     {
+                error_log(print_r($Parametros,1));
         try {
 
             $sql = $this->db->prepare("UPDATE obra_etapa SET 
@@ -575,6 +588,7 @@ class Etapa extends model
                 data_iniciada = :data_iniciada,
                 tempo_atividade = :tempo_atividade,
                 observacao = :observacao, 
+                observacao_sistema = :observacao_sistema, 
                 etp_nome_etapa_obra = :etp_nome_etapa_obra
 
                 WHERE id_etapa_obra = :id
@@ -585,7 +599,9 @@ class Etapa extends model
             $sql->bindValue(":data_programada", $Parametros['data_programada_obra']);
             $sql->bindValue(":data_iniciada", $Parametros['data_iniciada_obra']);
             $sql->bindValue(":tempo_atividade", $Parametros['tempo_atividade_obra']);
+            $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":observacao", $Parametros['observacao']);
+
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
 
