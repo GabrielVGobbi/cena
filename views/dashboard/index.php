@@ -82,7 +82,9 @@
                   </div>
                 </a>
                 <span class="product-description">
-                  Cliente: <?php echo $etpp['cliente_nome']; ?>
+                  Cliente: <?php echo $etpp['cliente_nome']; ?><br>
+                  Obra: <?php echo $etpp['obr_razao_social']; ?>
+
                 </span>
               </div>
             </li>

@@ -30,7 +30,8 @@ class Obras extends model
 
 		$sql = $this->db->prepare($sql);
 
-	
+			error_log(print_r($sql,1));			
+
 
 
 		$this->bindWhere($filtro, $sql);
@@ -62,6 +63,8 @@ class Obras extends model
 
 		$this->bindWhere($filtro, $sql);
 
+
+
 		$sql->execute();
 
 		if ($sql->rowCount() > 0) {
@@ -76,6 +79,11 @@ class Obras extends model
 		$where = array(
 			'obr.id_company=' . $id
 		);
+
+		if(!isset($filtro['situacao'])){
+
+			$where[] = 'obr.atv=1';
+		}
 
 		if($id_cliente != 0){
 			$where[] = 'obr.id_cliente='. $id_cliente;
@@ -155,6 +163,7 @@ class Obras extends model
 				if($filtro['situacao'] == 3){
 					$filtro['situacao'] = '0';
 				}
+				
 				$sql->bindValue(":situacao", $filtro['situacao']);
 			}
 		}

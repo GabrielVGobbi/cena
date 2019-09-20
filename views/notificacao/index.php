@@ -47,7 +47,7 @@ $data_hoje = date('Y-m-d h:i:s');
 										<i class="fa fa-ellipsis-v"></i>
 									</span>
 									<span class="text"><?php echo $propriedades->msg; ?></span>
-									<span class="text">Por: <?php echo $not['login']; ?></span>
+									<span class="text">Por: <?php echo $not['nome_usuario']; ?></span>
 
 									<small class="label label-info"><i class="fa fa-clock-o"></i> <?php echo $tempo ?></small>
 									<div class="tools">
@@ -74,7 +74,7 @@ $data_hoje = date('Y-m-d h:i:s');
 				<ul class="pagination pagination-sm pull-right">
 					<?php for ($q = 1; $q <= $p_count; $q++) : ?>
 						<li class="<?php echo ($q == $p) ? 'active' : '' ?> ">
-							<a href="<?php echo BASE_URL; ?>concessionarias?p=<?php $w = $_GET;
+							<a href="<?php echo BASE_URL; ?>notificacao?p=<?php $w = $_GET;
 																					$w['p'] = $q;
 																					echo http_build_query($w); ?>"><?php echo $q; ?></a>
 						</li>

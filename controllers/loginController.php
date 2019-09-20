@@ -29,8 +29,11 @@ class loginController extends controller {
 			$u = new Users();
 
 			if($u->doLogin($login, $pass)){
+				
 				header("location:".BASE_URL."home");
+				controller::alert('warning', 'existe etapas Proximas');
 				exit;
+			
 			} else {
 				$_SESSION['errorMsg'] = 'senha e/ou usuario estão incorretos';
 			}
