@@ -56,7 +56,7 @@ class obrasController extends controller
             $this->dataInfo['getCount']   = $this->obra->getCount($this->user->getCompany());
             $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
-            $this->dataInfo['clientes'] = $this->cliente->getAll('', $this->user->getCompany());
+            $this->dataInfo['clientes'] = $this->cliente->getAll(0,'', $this->user->getCompany());
             $this->dataInfo['concessionaria'] = $this->concessionaria->getAll('', $this->user->getCompany());
             $this->dataInfo['servico'] = $this->servico->getAll('0', '', $this->user->getCompany());
 
