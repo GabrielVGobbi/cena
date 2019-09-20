@@ -10,7 +10,7 @@ class Cliente extends model
 		$this->retorno = array();
 	}
 
-	public function getAll($filtro, $id_company)
+	public function getAll($offset,$filtro, $id_company)
 	{
 
 		$where = $this->buildWhere($filtro, $id_company);
@@ -19,7 +19,7 @@ class Cliente extends model
 			cliente cli
 		LEFT JOIN cliente_endereco cled ON (cli.clend_id = cled.id_endereco)
 		
-		WHERE " . implode(' AND ', $where);
+		WHERE " . implode(' AND ', $where) . " GROUP BY cli.id ORDER BY cli.cliente_nome ASC LIMIT $offset, 10";
 
 		$sql = $this->db->prepare($sql);
 

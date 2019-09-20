@@ -89,7 +89,7 @@
 				<ul class="pagination pagination-sm pull-right">
 					<?php for ($q = 1; $q <= $p_count; $q++) : ?>
 						<li class="<?php echo ($q == $p) ? 'active' : '' ?> ">
-							<a href="<?php echo BASE_URL; ?>concessionarias?p=<?php $w = $_GET;
+							<a href="<?php echo BASE_URL; ?>clientes?p=<?php $w = $_GET;
 																					$w['p'] = $q;
 																					echo http_build_query($w); ?>"><?php echo $q; ?></a>
 						</li>

@@ -26,13 +26,9 @@ class Obras extends model
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
 			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)		
-		WHERE " . implode(' AND ', $where) . " GROUP BY obr.id";
+		WHERE " . implode(' AND ', $where) . "  GROUP BY obr.id ORDER BY obr.obr_razao_social";
 
 		$sql = $this->db->prepare($sql);
-
-			error_log(print_r($sql,1));			
-
-
 
 		$this->bindWhere($filtro, $sql);
 

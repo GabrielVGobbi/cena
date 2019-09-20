@@ -243,7 +243,7 @@ class Etapa extends model
             SELECT etpsc.id_etapa FROM etapas_servico_concessionaria etpsc
             WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico)
 
-			AND etpt.nome = :nome
+			AND etpt.nome = :nome ORDER BY etp_nome
 		");
 
         $sql->bindValue(':nome', $tipo);

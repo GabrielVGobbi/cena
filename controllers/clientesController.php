@@ -44,10 +44,14 @@ class ClientesController extends controller
                 }
             }
 
-            $this->dataInfo['tableDados'] = $this->cliente->getAll($this->filtro, $this->user->getCompany());
-            $this->dataInfo['getCount']   = $this->cliente->getCount($this->user->getCompany());
-            $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
+            $offset = (10 * ($this->dataInfo['p'] - 1));
 
+
+
+            $this->dataInfo['tableDados'] = $this->cliente->getAll($offset, $this->filtro, $this->user->getCompany());
+            $this->dataInfo['getCount']   = $this->cliente->getCount($this->user->getCompany());
+            
+            $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
         } else {
