@@ -89,7 +89,7 @@ class Cliente extends model
 	}
 
 
-	public function add($id_company, $Parametros)
+	public function add($Parametros,$id_company)
 	{
 
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
@@ -145,6 +145,7 @@ class Cliente extends model
 				error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 			}
 		} else {
+			
 			$sql = $this->db->prepare("INSERT INTO cliente SET 
             			cliente_nome = :cliente_nome, 
             			cliente_email = :cliente_email,
@@ -165,23 +166,29 @@ class Cliente extends model
 		return $this->db->lastInsertId();
 	}
 
-	public function edit($Parametros)
+	public function edit($Parametros, $id_company)
 	{
 
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
-		$cliente_email = strtolower($Parametros['email']);
+		$cliente_email = mb_strtolower($Parametros['cliente_email']);
+		$cliente_responsavel = $Parametros['cliente_responsavel'];
 
 		if (isset($Parametros['id_cliente']) && $Parametros['id_cliente'] != '') {
 
 			$sql = $this->db->prepare("UPDATE cliente SET 
 				cliente_nome = :cliente_nome, 
-				cliente_email = :cliente_email
-				WHERE id_cliente = :id_cliente
+				cliente_email = :cliente_email, 
+				cliente_responsavel = :cliente_responsavel
+				WHERE id = :id_cliente AND id_company = :id_company;
         	");
 
 			$sql->bindValue(":cliente_nome", $cliente_nome);
 			$sql->bindValue(":cliente_email", $cliente_email);
+			$sql->bindValue(":cliente_responsavel", $cliente_responsavel);
+
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
+			$sql->bindValue(":id_company", $id_company);
+
 			$sql->execute();
 		}
 	}
@@ -368,5 +375,25 @@ class Cliente extends model
 		}
 
 		return $this->array;
+	}
+
+	public function validacao($id_company, $nome)
+	{
+
+		$sql = $this->db->prepare("SELECT * FROM cliente
+
+			WHERE id_company = :id_company AND cliente_nome = :cliente_nome
+		");
+
+		$sql->bindValue(':cliente_nome', $nome);
+		$sql->bindValue(':id_company', $id_company);
+
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 }

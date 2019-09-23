@@ -234,7 +234,7 @@ class controller
 			$valores['data_programada'] != '' || $valores['data_iniciada'] != '' ||
 			$valores['tempo_atividade'] != ''  
 		){
-			echo '<i style="color:#002bff" class="fa fa-fw fa-info"></i>';
+			echo '<i data-toggle="tooltip" title="" data-original-title="informações" style="color:#002bff" class="fa fa-fw fa-info"></i>';
 		}
 		
 	}

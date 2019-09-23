@@ -75,12 +75,23 @@ class ClientesController extends controller
 
         if (isset($_POST['cliente_nome']) && $_POST['cliente_nome'] != '') {
 
-            $result = $this->painel->insert($_POST, $this->dataInfo['nome_tabela'], $this->user->getCompany());
+            $validator = $this->cliente->validacao($this->user->getCompany(), $_POST['cliente_nome']);
 
-            $this->addValicao($result);
+            if(!$validator){
+                
+                $result = $this->cliente->add($_POST,$this->user->getCompany());
+                
+                $this->addValicao($result);
+
+            }else {
+                controller::alert('warning', 'Já existe um cliente com esse nome');
+
+            }
+
 
             header('Location:' . BASE_URL . 'clientes');
             exit();
+
         } else {
             $this->loadViewError();
         }
@@ -93,9 +104,9 @@ class ClientesController extends controller
 
             $this->dataInfo['tableInfo'] = $this->cliente->getClienteById($id, $this->user->getCompany());
 
-            if (isset($_POST['cliente_nome']) && isset($_POST['id'])) {
+            if (isset($_POST['cliente_nome']) && isset($_POST['id_cliente'])) {
 
-                $result = $this->painel->edit($_POST, $this->dataInfo['nome_tabela'], $this->user->getCompany());
+                $result = $this->cliente->edit($_POST, $this->user->getCompany());
                 
                 header('Location:' . BASE_URL . 'clientes');
                 exit();
