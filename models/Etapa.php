@@ -10,7 +10,6 @@ class Etapa extends model
         $this->array = array();
         $this->retorno = array();
 
-        $this->notificacao = new Notificacao('notificacoes');
         $this->painel = new Painel();
 
         $this->tabela = $nomeTabela;
@@ -77,8 +76,6 @@ class Etapa extends model
         $id_concessionaria = $Parametros['id_concessionaria'];
 
 
-
-
         try {
             $sql = $this->db->prepare("INSERT INTO etapa SET 
                     etp_nome = :nome,
@@ -92,6 +89,9 @@ class Etapa extends model
             $sql->execute();
 
             $id_etapa = $this->db->lastInsertId();
+
+            controller::setLog($Parametros, 'etapa', 'add');
+
 
 
             $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
@@ -125,6 +125,7 @@ class Etapa extends model
 
                 if ($sql->execute()) {
                     controller::alert('success', 'Editado com sucesso!!');
+                    controller::setLog($Parametros, 'etapa', 'edit');
                 } else {
                     controller::alert('danger', 'Erro ao fazer a edição!!');
                 }
@@ -133,6 +134,7 @@ class Etapa extends model
                 $sql->rollback();
                 error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
             }
+
         } else {
             controller::alert('danger', 'Não foi selecionado nada!!');
         }
@@ -142,6 +144,9 @@ class Etapa extends model
     {
         $tipo = 'Deletado';
 
+        $Parametros = array();
+        $Parametros['id_etapa'] = $id_etapa;
+
         if (isset($id_etapa) && $id_etapa != '') {
 
             $sql = $this->db->prepare("DELETE FROM etapa WHERE id = :id_etapa");
@@ -149,6 +154,7 @@ class Etapa extends model
 
             if ($sql->execute()) {
                 controller::alert('success', 'Deletado com sucesso!!');
+                controller::setLog($Parametros, 'etapa', 'delete');
             } else {
                 controller::alert('danger', 'Erro ao deletar!!');
             }
@@ -372,7 +378,7 @@ class Etapa extends model
 
                 $adm['id_obra'] = $Parametros['id_obra'];
 
-                $adm['etp_nome'] = $Parametros['nome_etapa'];
+                $adm['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
 
                 $adm['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -383,8 +389,6 @@ class Etapa extends model
                 $adm['observacao'] = $Parametros['observacao'];
                 $adm['observacao_sistema'] = $Parametros['observacao_sistema'];
 
-
-
                 $this->etapaAdministrativo($id_etapa, $adm, $id_company, $id_user);
 
             } elseif ($Parametros['tipo'] === 'CONCESSIONARIA') {
@@ -393,7 +397,7 @@ class Etapa extends model
 
                 $com['id_obra'] = $Parametros['id_obra'];
 
-                $com['etp_nome'] = $Parametros['nome_etapa'];
+                $com['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
 
                 $com['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -402,8 +406,6 @@ class Etapa extends model
                 $com['prazo_atendimento_concessionaria'] = $Parametros['prazo_atendimento_concessionaria'];
                 $com['observacao'] = $Parametros['observacao'];
                 $com['observacao_sistema'] = $Parametros['observacao_sistema'];
-
-
 
                 $com['nova_data'] = controller::SomarData(controller::returnDate($com['data_abertura_concessionaria']), $com['prazo_atendimento_concessionaria']);
 
@@ -415,7 +417,7 @@ class Etapa extends model
 
                 $obr['id_obra'] = $Parametros['id_obra'];
 
-                $obr['etp_nome'] = $Parametros['nome_etapa'];
+                $obr['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
 
                 $obr['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -430,6 +432,9 @@ class Etapa extends model
 
                 $this->etapaObra($id_etapa, $obr, $id_company, $id_user);
             }
+
+            controller::setLog($Parametros, 'etapa', 'obra_etapa');
+
 
             if (isset($arquivos) && $Parametros['documento_nome'] != '') {
 

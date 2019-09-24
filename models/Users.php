@@ -306,6 +306,9 @@ class Users extends model
 		$sql->bindValue(":params", '1');
 
 		$sql->execute();
+
+		controller::setLog($Parametros, 'usuario', 'add');
+
 		}
 	}
 
@@ -322,6 +325,8 @@ class Users extends model
 		$sql->bindValue(":id", $Parametros['id_usuario']);
 
 		$sql->execute();
+
+		controller::setLog($Parametros, 'usuario', 'edit');
 
 		if (isset($Parametros['permission_check'])) {
 			$param = implode(',', $Parametros['permission_check']);
@@ -343,10 +348,15 @@ class Users extends model
 		} else {
 			return $this->retorno = 'error';
 		}
+
+
 	}
 
 	public function delete($id, $id_company)
 	{
+		$Parametros = [
+			'id_usuario' => $id
+		];
 
 		$sql = $this->db->prepare("SELECT * FROM users WHERE id = :id AND id_company = :id_company");
 		$sql->bindValue(':id', $id);
@@ -365,6 +375,7 @@ class Users extends model
 			$sql->bindValue(":id_company", $id_company);
 			if ($sql->execute()) {
 				controller::alert('success', 'Usuario desativado com sucesso!!');
+				controller::setLog($Parametros, 'usuario', 'desativar');
 			} else {
 				controller::alert('danger', 'Não foi possivel desativar o usuario, contate o administrador do sistema');
 			}
@@ -374,6 +385,8 @@ class Users extends model
 			$sql->bindValue(":id_company", $id_company);
 			if ($sql->execute()) {
 				controller::alert('success', 'Usuario ativado com sucesso');
+				controller::setLog($Parametros, 'usuario', 'ativar');
+
 			} else {
 				controller::alert('danger', 'Não foi possivel ativar o usuario, contate o administrador do sistema');
 			}

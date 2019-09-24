@@ -7,11 +7,13 @@ class ajaxController extends controller
 
 
         $this->user = new Users();
+        $this->user->setLoggedUser();
+        
         if ($this->user->isLogged() == false) {
             header("Location: " . BASE_URL . "/login");
             exit;
         }
-        $this->user->setLoggedUser();
+       
         $this->id_user = $this->user->getId();
 
         $this->retorno = array();

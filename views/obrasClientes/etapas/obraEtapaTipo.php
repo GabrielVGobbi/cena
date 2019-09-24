@@ -43,8 +43,6 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
                         <span style="font-size: 12px" class="label label-success"><i class="fa fa-clock-o"></i> Concluido </span>
                     <?php endif; ?>
 
-                    <span class="text pull-right"> <?php echo ($etp['observacao'] != '' ? 'Obs: '.$etp['observacao'] : ''); ?></span>
-
 
 
               

@@ -11,6 +11,10 @@ class controller
 
 		$u = new Users;
 		$u->setLoggedUser();
+		$p = new Painel;
+
+		$this->array = array();
+
 
 		$this->userInfo = array(
 			'userName' 	  	=> $u->getInfo($u->getId(), $u->getCompany()),
@@ -247,6 +251,19 @@ class controller
 		$array = $doc->getDocumentoEtapa($id_etapa_obra);
 
 		return $array;
+	}
+
+	public function setLog($arr, $tabela, $tipo)
+	{
+		$u = new Users;
+		$p = new Painel;
+		$u->setLoggedUser();
+		$id_usuario = $u->getId();
+		
+		
+		$array = $p->setLog($arr, $tabela, $tipo, $id_usuario);
+
+		
 	}
 
 	static public function diferenca($dt)

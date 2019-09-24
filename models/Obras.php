@@ -245,7 +245,9 @@ class Obras extends model
 
 	public function delete($id, $id_company)
 	{
-
+		$Parametros = [
+			'id_obra' => $id
+		];
 		$sql = $this->db->prepare("DELETE FROM obra WHERE id = :id AND id_company = :id_company");
 		
 		$sql->bindValue(":id", $id);
@@ -253,6 +255,8 @@ class Obras extends model
 		
 		if ($sql->execute()) {
 			controller::alert('danger', 'obra deletado com sucesso!!');
+			controller::setLog($Parametros, 'obra', 'delete');
+
 
 			$this->deleteEtapasObras($id);
 
@@ -304,6 +308,8 @@ class Obras extends model
 
 			if ($sql->execute()) {
 				controller::alert('success', 'Obra criado com sucesso!!');
+				controller::setLog($Parametros, 'obra', 'add');
+
 			} else {
 				controller::alert('error', 'Não foi possivel fazer o cadastro da obra, Contate o administrador do sistema!!');
 			}
@@ -402,6 +408,9 @@ class Obras extends model
 
 			$sql->execute();
 
+			controller::setLog($Parametros, 'obra', 'edit');
+
+
 			if (isset($Parametros['check'])) {
 				if (count($Parametros['check']) > 0) {
 					for ($q = 0; $q < count($Parametros['check']); $q++) {
@@ -415,6 +424,9 @@ class Obras extends model
 						$sql->bindValue(":id_obra", $Parametros['id_obra']);
 
 						$sql->execute();
+
+						controller::setLog($Parametros, 'obra', 'concluir_obra');
+
 					}
 				}
 				
@@ -432,6 +444,9 @@ class Obras extends model
 
 	public function concluir($id, $id_company)
 	{
+		$Parametros = [
+			'id' => $id
+		];
 
 		if (isset($id) && $id != '') {
 
@@ -447,6 +462,7 @@ class Obras extends model
 
 			if($sql->execute()){
 				controller::alert('success', 'Obra concluida com sucesso!');
+				controller::setLog($Parametros, 'obra', 'concluir_obra');
 
 			}else {
 				controller::alert('error', 'não foi possivel concluir a obra');

@@ -88,10 +88,38 @@ class Painel extends model
         return $certo;
     }
 
-    public function setLog($arr, $nome_tabela, $id_company, $single)
+    public function setLog($arr, $nome_tabela,  $tipo, $id_usuario)
     {
+
+        $arr['nome_tabela'] = $nome_tabela;
+ 
+        try {
+            $sql = $this->db->prepare(
+                "   INSERT INTO log SET 
+
+                    log_id_usuario  = :id_usuario,  
+                    log_timer       = NOW(),
+                    log_tipo        = :tipo,
+                    log_dados       = :Parametros
+
+                ");
+
+            $sql->bindValue(":id_usuario", $id_usuario);
+            $sql->bindValue(":tipo", $tipo);
+            $sql->bindValue(":Parametros", json_encode($arr, JSON_UNESCAPED_UNICODE ));
+
+
+            if($sql->execute()){
+                return true;
+            }else { 
+                return false;
+            }
         
-        
+        } catch (PDOExecption $e) {
+            $sql->rollback();
+            error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+        }   
+
 
     }
 

@@ -161,7 +161,12 @@ class Cliente extends model
 			$sql->bindValue(":id_company", $id_company);
 
 			$sql->execute();
+
+			controller::setLog($Parametros, 'cliente', 'add');
+
 		}
+
+		
 
 		return $this->db->lastInsertId();
 	}
@@ -190,6 +195,9 @@ class Cliente extends model
 			$sql->bindValue(":id_company", $id_company);
 
 			$sql->execute();
+
+			controller::setLog($Parametros, 'cliente', 'edit');
+
 		}
 	}
 
@@ -230,6 +238,9 @@ class Cliente extends model
 		$sql->bindValue(":acesso_criado", '1');
 
 		$sql->execute();
+
+		controller::setLog($Parametros, 'acesso_usuario', 'add');
+
 
 
 		return $id = $this->db->lastInsertId();
@@ -320,6 +331,8 @@ class Cliente extends model
 		$sql->bindValue(":id_company", $id_company);
 		if ($sql->execute()) {
 			return true;
+			controller::setLog($Parametros, 'cliente', 'delete');
+
 		} else {
 			return false;
 		}
@@ -380,6 +393,8 @@ class Cliente extends model
 	public function validacao($id_company, $nome)
 	{
 
+		$nome = controller::ReturnValor($nome);
+		
 		$sql = $this->db->prepare("SELECT * FROM cliente
 
 			WHERE id_company = :id_company AND cliente_nome = :cliente_nome

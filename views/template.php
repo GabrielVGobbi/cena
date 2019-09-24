@@ -22,6 +22,7 @@
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
+  <script src="https://unpkg.com/imask"></script>
 
 </head>
 

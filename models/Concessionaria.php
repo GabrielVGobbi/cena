@@ -207,7 +207,7 @@ class Concessionaria extends model
 
 	public function add($id_company, $Parametros)
 	{
-
+		
 		try {
 			$sql = $this->db->prepare("INSERT INTO concessionaria SET 
 					razao_social = :razao_social,
@@ -227,14 +227,15 @@ class Concessionaria extends model
 				$this->setServico($Parametros, $id, $id_company);
 			}
 
+			controller::setLog($Parametros, 'concessionaria', 'add');
+			
 			return $id;
+		
 		} catch (PDOExecption $e) {
 			$sql->rollback();
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
-		}
+		}	
 
-
-		return $this->retorno;
 	}
 
 	public function setServico($Parametros, $id_concessionaria, $id_company)
@@ -247,6 +248,8 @@ class Concessionaria extends model
 		$sql->bindValue(":id_servico", $Parametros['servico']);
 		$sql->bindValue(":id_concessionaria", $id_concessionaria);
 		$sql->execute();
+
+
 	}
 
 
@@ -338,6 +341,7 @@ class Concessionaria extends model
 			$sql = $this->db->prepare("UPDATE concessionaria SET
                 id_company          	= :id_company, 
 				razao_social          	= :razao_social
+				
 				WHERE id = :id
         
             ");
@@ -351,6 +355,9 @@ class Concessionaria extends model
 			if (isset($Parametros['servico'])) {
 				$this->setServico($Parametros, $id, $id_company);
 			}
+
+			controller::setLog($Parametros, 'concessionaria', 'edit');
+
 		} catch (PDOExecption $e) {
 			$sql->rollback();
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
