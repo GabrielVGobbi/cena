@@ -303,8 +303,8 @@
     }
 
     $(function() {
-      setInterval(verificarNotificacao, 2000);
-      verificarNotificacao();
+      //setInterval(verificarNotificacao, 2000);
+      //verificarNotificacao();
 
       $('.drop-notific').on('click', function() {
         $('.notificacao-mensagem').removeClass('fa-blink');

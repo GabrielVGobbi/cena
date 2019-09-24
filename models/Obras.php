@@ -351,7 +351,7 @@ class Obras extends model
 		$sql = "SELECT * FROM  
 			obra_etapa obrt
 			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
-		WHERE id_obra = :id_obra AND tipo IN ($tipo) ORDER BY tipo not in ('2'), id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC" ;
+		WHERE id_obra = :id_obra AND tipo IN ($tipo) ORDER BY  tipo not in ('2'),ordem DESC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC" ;
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_obra", $id_obra);

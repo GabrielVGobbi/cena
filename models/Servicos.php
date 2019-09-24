@@ -247,7 +247,7 @@ class Servicos extends model
 					'link' => BASE_URL . 'obras/edit/' . $Parametros['id_obra']
 				);
 
-				$this->notificacao->insert($id_company, $ParametrosNotificacao);
+				//$this->notificacao->insert($id_company, $ParametrosNotificacao);
 			}
 
 		}

@@ -11,6 +11,8 @@ class obrasController extends controller
         $this->obra = new Obras();
         $this->etapa = new Etapa('Etapa');
         $this->documento = new Documentos();
+        $this->financeiro = new Financeiro('Financeiro');
+
 
         $this->cliente = new Cliente();
         $this->concessionaria = new Concessionaria();
@@ -203,6 +205,28 @@ class obrasController extends controller
 
         header("Location: " . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $id_obra);
         exit();
+    }
+
+    public function financeiro($id)
+    {
+        if($id != ''){
+            if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_edit')  
+                && $this->user->hasPermission('financeiro_view')) {
+
+                $this->dataInfo['tableDados'] = $this->obra->getInfo($id, $this->user->getCompany());
+
+                $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'];
+
+                $this->loadTemplate($this->dataInfo['pageController'] . "/financeiro/cadastrar", $this->dataInfo);
+            } else {
+
+                $this->loadViewError();
+            }
+        } else { 
+           
+            header("Location: " . BASE_URL . $this->dataInfo['pageController']);
+            exit();
+        }
     }
 
 

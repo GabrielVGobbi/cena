@@ -88,9 +88,11 @@ class Painel extends model
         return $certo;
     }
 
-    public function setLog()
+    public function setLog($arr, $nome_tabela, $id_company, $single)
     {
         
+        
+
     }
 
     

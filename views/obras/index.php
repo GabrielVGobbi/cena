@@ -62,6 +62,8 @@
 						</a>
 						<div class="box-footer clearfix">
 							<a href="<?php echo BASE_URL; ?>obras/concluir/<?php echo $obr[0]; ?>" class="btn btn-sm btn-info btn-flat pull-left">Concluir Obra</a>
+														<a href="<?php echo BASE_URL; ?>obras/concluir/<?php echo $obr[0]; ?>" class="btn btn-sm btn-info btn-flat pull-left">Concluir Obra</a>
+
 							<?php if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_delete')) : ?>
 								<button class="btn btn-sm btn-danger btn-flat pull-right" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL; ?>obras/delete/<?php echo $obr[0]; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
 									Excluir Obra
