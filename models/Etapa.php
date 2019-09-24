@@ -436,11 +436,13 @@ class Etapa extends model
             controller::setLog($Parametros, 'etapa', 'obra_etapa');
 
 
-            if (isset($arquivos) && $Parametros['documento_nome'] != '') {
-
+            if (isset($arquivos) && $Parametros['documento_etapa_nome'] != '') {
                 $d = new Documentos;
-                $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_nome'], $id_company);
+                $d->add($arquivos, $id_company, $Parametros['id_obra'], $Parametros['documento_etapa_nome']);
+                $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company);
             }
+            
+
         } else {
             controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
         }

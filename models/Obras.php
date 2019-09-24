@@ -472,6 +472,36 @@ class Obras extends model
 		}
 	}
 
+	public function desconcluir($id, $id_company)
+	{
+		$Parametros = [
+			'id' => $id
+		];
+
+		if (isset($id) && $id != '') {
+
+			$sql = $this->db->prepare("UPDATE obra SET 
+				atv = 1
+				
+				WHERE id = :id_obra AND id_company = :id_company
+        	");
+
+			$sql->bindValue(":id_obra", $id);
+			$sql->bindValue(":id_company", $id_company);
+
+
+			if($sql->execute()){
+				controller::alert('success', 'Obra concluida com sucesso!');
+				controller::setLog($Parametros, 'obra', 'desconcluir_obra');
+
+			}else {
+				controller::alert('error', 'não foi possivel concluir a obra');
+
+			}
+
+		}
+	}
+
 	public function parcialCheck($Parametros)
 	{
 

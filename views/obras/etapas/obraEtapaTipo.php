@@ -6,6 +6,7 @@ if (isset($_GET['tipo'])) {
     $tipo = '';
 }
 $etapas = $this->obra->getEtapas($obr[0], $tipo);
+
 ?>
 
 <?php foreach ($etapas as $etp) : ?>
@@ -44,13 +45,15 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
                     <?php endif; ?>
 
                     <span class="text pull-right"> <?php echo ($etp['observacao'] != '' ? 'Obs: '.$etp['observacao'] : ''); ?></span>
+                    <?php controller::qntDocumentoEtapa($etp['id_etapa_obra'], $obr[0]); ?>
 
                     <!-- se dados não estiverem vazio aparece o info -->
-                    
-
 
                 </a>
                 <?php controller::loadInfo($etp); ?>
+
+
+                
 
             </li>
 

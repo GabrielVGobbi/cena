@@ -243,6 +243,18 @@ class controller
 		
 	}
 
+	public function qntDocumentoEtapa($id_etapa_obra, $id_obra)
+	{
+
+		$documento_etapa = controller::getDocumentoEtapaObra($id_etapa_obra);
+
+		if(count($documento_etapa) > 0){
+			echo '<i data-toggle="tooltip"  title="" data-original-title="documento" style="color:#002bff" class="fa fa-book"></i>';
+		}
+		
+		
+	}
+
 	public function getDocumentoEtapaObra($id_etapa_obra)
 	{
 

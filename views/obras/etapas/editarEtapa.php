@@ -198,10 +198,10 @@
                     </div>
                     <div class="box-body" style="">
                       <div id="etapa_ok<?php echo $array[0]['id_etapa_obra']; ?>">
-                        <?php $documento_obra = controller::getDocumentoEtapaObra($array[0]['id_etapa_obra']); ?>
+                        <?php $documento_etapa = controller::getDocumentoEtapaObra($array[0]['id_etapa_obra']); ?>
 
-                        <?php if (count($documento_obra) > 0) : ?>
-                          <?php foreach ($documento_obra as $doc) : ?>
+                        <?php if (count($documento_etapa) > 0) : ?>
+                          <?php foreach ($documento_etapa as $doc) : ?>
                             <div class="col-md-12">
                               <div class="input-group" style="width: 50%;">
                                 <input type="text" class="form-control" autocomplete="off" value="<?php echo $doc['docs_nome']; ?>">
@@ -221,7 +221,7 @@
                       <div class="col-md-10" style="display:none;" id="new_etapa<?php echo $array[0]['id_etapa_obra']; ?>">
                         <label>Adicionar novo Documento</label>
                         <div class="input-group">
-                          <input class="form-control" name="documento_nome" placeholder="Nome do Documento">
+                          <input class="form-control" name="documento_etapa_nome" placeholder="Nome do Documento">
                           <div class="input-group-btn">
                             <div class="btn btn-default btn-file">
                               <i class="fa fa-paperclip"></i> PDF
@@ -256,7 +256,6 @@
 
 
     });
-
 
   })
 </script>

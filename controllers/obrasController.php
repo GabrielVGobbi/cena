@@ -11,7 +11,6 @@ class obrasController extends controller
         $this->obra = new Obras();
         $this->etapa = new Etapa('Etapa');
         $this->documento = new Documentos();
-        $this->financeiro = new Financeiro('Financeiro');
 
 
         $this->cliente = new Cliente();
@@ -159,6 +158,20 @@ class obrasController extends controller
         if ($this->user->hasPermission('obra_view')) {
 
             $result = $this->obra->concluir($id, $this->user->getCompany());
+
+            header("Location: " . BASE_URL . $this->dataInfo['pageController']);
+            exit();
+        } else {
+            $this->loadViewError();
+        }
+    }
+
+    public function desconcluir($id)
+    {
+
+        if ($this->user->hasPermission('obra_view')) {
+
+            $result = $this->obra->desconcluir($id, $this->user->getCompany());
 
             header("Location: " . BASE_URL . $this->dataInfo['pageController']);
             exit();
