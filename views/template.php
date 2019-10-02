@@ -63,7 +63,7 @@
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('documento_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>
+                <!--<li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>-->
               <?php endif; ?>
 
 

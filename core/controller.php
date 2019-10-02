@@ -129,7 +129,7 @@ class controller
 		}
 	}
 
-	public function loadEtapaByTipo($id)
+	public function loadEtapaByTipo($id, $cliente)
 	{
 		$etp = new Etapa('etapas');
 
@@ -265,7 +265,7 @@ class controller
 		return $array;
 	}
 
-	public function setLog($arr, $tabela, $tipo)
+	static public function setLog($arr, $tabela, $tipo)
 	{
 		$u = new Users;
 		$p = new Painel;

@@ -369,6 +369,9 @@ class Etapa extends model
     {
         $tipo = 'Editado';
 
+        error_log(print_r($Parametros,1));
+
+
 
         if (isset($id_etapa) && $id_etapa != '') {
 
@@ -438,8 +441,9 @@ class Etapa extends model
 
             if (isset($arquivos) && $Parametros['documento_etapa_nome'] != '') {
                 $d = new Documentos;
-                $d->add($arquivos, $id_company, $Parametros['id_obra'], $Parametros['documento_etapa_nome']);
-                $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company);
+
+                $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'].'_'.$Parametros['cliente'];
+                $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company, $Parametros['id_obra']);
             }
             
 
@@ -454,7 +458,6 @@ class Etapa extends model
 
             $sql = $this->db->prepare("UPDATE obra_etapa SET 
                 
-                ordem = :ordem,
                 responsavel = :responsavel,
                 data_pedido = :data_pedido,
                 cliente_responsavel = :cliente_responsavel,
@@ -473,7 +476,6 @@ class Etapa extends model
             $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
-            $sql->bindValue(":ordem", '');
 
             $sql->bindValue(":id", $id_etapa);
 
@@ -513,7 +515,6 @@ class Etapa extends model
 
             $sql = $this->db->prepare("UPDATE obra_etapa SET 
                 
-                ordem = :ordem,
                 nota_numero = :nota_numero,
                 data_abertura = :data_abertura,
                 prazo_atendimento = :prazo_atendimento,
@@ -526,7 +527,6 @@ class Etapa extends model
                 WHERE id_etapa_obra = :id
             ");
 
-            $sql->bindValue(":ordem", '');
             $sql->bindValue(":nota_numero", $Parametros['nota_numero_concessionaria']);
             $sql->bindValue(":data_abertura", controller::returnDate($Parametros['data_abertura_concessionaria']));
             $sql->bindValue(":prazo_atendimento", $Parametros['prazo_atendimento_concessionaria']);
@@ -584,12 +584,10 @@ class Etapa extends model
 
     public function etapaObra($id_etapa, $Parametros, $id_company, $id_user)
     {
-                error_log(print_r($Parametros,1));
         try {
 
             $sql = $this->db->prepare("UPDATE obra_etapa SET 
                 
-                ordem = :ordem,
                 responsavel = :responsavel,
                 data_programada = :data_programada,
                 data_iniciada = :data_iniciada,
@@ -601,7 +599,6 @@ class Etapa extends model
                 WHERE id_etapa_obra = :id
             ");
 
-            $sql->bindValue(":ordem", '');
             $sql->bindValue(":responsavel", $Parametros['responsavel_obra']);
             $sql->bindValue(":data_programada", $Parametros['data_programada_obra']);
             $sql->bindValue(":data_iniciada", $Parametros['data_iniciada_obra']);
@@ -680,7 +677,7 @@ class Etapa extends model
 
         $data_hoje = date('Y-m-d');
 
-        $prazo_cinco_dias =  date('Y-m-d', strtotime('+5days', strtotime($data_hoje)));
+        $prazo_cinco_dias =  date('Y-m-d', strtotime('+30days', strtotime($data_hoje)));
         $prazo_atrasado = date('Y-m-d', strtotime('-1000days', strtotime($data_hoje)));
 
         try {

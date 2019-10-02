@@ -127,12 +127,7 @@ class Documentos extends model
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 		}
 
-		if ($id != '' || $id_obra) {
-
-			$this->addDocumentoObra($id_obra, $id);
-		}
-
-		return $this->db->lastInsertId();
+		return $id;
 	}
 
 	public function delete($id, $id_company)
@@ -207,8 +202,9 @@ class Documentos extends model
 		}
 	}
 
-	public function addDocumentoEtapa($id_etapa, $arquivos, $nome_documento, $id_company)
+	public function addDocumentoEtapa($id_etapa, $arquivos, $nome_documento, $id_company, $id_obra)
 	{
+
 
 
 		$id_documento = $this->add($arquivos, $id_company, '', $nome_documento);
@@ -223,6 +219,11 @@ class Documentos extends model
 			$sql->bindValue(":id_documento", $id_documento);
 			$sql->bindValue(":id_etapa", $id_etapa);
 			$sql->execute();
+
+
+			$this->addDocumentoObra($id_obra, $id_documento);
+			
+
 		} catch (PDOExecption $e) {
 			$sql->rollback();
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));

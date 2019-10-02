@@ -10,6 +10,9 @@
         <input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $array[0]['id_etapa_obra']; ?>">
         <input type="hidden" class="form-control" name="id_obra" autocomplete="off" value="<?php echo $array[0]['id_obra']; ?>">
         <input type="hidden" class="form-control" name="server" autocomplete="off" value="<?php echo (isset($_GET['tipo']) ? $_GET['tipo'] : '0') ?>">
+        <input type="hidden" class="form-control" name="cliente" autocomplete="off" value="<?php echo $cliente; ?>">
+
+        
 
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
