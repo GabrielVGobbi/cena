@@ -1,11 +1,18 @@
 <!DOCTYPE html>
 <html>
+
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>AdminLTE 2 | Log in</title>
+  <title>AdminCena | Log in</title>
   <!-- Tell the browser to be responsive to screen width -->
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/dist/js/adminlte.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/icheck.min.js"></script>
+
+
+
   <!-- Bootstrap 3.3.7 -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap/dist/css/bootstrap.min.css">
   <!-- Font Awesome -->
@@ -17,8 +24,11 @@
   <!-- iCheck -->
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/square/blue.css">
 
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
+  <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
+
 </head>
+
 <body class="hold-transition login-page">
   <div class="login-box">
     <div class="login-logo">
@@ -28,7 +38,7 @@
     <div class="login-box-body">
       <p class="login-box-msg">Faça o login no painel administrativo</p>
 
-      <form  method="post" action="<?php echo BASE_URL; ?>/login/index_post">
+      <form method="post" action="<?php echo BASE_URL; ?>/login/index_post">
         <div class="form-group has-feedback">
           <input type="text" class="form-control" placeholder="Usuario" name="login">
           <span class="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -40,22 +50,29 @@
         <div class="row">
           <div class="col-xs-8">
             <div class="checkbox icheck">
-              <label>
-                
+              <label class="">
+                <div class="icheckbox_square-blue" aria-checked="false" aria-disabled="false" style="position: relative;">
+                <input name="lembrar" value="true" type="checkbox" style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); 
+                border: 0px; opacity: 0;"><ins class="iCheck-helper" 
+                style="position: absolute; top: -20%; left: -20%; display: block; width: 140%; height: 140%; margin: 0px; padding: 
+                  0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;">
+                </ins>
+              </div> Remember Me
               </label>
             </div>
           </div>
-          <!-- /.col -->
+
           <div class="col-xs-4">
             <button type="submit" class="btn btn-primary btn-block btn-flat">Entrar</button>
           </div>
+
         </div>
 
-        
-          <?php if(isset($error) && !empty($error)): ?>
-         
+
+        <?php if (isset($error) && !empty($error)) : ?>
+
           <div class="row">
-            
+
             <div class="col-md-12">
               <div class="callout callout-danger">
                 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
@@ -65,35 +82,38 @@
             </div>
           </div>
         <?php endif; ?>
-      </div>
+
+
+    </div>
     </form>
 
-   <!--  <div class="social-auth-links text-center">
+    <!--  <div class="social-auth-links text-center">
       <p>- OR -</p>
       <a href="#" class="btn btn-block btn-social btn-facebook btn-flat"><i class="fa fa-facebook"></i> Sign in using
         Facebook</a>
       <a href="#" class="btn btn-block btn-social btn-google btn-flat"><i class="fa fa-google-plus"></i> Sign in using
         Google+</a>
       </div> -->
-      <!-- /.social-auth-links -->
-<!-- 
+    <!-- /.social-auth-links 
+<
     <a href="#">I forgot my password</a><br>
     <a href="register.html" class="text-center">Register a new membership</a> -->
 
   </div>
   <!-- /.login-box-body -->
-</div>
-<!-- /.login-box -->
+  </div>
+  <!-- /.login-box -->
 
 
-<script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' /* optional */
+  <script>
+    $(function() {
+      $('input').iCheck({
+        checkboxClass: 'icheckbox_square-blue',
+        radioClass: 'iradio_square-blue',
+        increaseArea: '20%' /* optional */
+      });
     });
-  });
-</script>
+  </script>
 </body>
+
 </html>

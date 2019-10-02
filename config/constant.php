@@ -14,4 +14,7 @@ define("gitSSH", "rR96&cCgq,sn");
 
 define("EmailLand", "1&zK21-.7^+B");
 
+define('HASH_KEY', md5( 'chave secreta' ) );
+define('HASH_PATTERN', HASH_KEY . '%d' . '%s' );
+
 

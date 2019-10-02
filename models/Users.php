@@ -17,6 +17,22 @@ class Users extends model
 	public function isLogged()
 	{
 
+		if(isset($_COOKIE['lembrar'])){
+			$user = $_COOKIE['user'];
+			$pass = $_COOKIE['pass'];
+
+			$sql = $this->db->prepare("SELECT * FROM users WHERE login = :login AND password = :password AND usu_ativo = '1'");
+			$sql->bindValue(':login', $user);
+			$sql->bindValue(':password', $pass);
+			$sql->execute();
+			if($sql->rowCount() == 1){
+				return true;
+
+				error_log(print_r('ok',1));
+				exit();
+			}
+		}
+
 		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser'])) {
 			return true; //se a session esta aberta e não esta vazia retorna true
 
@@ -26,8 +42,14 @@ class Users extends model
 		}
 	}
 
+	private function hashForCookie( $str )
+	{
+		$strHash = sprintf( HASH_PATTERN, time(), $str );
+		return sha1( $strHash );
+	}
+
 	//Verifica os dados do POST corretamente
-	public function doLogin($login, $password)
+	public function doLogin($login, $password, $lembrar)
 	{
 
 		$sql = $this->db->prepare("SELECT * FROM users WHERE login = :login AND password = :password AND usu_ativo = '1'");
@@ -39,6 +61,18 @@ class Users extends model
 			$row = $sql->fetch();
 
 			$_SESSION['ccUser'] = $row['id'];
+
+			if($lembrar){
+				setcookie( 'lembrar', true, time() + (60*60*24), '/');
+				setcookie( 'user', $login, time() + (60*60*24), '/');
+				setcookie( 'pass', $password, time() + (60*60*24), '/');
+
+
+				error_log(print_r('ok',1));
+			}
+
+			$hash = $this->hashForCookie($password);
+			
 
 			return true;
 		} else {
@@ -72,6 +106,7 @@ class Users extends model
 	{
 
 		session_destroy();
+		setcookie('lembrar', true, time()-1, '/');
 	}
 
 	public function hasPermission($name)

@@ -21,14 +21,18 @@ class loginController extends controller {
 
 	public function index_post(){
 
+
+
+
 		if(isset($_POST['login']) && !empty($_POST['password'])){
 
 			$login = addslashes(lcfirst($_POST['login']));
 			$pass = addslashes($_POST['password']);
+			$lembrar = ($_POST['lembrar']);
 
 			$u = new Users();
 
-			if($u->doLogin($login, $pass)){
+			if($u->doLogin($login, $pass, $lembrar)){
 				
 				header("location:".BASE_URL."home");
 				exit;
