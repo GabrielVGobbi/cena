@@ -123,5 +123,169 @@ class Painel extends model
 
     }
 
+    public function orderItem($orderType, $id, $tipo){
+     
+        $itemBefore = array();
+        if($orderType == 'up'){
+
+            $infoItemAtual = $this->atual($id);
+            $order_id = $infoItemAtual['order_id'];
+
+            $sql = $this->db->prepare(
+                "   SELECT * FROM etapas_servico_concessionaria WHERE order_id < :order_id AND tipo = :tipo ORDER BY order_id DESC  LIMIT 1
+
+                ");
+
+            $sql->bindValue(":order_id", $order_id);
+            $sql->bindValue(":tipo", $tipo);
+            $sql->execute();
+            
+     
+            if ($sql->rowCount() > 0) {
+                $itemBefore = $sql->fetch();
+
+                $sql = $this->db->prepare("
+                UPDATE etapas_servico_concessionaria SET 
+                    order_id = :order_id
+                WHERE id = :id
+                ");
+
+                $sql->bindValue(":id", $itemBefore['id']);
+                $sql->bindValue(":order_id", $order_id);
+                $sql->execute();
+
+
+                $sql = $this->db->prepare("
+                UPDATE etapas_servico_concessionaria SET 
+                    order_id = :order_id
+                WHERE id = :id
+                ");
+
+                $sql->bindValue(":id", $infoItemAtual['id']);
+                $sql->bindValue(":order_id", $itemBefore['order_id']);
+                $sql->execute();
+
+
+            }else {
+                return;
+            }
+
+
+        }else if($orderType == 'down') {
+
+            $infoItemAtual = $this->atual($id);
+            $order_id = $infoItemAtual['order_id'];
+            
+            $sql = $this->db->prepare(
+                "   SELECT * FROM etapas_servico_concessionaria WHERE order_id > :order_id AND tipo = :tipo ORDER BY order_id ASC  LIMIT 1
+
+                ");
+
+            $sql->bindValue(":order_id", $order_id);
+            $sql->bindValue(":tipo", $tipo);
+            $sql->execute();
+            
+     
+            if ($sql->rowCount() > 0) {
+                $itemBefore = $sql->fetch();
+
+                $sql = $this->db->prepare("
+                UPDATE etapas_servico_concessionaria SET 
+                    order_id = :order_id
+                WHERE id = :id
+                ");
+
+                $sql->bindValue(":id", $itemBefore['id']);
+                $sql->bindValue(":order_id", $order_id);
+                $sql->execute();
+
+
+                $sql = $this->db->prepare("
+                UPDATE etapas_servico_concessionaria SET 
+                    order_id = :order_id
+                WHERE id = :id
+                ");
+
+                $sql->bindValue(":id", $infoItemAtual['id']);
+                $sql->bindValue(":order_id", $itemBefore['order_id']);
+                $sql->execute();
+
+
+            }else {
+                return;
+            }
+
+        }
+
+
+    }
+
+    public function atual($id){
+        $array = array();
+        $sql = $this->db->prepare(
+            "   SELECT * FROM etapas_servico_concessionaria WHERE id = :id LIMIT 1
+
+            ");
+
+        $sql->bindValue(":id", $id);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetch();
+        }
+
+        return $array;
+       
+    }
+
+    public function script(){
+
+        
+        $array = array();
+        $sql = $this->db->prepare(
+            "   SELECT * FROM etapas_servico_concessionaria etpcs
+                INNER JOIN etapa etp ON (etp.id = etpcs.id_etapa)
+                INNER JOIN etapa_tipo etpt on (etp.tipo = etpt.id_etapatipo)
+
+            ");
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchALL();
+
+            foreach($array as $k){
+                error_log(print_r($k,1));
+                exit();
+
+                if($k['id_etapatipo'] == 1){
+                    $tipo = 'adm';
+                }else if($k['id_etapatipo'] == 2 ){
+                    $tipo = 'com';
+                }else {
+                    $tipo = 'obr';
+                }
+
+                $sql = $this->db->prepare(
+                    "UPDATE etapas_servico_concessionaria  SET
+							order_id = :order
+                            tipo = :tipo
+				
+							WHERE id = :order
+				");
+                $sql->bindValue(":order",$k['id']);
+                $sql->bindValue(":tipo", $tipo);
+
+                $sql->execute();
+                   
+            }
+
+        }
+
+       
+
+    }
+
     
 }
+

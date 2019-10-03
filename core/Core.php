@@ -11,7 +11,7 @@ class Core {
 		$params = array();
 
 
-		if(!empty($url) && $url != '/' && $url != 'assets/images/anuncios' && $url != 'favicon.icoController'){
+		if(!empty($url) && $url != '/' && $url != 'assets/images/anuncios'){
 
 			$url = explode('/', $url);
 			array_shift($url);

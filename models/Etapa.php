@@ -270,11 +270,11 @@ class Etapa extends model
 
         $arrayConcessionaria = array();
 
-        $sql = $this->db->prepare("SELECT * FROM etapas_servico_concessionaria etpsc
+        $sql = $this->db->prepare("SELECT *, etpsc.id as id_ord_m FROM etapas_servico_concessionaria etpsc
             INNER JOIN etapa etp ON (etp.id = etpsc.id_etapa)
             INNER JOIN etapa_tipo etpt ON (etp.tipo = etpt.id_etapatipo)
 
-			WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico AND etpt.nome = :tipo
+			WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico AND etpt.nome = :tipo ORDER BY etpsc.order_id ASC
 		");
 
         $sql->bindValue(':id_concessionaria', $id_concessionaria);
@@ -290,24 +290,39 @@ class Etapa extends model
         return $arrayConcessionaria;
     }
 
-    public function addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa)
+    public function addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo)
     {
 
-        $tipo = "Inserido";
         try {
             $sql = $this->db->prepare("INSERT INTO etapas_servico_concessionaria SET 
         		id_concessionaria = :id_concessionaria,
                 id_servico        = :id_servico,
-                id_etapa          = :id_etapa
+                id_etapa          = :id_etapa,
+                tipo              = :tipo
 
 			");
 
             $sql->bindValue(":id_concessionaria", $id_concessionaria);
             $sql->bindValue(":id_servico", $id_servico);
             $sql->bindValue(":id_etapa", $id_etapa);
+            $sql->bindValue(":tipo", $tipo);
+
 
 
             if ($sql->execute()) {
+                
+
+                $id = $this->db->lastInsertId();
+
+                $sql = $this->db->prepare("
+                    UPDATE etapas_servico_concessionaria SET 
+                        order_id = :id
+                    WHERE id = :id
+                ");
+
+                $sql->bindValue(":id", $id);
+                $sql->execute();
+
                 controller::alert('success', 'Inserido com sucesso!!');
             } else {
                 controller::alert('danger', 'Não foi possivel fazer a inserção');
@@ -319,6 +334,7 @@ class Etapa extends model
 
         return $this->db->lastInsertId();
     }
+
 
     public function removeEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa)
     {
@@ -369,10 +385,6 @@ class Etapa extends model
     {
         $tipo = 'Editado';
 
-        error_log(print_r($Parametros,1));
-
-
-
         if (isset($id_etapa) && $id_etapa != '') {
 
             if ($Parametros['tipo'] === 'ADMINISTRATIVA') {
@@ -397,6 +409,8 @@ class Etapa extends model
             } elseif ($Parametros['tipo'] === 'CONCESSIONARIA') {
 
                 $com = array();
+
+                $com['check_nota'] = isset($Parametros['check_nota']) ? $Parametros['check_nota'] : ''; 
 
                 $com['id_obra'] = $Parametros['id_obra'];
 
@@ -561,21 +575,22 @@ class Etapa extends model
                 controller::alert('danger', 'Erro ao fazer a edição!!');
             }
 
-
-            $sql = $this->db->prepare("UPDATE obra SET 
+            if($Parametros['check_nota'] == 1){
+                $sql = $this->db->prepare("UPDATE obra SET 
+                    
                 
-               
-                obra_nota_numero = :obra_nota_numero
-                
+                    obra_nota_numero = :obra_nota_numero
+                    
 
-                WHERE id = :id
-            ");
+                    WHERE id = :id
+                ");
 
-            $sql->bindValue(":obra_nota_numero", $Parametros['nota_numero_concessionaria']);
+                $sql->bindValue(":obra_nota_numero", $Parametros['nota_numero_concessionaria']);
 
 
-            $sql->bindValue(":id",  $Parametros['id_obra']);
-            $sql->execute();
+                $sql->bindValue(":id",  $Parametros['id_obra']);
+                $sql->execute();
+            }
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -639,36 +654,49 @@ class Etapa extends model
     }
 
 
-    public function check($id, $id_obra, $tipo)
+    public function check($ordem, $id_obra, $tipo)
     {
+        error_log(print_r($ordem,1));
+        //error_log(print_r($id_obra,1));
+        //error_log(print_r($tipo,1));
+
 
         $array = array();
 
-        $sql = $this->db->prepare("SELECT obr.parcial_check as parcial,obr.check as `check` FROM obra_etapa obr 
+        $sql = $this->db->prepare("SELECT obr.parcial_check as parcial,obr.check as `check`,ordem FROM obra_etapa obr 
             INNER JOIN etapa etp ON (obr.id_etapa = etp.id)
-            WHERE (id_etapa_obra = :id AND id_obra = :id_obra 
-            AND etp.tipo = :tipo) ");
+            WHERE (ordem < :id AND id_obra = :id_obra 
+            AND etp.tipo = :tipo) ORDER BY id_etapa_obra DESC LIMIT 1 ");
 
-        $sql->bindValue(':id', $id);
+        $sql->bindValue(':id', $ordem);
         $sql->bindValue(':id_obra', $id_obra);
         $sql->bindValue(':tipo', $tipo);
 
         $sql->execute();
 
-        $row = $sql->fetch();
+        if($sql->rowCount() > 0){
+            $row = $sql->fetch();
 
-        if ($tipo == 1) {
-
+            if ($tipo == 1) {   
+                return 1;
+            }
+    
+            if ($row['parcial'] == 1  || $row['check'] == 1 || $row['check'] == '') {
+               
+                return 1;
+            
+            } else {
+    
+                return 0;
+            }
+            
+        }else {
+            
             return 1;
         }
 
-        if ($row['parcial'] == 1  || $row['check'] == 1 || $row['check'] == '') {
 
-            return 1;
-        } else {
-
-            return 0;
-        }
+        
     }
 
 

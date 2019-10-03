@@ -355,7 +355,7 @@
   <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
   <!--<script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/dist/js/pages/dashboard.js"></script>-->
   <script type="text/javascript">
-    var BASE_URL = '<?php echo BASE_URL; ?>'
+    var BASE_URL = '<?php echo BASE_URL; ?>';
   </script>
 
   <?php if (isset($_SESSION['form'])) : ?>

@@ -1,6 +1,6 @@
 <?php
     $etapa = $array[0]['id_etapa_obra'] - 1;
-    $etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo']);
+    //$etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo']);
 ?>
 <form id="concessionaria" action="<?php echo BASE_URL; ?>obras/editEtapaObra/<?php echo $array[0]['id_etapa_obra']; ?>" method="post">
     <table class="table table-striped">
@@ -16,9 +16,9 @@
 
             <tr style="display:;">
                 <td>
-                    <?php if ($etapaCheck == 1 || $etapaCheck == '') : ?>
+                   
                         <a type="button" data-toggle="modal" data-target="#editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-info"><i class="fa fa-fw fa-check-square-o"></i></a>
-                    <?php endif; ?>
+                  
                     <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>obras/obra_etapa_delete/<?php echo $array[0]['id_etapa_obra']; ?>/<?php echo $array[0]['id_obra'];?>"><i class="ion ion-trash-a"></i></a>
 
                 </td>

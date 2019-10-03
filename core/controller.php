@@ -141,10 +141,14 @@ class controller
 		include "views/obras/etapas/editarEtapa.php";
 	}
 
-	public function loadEtapaCheck($check, $etp, $id_obra, $tipo)
+	public function loadEtapaCheck($id_etapa,$ordem, $id_obra, $tipo, $etp)
 	{
 
 
+		$check = $this->etapa->check($ordem, $id_obra, $tipo);
+
+
+		
 
 		include ('views/obras/etapas/check.php');
 	}

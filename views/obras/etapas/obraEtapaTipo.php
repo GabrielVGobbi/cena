@@ -22,19 +22,10 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
 
                     <?php
+                
 
-                        $tipo = '';
-
-                        $etapa = $etp['id_etapa_obra'] - 1;
-
-                        //pegar o registro anterior para ver se ta 0 ou 1 
-                        $etapaCheck = $this->etapa->check($etapa, $obr[0], $etp['tipo']);
-
-                        if($etp['parcial_check'] == 1){
-                            $tipo = 'PARCIAL';
-                        }
-
-                        controller::loadEtapaCheck($etapaCheck, $etp, $obr[0], $tipo);
+                            controller::loadEtapaCheck($etp['id_etapa_obra'],$etp['ordem'], $obr[0], $etp['tipo'], $etp);
+                        
                     ?>
      
 

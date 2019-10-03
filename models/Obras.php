@@ -323,12 +323,14 @@ class Obras extends model
 				if (count($etapas) > 0) {
 					for ($q = 0; $q < count($etapas); $q++) {
 
-						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra)
-							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra)
+						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra, ordem)
+							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra, :ordem)
 							");
 						$sql->bindValue(":id_etapa", $etapas[$q]['id_etapa']);
 						$sql->bindValue(":id_obra", $id_obra);
 						$sql->bindValue(":etp_nome_etapa_obra", $etapas[$q]['etp_nome']);
+						$sql->bindValue(":ordem", $etapas[$q]['order_id']);
+
 
 
 						$sql->execute();
@@ -336,7 +338,6 @@ class Obras extends model
 				}
 			} else {
 
-				error_log(print_r('erro', 1));
 			}
 		} catch (PDOExecption $e) {
 			$sql->rollback();
@@ -350,6 +351,8 @@ class Obras extends model
 	public function getEtapas($id_obra, $tipo)
 	{
 
+
+
 		if($tipo == '' || $tipo == '0'){
 			$tipo = '1,2,3';
 		}	
@@ -357,10 +360,11 @@ class Obras extends model
 		$sql = "SELECT * FROM  
 			obra_etapa obrt
 			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
-		WHERE id_obra = :id_obra AND tipo IN ($tipo) ORDER BY  tipo not in ('2'),ordem DESC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC" ;
+		WHERE id_obra = :id_obra AND tipo IN ($tipo) ORDER BY  tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC" ;
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_obra", $id_obra);
+
 
 
 		$sql->execute();

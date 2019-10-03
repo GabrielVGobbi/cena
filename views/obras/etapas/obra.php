@@ -1,6 +1,6 @@
 <?php
 $etapa = $array[0]['id_etapa_obra'] - 1;
-$etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo']);
+//$etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo']);
 ?>
 
 <form id="obra" action="<?php echo BASE_URL; ?>obras/editEtapaObra/<?php echo $array[0]['id_etapa_obra']; ?>" method="post">
@@ -20,7 +20,7 @@ $etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo'
 
             <tr>
                 <td>
-                    <?php if ($etapaCheck == 1 || $etapaCheck == '') : ?>
+                    
 
                         <a type="button" data-toggle="modal" data-target="#editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-info"><i class="fa fa-fw fa-check-square-o"></i></a>
            
@@ -28,7 +28,7 @@ $etapaCheck = $this->etapa->check($etapa, $array[0]['id_obra'], $array[0]['tipo'
                         <button class="btn btn-danger" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL ?>obras/obra_etapa_delete/<?php echo $array[0]['id_etapa_obra']; ?>/<?php echo $array[0]['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
 																<i class="fa fa-fw fa-trash"></i>
 															</button>
-                    <?php endif; ?>
+                    
 
                 </td>
                 <td><?php echo $array[0]['responsavel']; ?></td>

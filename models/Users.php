@@ -28,7 +28,6 @@ class Users extends model
 			if($sql->rowCount() == 1){
 				return true;
 
-				error_log(print_r('ok',1));
 				exit();
 			}
 		}
@@ -51,7 +50,6 @@ class Users extends model
 	//Verifica os dados do POST corretamente
 	public function doLogin($login, $password, $lembrar)
 	{
-
 		$sql = $this->db->prepare("SELECT * FROM users WHERE login = :login AND password = :password AND usu_ativo = '1'");
 		$sql->bindValue(':login', lcfirst($login));
 		$sql->bindValue(':password', md5($password));
@@ -62,17 +60,12 @@ class Users extends model
 
 			$_SESSION['ccUser'] = $row['id'];
 
-			if($lembrar){
+			if(isset($lembrar)){
 				setcookie( 'lembrar', true, time() + (60*60*24), '/');
 				setcookie( 'user', $login, time() + (60*60*24), '/');
 				setcookie( 'pass', $password, time() + (60*60*24), '/');
 
-
-				error_log(print_r('ok',1));
-			}
-
-			$hash = $this->hashForCookie($password);
-			
+			}			
 
 			return true;
 		} else {

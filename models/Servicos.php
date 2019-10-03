@@ -133,7 +133,7 @@ class Servicos extends model
 		$sql = "SELECT * FROM  
 			etapas_servico_concessionaria etpsc
 			INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
-		WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico";
+		WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico ORDER BY etpsc.order_id ASC";
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_concessionaria", $id_concessionaria);

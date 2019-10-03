@@ -115,6 +115,19 @@
                             </div>
                           </div>
                         </div>
+                        
+                        <div class="col-md-12">
+                          <div class="checkbox icheck">
+                            <label class="">
+                              <div class="icheckbox_square-blue">
+                                <input class="flat-blue" name="check_nota"  type="checkbox" value="1">
+
+                              </div> Salvar como ultima nota
+                            </label>
+                          </div>
+                        </div>
+                      
+
 
                         <div class="col-md-12">
                           <div class="form-group">

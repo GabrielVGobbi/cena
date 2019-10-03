@@ -197,7 +197,7 @@ class concessionariasController extends controller
     public function add_etapa($id_concessionaria, $id_servico, $id_etapa, $tipo)
     {
 
-        $id = $this->etapa->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
+        $id = $this->etapa->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo);
 
         header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
         exit();
@@ -211,6 +211,16 @@ class concessionariasController extends controller
         header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
         exit();
     }
+
+    public function order($id_concessionaria, $id_servico, $id_ord_m, $tipo, $orderType)
+    {
+
+        $id = $this->painel->orderItem($orderType,$id_ord_m, $tipo);
+
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $id_concessionaria . '/' . $id_servico . '?tipo=' . $tipo);
+        exit();
+    }
+
 
     public function edit_etapa($id_concessionaria,$id_servico, $tipo )
     {
