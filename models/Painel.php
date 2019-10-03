@@ -243,10 +243,8 @@ class Painel extends model
         
         $array = array();
         $sql = $this->db->prepare(
-            "   SELECT * FROM etapas_servico_concessionaria etpcs
-                INNER JOIN etapa etp ON (etp.id = etpcs.id_etapa)
-                INNER JOIN etapa_tipo etpt on (etp.tipo = etpt.id_etapatipo)
-
+            "    SELECT * FROM obra_etapa
+            WHERE id_etapa <> 116 AND id_etapa_obra <> 40 and id_etapa_obra <> 39 and id_etapa_obra <> 515
             ");
 
         $sql->execute();
@@ -255,26 +253,16 @@ class Painel extends model
             $array = $sql->fetchALL();
 
             foreach($array as $k){
-                error_log(print_r($k,1));
-                exit();
 
-                if($k['id_etapatipo'] == 1){
-                    $tipo = 'adm';
-                }else if($k['id_etapatipo'] == 2 ){
-                    $tipo = 'com';
-                }else {
-                    $tipo = 'obr';
-                }
 
                 $sql = $this->db->prepare(
-                    "UPDATE etapas_servico_concessionaria  SET
-							order_id = :order
-                            tipo = :tipo
+                    "UPDATE obra_etapa  SET
+							ordem = :id
 				
-							WHERE id = :order
+							WHERE id_etapa_obra = :id
 				");
-                $sql->bindValue(":order",$k['id']);
-                $sql->bindValue(":tipo", $tipo);
+                $sql->bindValue(":id",$k['id_etapa_obra']);
+
 
                 $sql->execute();
                    

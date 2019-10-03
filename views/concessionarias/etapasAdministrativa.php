@@ -79,6 +79,8 @@
                                         <td><?php echo $etpSC['etp_nome']; ?></td>
                                         <td>
                                             <a href="<?php echo BASE_URL; ?>concessionarias/remove_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpSC['id']; ?>/adm" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-left"></i> Remover</a></a>
+                                            <a href="<?php echo BASE_URL; ?>concessionarias/order/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpSC['id_ord_m']; ?>/adm/up" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-up"></i></a>
+                                            <a href="<?php echo BASE_URL; ?>concessionarias/order/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpSC['id_ord_m']; ?>/adm/down" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-down"></i></a>
                                         </td>
                                     </tr>
                                 <?php endforeach; ?>

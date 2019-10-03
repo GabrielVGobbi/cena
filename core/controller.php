@@ -147,9 +147,6 @@ class controller
 
 		$check = $this->etapa->check($ordem, $id_obra, $tipo);
 
-
-		
-
 		include ('views/obras/etapas/check.php');
 	}
 

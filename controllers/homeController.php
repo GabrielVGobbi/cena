@@ -16,10 +16,10 @@ class homeController extends controller
         $this->obra = new Obras();
         $this->documento = new Documentos();
         $this->etapa = new Etapa('etapa');
+        $this->painel = new Painel;
 
         $this->user->setLoggedUser();
         $this->dataInfo['errorForm'] = array();
-
 
         if ($this->user->isLogged() == false) {
 
