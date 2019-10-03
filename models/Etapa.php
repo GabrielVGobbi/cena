@@ -75,6 +75,14 @@ class Etapa extends model
         $id_servico = $Parametros['id_servico'];
         $id_concessionaria = $Parametros['id_concessionaria'];
 
+        if($Parametros['tipo'] == 1){
+            $tipo = 'adm';
+        }else if ($Parametros['tipo'] == 2){
+            $tipo = 'com';
+        }else {
+            $tipo = 'obr';
+
+        }
 
         try {
             $sql = $this->db->prepare("INSERT INTO etapa SET 
@@ -92,9 +100,8 @@ class Etapa extends model
 
             controller::setLog($Parametros, 'etapa', 'add');
 
+            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa,$tipo );
 
-
-            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa);
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -167,16 +174,20 @@ class Etapa extends model
     {
         $tipo = 'Deletado';
 
+        $Parametros = array(
+            'id_etapa_obra' => $id_etapa_obra,
+        );
+
+
         if (isset($id_etapa_obra) && $id_etapa_obra != '') {
 
             $sql = $this->db->prepare("DELETE FROM obra_etapa WHERE id_etapa_obra = :id_etapa_obra");
-
-            $this->painel->setLog();
-           
             $sql->bindValue(":id_etapa_obra", $id_etapa_obra);
             
             if ($sql->execute()) {
                 controller::alert('success', 'Deletado com sucesso!!');
+                controller::setLog($Parametros, 'delete_etapa_obra', 'obra_etapa');
+
             } else {
                 controller::alert('danger', 'Erro ao deletar!!');
             }
@@ -656,10 +667,6 @@ class Etapa extends model
 
     public function check($ordem, $id_obra, $tipo)
     {
-        error_log(print_r($ordem,1));
-        //error_log(print_r($id_obra,1));
-        //error_log(print_r($tipo,1));
-
 
         $array = array();
 

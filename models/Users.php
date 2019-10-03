@@ -63,7 +63,7 @@ class Users extends model
 			if(isset($lembrar)){
 				setcookie( 'lembrar', true, time() + (60*60*24), '/');
 				setcookie( 'user', $login, time() + (60*60*24), '/');
-				setcookie( 'pass', $password, time() + (60*60*24), '/');
+				setcookie( 'pass', md5($password), time() + (60*60*24), '/');
 
 			}			
 
