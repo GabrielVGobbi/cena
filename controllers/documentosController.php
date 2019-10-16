@@ -107,14 +107,26 @@ class documentosController extends controller
         }
     }
 
-    public function delete($id)
+    public function delete($id, $id_obra = '', $id_etapa = '')
     {
 
         if ($this->user->hasPermission('documento_view') && $this->user->hasPermission('documento_delete')) {
+            
+
+            if($id_etapa != ''){
+                $this->documento->deleteDocFromEtapa($id_etapa, $id);
+            }
 
             $result = $this->documento->delete($id, $this->user->getCompany());
 
-            header("Location: " . BASE_URL . $this->dataInfo['pageController']);
+            if($id_obra == ''){
+                header("Location: " . BASE_URL . $this->dataInfo['pageController']);
+            }else {
+                header("Location: " . BASE_URL . 'obras/edit/'. $id_obra);
+
+            }
+
+            
 
             if ($result) {
                 $this->dataInfo['success'] = 'true';

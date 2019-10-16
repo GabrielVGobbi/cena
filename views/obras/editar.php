@@ -124,6 +124,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 														<a href="<?php echo BASE_URL ?>assets/documentos/<?php echo $doc['docs_nome']; ?>" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
 															<i class="fa fa-info"></i>
 														</a>
+														
 													</div>
 												</div>
 											</div>

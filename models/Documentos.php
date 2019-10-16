@@ -143,6 +143,40 @@ class Documentos extends model
 		}
 	}
 
+	public function getDocumentoById($id, $id_company)
+	{
+
+		$sql = $this->db->prepare("
+			SELECT * FROM documentos
+			WHERE id_company = :id_company AND id = :id
+		");
+
+		$sql->bindValue(':id', $id);
+		$sql->bindValue(':id_company', $id_company);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$this->array = $sql->fetch();
+		}
+
+		return $this->array;
+	}
+
+	public function deleteDocFromEtapa($id_etapa, $id_documento)
+	{
+
+		$documentoArray = $this->getDocumentoById($id_documento, 1);
+
+		$documento =  'assets/documentos/'.$documentoArray['docs_nome'];
+
+		$sql = $this->db->prepare("DELETE FROM documento_etapa WHERE id_etapa_obra = :id_etapa AND id_documento = :id_documento");
+		$sql->bindValue(":id_etapa", $id_etapa);
+		$sql->bindValue(":id_documento", $id_documento);
+		$sql->execute();
+
+		unlink($documento);
+	}
+
 	public function getDocumentoObra($id_obra)
 	{
 

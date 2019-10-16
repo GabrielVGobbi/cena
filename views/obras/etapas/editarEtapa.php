@@ -1,6 +1,6 @@
 <?php
-  $check = 'danger';
-  $msg = 'prazo';
+$check = 'danger';
+$msg = 'prazo';
 ?>
 
 <div class="modal fade" id="editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -12,7 +12,7 @@
         <input type="hidden" class="form-control" name="server" autocomplete="off" value="<?php echo (isset($_GET['tipo']) ? $_GET['tipo'] : '0') ?>">
         <input type="hidden" class="form-control" name="cliente" autocomplete="off" value="<?php echo $cliente; ?>">
 
-        
+
 
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -115,18 +115,18 @@
                             </div>
                           </div>
                         </div>
-                        
+
                         <div class="col-md-12">
                           <div class="checkbox icheck">
                             <label class="">
                               <div class="icheckbox_square-blue">
-                                <input class="flat-blue" name="check_nota"  type="checkbox" value="1">
+                                <input class="flat-blue" name="check_nota" type="checkbox" value="1">
 
                               </div> Salvar como ultima nota
                             </label>
                           </div>
                         </div>
-                      
+
 
 
                         <div class="col-md-12">
@@ -146,7 +146,7 @@
 
                       <?php elseif ($array[0]['nome'] === 'OBRA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="OBRA">
-                        
+
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Nome Etapa</label>
@@ -225,6 +225,9 @@
                                   <a href="<?php echo BASE_URL ?>assets/documentos/<?php echo $doc['docs_nome']; ?>" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
                                     <i class="fa fa-info"></i>
                                   </a>
+                                  <a href="<?php echo BASE_URL ?>documentos/delete/<?php echo $doc['id']; ?>/<?php echo $array[0]['id_obra'];?>/<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">
+                                    <i class="fa fa-trash"></i>
+                                  </a>
                                 </div>
                               </div>
                             </div>
@@ -255,7 +258,7 @@
               <button type="submit" class="btn btn-primary">Salvar</button>
             </div>
           </div>
-        </div>    
+        </div>
     </div>
   </div>
 
