@@ -35,12 +35,14 @@
 												<th>Tipo</th>
 											</tr>
 											<?php foreach ($tableDados as $inf) : ?>
-												<tr <?php echo ($inf['id'] == $_SESSION['ccUser'] ? "class='table-danger'" : ""); ?>>
+												<?php $id = (isset($_SESSION['ccUser']) ? $_SESSION['ccUser'] : $_COOKIE['lembrar']); ?>
+
+												<tr <?php echo ($inf['id'] == $id ? "class='table-danger'" : ""); ?>>
 													<td>
 														<?php if ($this->user->hasPermission('user_view') && $this->user->hasPermission('user_edit')) : ?>
 															<a type="button" class="btn btn-info" href="<?php echo BASE_URL ?>usuario/edit/<?php echo $inf['id'] ?>"><i class="fa fa-fw fa-edit"></i></a>
 														<?php endif; ?>
-														<?php if ($this->user->hasPermission('user_delet') && $_SESSION['ccUser'] != $inf['id']) : ?>
+														<?php if ($this->user->hasPermission('user_delet') && $id != $inf['id']) : ?>
 															<a type="button" href="<?php echo BASE_URL ?>usuario/delete/<?php echo $inf['id'] ?>" class="<?php echo ($inf['usu_ativo'] == ATIVO ? "btn btn-success" : "btn btn-default");	?>"><i class="fa fa-fw fa-toggle-on"></i></a>
 														
 															

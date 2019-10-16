@@ -17,22 +17,7 @@ class Users extends model
 	public function isLogged()
 	{
 
-		if(isset($_COOKIE['lembrar'])){
-			$user = $_COOKIE['user'];
-			$pass = $_COOKIE['pass'];
-
-			$sql = $this->db->prepare("SELECT * FROM users WHERE login = :login AND password = :password AND usu_ativo = '1'");
-			$sql->bindValue(':login', $user);
-			$sql->bindValue(':password', $pass);
-			$sql->execute();
-			if($sql->rowCount() == 1){
-				return true;
-
-				exit();
-			}
-		}
-
-		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser'])) {
+		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser']) || isset($_COOKIE['lembrar'])) {
 			return true; //se a session esta aberta e não esta vazia retorna true
 
 		} else {
@@ -61,13 +46,14 @@ class Users extends model
 			$_SESSION['ccUser'] = $row['id'];
 
 			if(isset($lembrar)){
-				setcookie( 'lembrar', true, time() + (60*60*24), '/');
+				
+				setcookie( 'lembrar', $_SESSION['ccUser'], time() + (60*60*3600), '/');
 				setcookie( 'user', $login, time() + (60*60*24), '/');
 				setcookie( 'pass', md5($password), time() + (60*60*24), '/');
 
 			}			
-
 			return true;
+			
 		} else {
 			return false;
 		}
@@ -77,9 +63,9 @@ class Users extends model
 	public function setLoggedUser()
 	{
 
-		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser'])) {
+		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser']) || isset($_COOKIE['lembrar'])) {
 
-			$id = $_SESSION['ccUser'];
+			$id = (isset($_SESSION['ccUser']) ? $_SESSION['ccUser'] : $_COOKIE['lembrar']);
 			$sql = $this->db->prepare("SELECT * FROM users WHERE id = :id");
 			$sql->bindValue(':id', $id);
 			$sql->execute();
