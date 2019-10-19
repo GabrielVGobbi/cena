@@ -149,11 +149,15 @@ class ajaxController extends controller
 
         if (isset($_POST['nome']) && !empty($_POST['nome'])) {
 
-
+            
             $Parametros['nome'] = addslashes($_POST['nome']);
             $Parametros['tipo'] = addslashes($_POST['tipo']);
             $Parametros['id_servico'] = addslashes($_POST['id_servico']);
             $Parametros['id_concessionaria'] = addslashes($_POST['id_concessionaria']);
+
+            $Parametros['quantidade']       = ( isset($_POST['quantidade'])  ? $_POST['quantidade'] : '' );	
+            $Parametros['preco']            = ( isset($_POST['preco'])       ? $_POST['preco'] :      '' );	
+            $Parametros['tipo_compra']      = ( isset($_POST['tipo_compra']) ? $_POST['tipo_compra'] : '' );	
 
 
             $data['id'] = $a->add($u->getCompany(), $Parametros);

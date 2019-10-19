@@ -75,24 +75,39 @@ class Etapa extends model
         $id_servico = $Parametros['id_servico'];
         $id_concessionaria = $Parametros['id_concessionaria'];
 
+
+
+        $quantidade = ( isset($Parametros['quantidade']) ? $Parametros['quantidade'] : '' );	
+        $preco      = ( isset($Parametros['preco'])      ? controller::PriceSituation($Parametros['preco'])      : '' );	
+        $tipo_compra      = ( isset($Parametros['tipo_compra'])      ? $Parametros['tipo_compra']      : '' );	
+
         if($Parametros['tipo'] == 1){
             $tipo = 'adm';
         }else if ($Parametros['tipo'] == 2){
             $tipo = 'com';
-        }else {
+        }else if ($Parametros['tipo'] == 3){
             $tipo = 'obr';
+
+        }else {
+            $tipo = 'compra';
 
         }
 
         try {
             $sql = $this->db->prepare("INSERT INTO etapa SET 
-                    etp_nome = :nome,
-                    tipo = :tipo
-
-                ");
+                etp_nome    = :nome,
+                tipo        = :tipo,
+                quantidade  = :quantidade,
+                preco       = :preco,
+                tipo_compra  = :tipo_compra
+            ");
 
             $sql->bindValue(":nome", $Parametros['nome']);
             $sql->bindValue(":tipo", $Parametros['tipo']);
+            $sql->bindValue(":quantidade", $quantidade);
+            $sql->bindValue(":preco", $preco);
+            $sql->bindValue(":tipo_compra", $tipo_compra);
+
 
             $sql->execute();
 
@@ -114,21 +129,31 @@ class Etapa extends model
     {
         $tipo = 'Editado';
 
-        $etp_nome = $Parametros['nome_etapa'];
+        $etp_nome  = $Parametros['nome_etapa'];
         $id_etapa  = $Parametros['id_etapa'];
+
+        $quantidade         = ( isset($Parametros['quantidade'])  ? $Parametros['quantidade'] : '' );	
+        $preco              = ( isset($Parametros['preco'])       ? $Parametros['preco'] :      '' );	
+        $tipo_compra        = ( isset($Parametros['tipo_compra']) ? $Parametros['tipo_compra'] : '' );	
 
         if (isset($id_etapa) && $id_etapa != '') {
             try {
 
                 $sql = $this->db->prepare("UPDATE etapa SET 
 					
-					etp_nome = :etp_nome
+					etp_nome = :etp_nome,
+                    quantidade  = :quantidade,
+                    preco       = :preco,
+                    tipo_compra  = :tipo_compra
 
 					WHERE id = :id_etapa
 	        	");
 
                 $sql->bindValue(":etp_nome", $etp_nome);
                 $sql->bindValue(":id_etapa", $id_etapa);
+                $sql->bindValue(":quantidade", $quantidade);
+                $sql->bindValue(":preco", $preco);
+                $sql->bindValue(":tipo_compra", $tipo_compra);
 
                 if ($sql->execute()) {
                     controller::alert('success', 'Editado com sucesso!!');

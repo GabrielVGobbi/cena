@@ -9,6 +9,7 @@
                 <?php include_once('etapasConcessionaria.php'); ?>
                 <?php include_once('etapasAdministrativa.php'); ?>
                 <?php include_once('etapasObra.php'); ?>
+                <?php include_once('etapasCompra.php'); ?>
             </div>
             <div class="pull-right">
                 <a href="<?php echo BASE_URL; ?>concessionarias/edit/<?php echo $tableInfo['id_concessionaria']; ?>" type="" class="btn btn-primary">Voltar</a>
@@ -31,18 +32,32 @@
                 $('#boxcom').boxWidget('toggle');
                 $('#boxadm').boxWidget('collapse');
                 $('#boxobra').boxWidget('collapse');
+                $('#boxcompra').boxWidget('collapse');
+
             });
 
             $('.boxadm').on('click', function(e) {
                 $('#boxcom').boxWidget('collapse');
                 $('#boxadm').boxWidget('toggle');
                 $('#boxobra').boxWidget('collapse');
+                $('#boxcompra').boxWidget('collapse');
+
             });
 
             $('.boxobra').on('click', function(e) {
                 $('#boxcom').boxWidget('collapse');
                 $('#boxadm').boxWidget('collapse');
+                $('#boxcompra').boxWidget('collapse');
                 $('#boxobra').boxWidget('toggle');
+                
+            });
+
+            $('.boxcompra').on('click', function(e) {
+                $('#boxcom').boxWidget('collapse');
+                $('#boxadm').boxWidget('collapse');
+                $('#boxcompra').boxWidget('toggle');
+                $('#boxobra').boxWidget('collapse');
+                
             });
         });
     </script>

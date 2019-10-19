@@ -132,6 +132,8 @@ class concessionariasController extends controller
 
             $this->dataInfo['titlePage'] = $this->dataInfo['tableInfo']['razao_social'] . ' x ' . $this->dataInfo['tableInfo']['sev_nome'];
 
+            $this->dataInfo['fluid'] = true;
+
             $this->loadTemplate($this->dataInfo['pageController'] . "/edit_servico", $this->dataInfo);
         } else {
 

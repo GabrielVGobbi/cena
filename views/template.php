@@ -223,7 +223,7 @@
     </header>
     <!-- Full Width Column -->
     <div class="content-wrapper">
-      <div class="container">
+      <div class="container<?php echo ( ($viewData['titlePage'] == 'financeiro' || isset($viewData['fluid'])) ? '-fluid' : '') ?>">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1 style="text-align: center;">
