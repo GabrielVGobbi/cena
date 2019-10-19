@@ -3,11 +3,24 @@
 
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
-        <a href="<?php echo BASE_URL; ?>obras"> <span class="info-box-icon bg-aqua"><i class="fa fa-building-o"></i></span></a>
+        <a href="<?php echo BASE_URL; ?>obras?filtros%5Bobra_nota_numero%5D=&filtros%5Bnome_obra%5D=&filtros%5Bcliente_nome%5D=&filtros%5Bsituacao%5D="> <span class="info-box-icon bg-aqua"><i class="fa fa-building-o"></i></span></a>
 
         <div class="info-box-content">
-          <span class="info-box-text">Obras</span> </a>
+          <span class="info-box-text">Todas as Obras</span> </a>
           <span class="info-box-number"><?php echo $count_obras; ?></span>
+        </div>
+        <!-- /.info-box-content -->
+      </div>
+      <!-- /.info-box -->
+    </div>
+
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <a href="<?php echo BASE_URL; ?>obras"> <span class="info-box-icon bg-green"><i class="fa fa-building-o"></i></span></a>
+
+        <div class="info-box-content">
+          <span class="info-box-text">Obras Ativas</span>
+          <span class="info-box-number"><?php echo $count_obrasAtivas; ?></span>
         </div>
         <!-- /.info-box-content -->
       </div>
@@ -31,18 +44,7 @@
     <!-- fix for small devices only -->
     <div class="clearfix visible-sm-block"></div>
 
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <a href="<?php echo BASE_URL; ?>concessionaria"> <span class="info-box-icon bg-green"><i class="ion ion-stats-bars"></i></span></a>
-
-        <div class="info-box-content">
-          <span class="info-box-text">Concessionarias</span>
-          <span class="info-box-number"><?php echo $count_concessionaria; ?></span>
-        </div>
-        <!-- /.info-box-content -->
-      </div>
-      <!-- /.info-box -->
-    </div>
+    
     <!-- /.col -->
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">

@@ -38,6 +38,7 @@ class homeController extends controller
     {
 
         $this->dataInfo['count_obras'] = $this->obra->getCount($this->user->getCompany());
+        $this->dataInfo['count_obrasAtivas'] = $this->obra->getCountAtivas($this->user->getCompany());
         $this->dataInfo['count_servico'] = $this->servico->getCount($this->user->getCompany());
         $this->dataInfo['count_cliente'] = $this->cliente->getCount($this->user->getCompany());
         $this->dataInfo['count_concessionaria'] = $this->concessionaria->getCount($this->user->getCompany());

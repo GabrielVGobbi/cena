@@ -184,6 +184,25 @@ class Obras extends model
 		return $r;
 	}
 
+	public function getCountAtivas($id_company)
+	{
+
+		$r = 0;
+		$sql = $this->db->prepare("SELECT COUNT(*) AS c FROM obra WHERE id_company = :id_company AND atv = 1");
+		$sql->bindValue(':id_company', $id_company);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$row = $sql->fetch();
+		}
+
+		$r = $row['c'];
+
+		return $r;
+	}
+
+	
+
 	//Selecionar por ID
 	public function getInfo($id, $id_company)
 	{
