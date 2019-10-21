@@ -96,7 +96,7 @@ class Documentos extends model
 	public function add($arquivos, $id_company, $id_obra = 0, $nome_documento = '')
 	{
 
-		$nome_documento = strtolower($nome_documento);
+
 		
 		if (is_dir("assets/documentos/")) {
 			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . '.pdf');
@@ -119,6 +119,11 @@ class Documentos extends model
 				controller::alert('success', 'documento adicionado com sucesso!!');
 
 				$id = $this->db->lastInsertId();
+	
+				if((isset($id_obra) && $id_obra != '')){
+					$this->addDocumentoObra($id_obra, $id);
+				}
+
 			} else {
 				controller::alert('error', 'Contate o administrador do sistema!!');
 			}
