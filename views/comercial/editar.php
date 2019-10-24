@@ -73,14 +73,14 @@
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Valor de Desconto</label>
-                                        <input type="text" class="form-control"  name="valor_desconto" id="valor_desconto" autocomplete="off" value="R$ <?php echo ($tableInfo['valor_desconto'] != '' ? number_format($tableInfo['valor_desconto'], 2, ',', '.') : '' ); ?>">
+                                        <input type="text" class="form-control" onkeyup="updateDesconto()"  name="valor_desconto" id="valor_desconto" autocomplete="off" value="R$ <?php echo ($tableInfo['valor_desconto'] != '' ? number_format($tableInfo['valor_desconto'], 2, ',', '.') : '' ); ?>">
                                     </div>
                                 </div>
 
                                 <div class="col-md-3">
                                     <div class="form-group">
                                         <label>Valor Negociado</label>
-                                        <input type="text" class="form-control" name="valor_negociado" id="Totalnegociado" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_negociado'], 2, ',', '.'); ?>">
+                                        <input type="text" class="form-control"  name="valor_negociado" id="Totalnegociado" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_negociado'], 2, ',', '.'); ?>">
                                     </div>
                                 </div>
 
@@ -173,6 +173,7 @@
 												<th>Nome</th>
 												<th>Método</th>
 												<th>Valor</th>
+												<th>Valor a Receber</th>
 												<th>Ação</th>
 
 											</tr>

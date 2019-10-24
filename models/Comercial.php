@@ -204,11 +204,9 @@ class Comercial extends model
 		$id_etapa = $Parametros['id_etapa'];
 		$id_comercial = $Parametros['id_comercial'];
 		$metodo_valor = $Parametros['metodo_valor'];
-		$valor_receber = $Parametros['valor_receber'];
+		$valor_receber = controller::PriceSituation($Parametros['valor_receber']);
 
-		$valor_receber_str = str_replace('R$ ', '', $valor_receber);
-		$valor_receber_valor = str_replace(',00', '', $valor_receber_str);
-		$valor_receber = str_replace('.', '', $valor_receber_valor);
+		
 
 		try {
 
@@ -246,19 +244,33 @@ class Comercial extends model
 
 		$nome_obra = $Parametros['nome_obra'];
 
+		$valor_proposta 		= controller::PriceSituation($Parametros['valor_proposta']);
+		$valor_desconto 		= controller::PriceSituation($Parametros['valor_desconto']);
+		$valor_negociado 		= controller::PriceSituation($Parametros['valor_negociado']);
+
+		$data_envio 			= $Parametros['data_envio'];
+
 		if (isset($Parametros['id_' . $this->tabela]) && $Parametros['id_' . $this->tabela] != '') {
 			
 			try {
 
 				$sql = $this->db->prepare("UPDATE $this->tabela SET 
 					
-					nome_obra = :nome_obra
+					nome_obra = :nome_obra,
+					valor_proposta 		=	:valor_proposta, 
+					valor_desconto 		=	:valor_desconto, 
+					valor_negociado 	=	:valor_negociado,
+					data_envio 			=	:data_envio
 
 					WHERE id_comercial = :id_comercial
 	        	");
 				
 				$sql->bindValue(":nome_obra", $nome_obra);
 				$sql->bindValue(":id_comercial", $Parametros['id_' . $this->tabela]);
+				$sql->bindValue(":valor_proposta", $valor_proposta);
+				$sql->bindValue(":valor_desconto", $valor_desconto);
+				$sql->bindValue(":valor_negociado", $valor_negociado);
+				$sql->bindValue(":data_envio", $data_envio);
 
 				if ($sql->execute()) {
 					controller::alert('success', 'Editado com sucesso!!');
