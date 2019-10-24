@@ -73,6 +73,8 @@ class Comercial extends model
 		$valor_proposta 		= controller::PriceSituation($Parametros['valor_proposta']);
 		$valor_desconto 		= controller::PriceSituation($Parametros['valor_desconto']);
 		$valor_negociado 		= controller::PriceSituation($Parametros['valor_negociado']);
+		$valor_custo  			= controller::PriceSituation($Parametros['valor_custo']);
+
 
 		$data_envio 			= $Parametros['data_envio'];
 
@@ -92,6 +94,7 @@ class Comercial extends model
 				valor_proposta 		=	:valor_proposta, 
 				valor_desconto 		=	:valor_desconto, 
 				valor_negociado 	=	:valor_negociado,
+				valor_custo			= 	:valor_custo,
 				data_envio 			=	:data_envio,
 				id_status 			= 	1
         		
@@ -105,6 +108,7 @@ class Comercial extends model
 			$sql->bindValue(":valor_proposta", $valor_proposta);
 			$sql->bindValue(":valor_desconto", $valor_desconto);
 			$sql->bindValue(":valor_negociado", $valor_negociado);
+			$sql->bindValue(":valor_custo", $valor_custo);
 			$sql->bindValue(":data_envio", $data_envio);
 			$sql->bindValue(":id_company", $id_company);
 
@@ -248,6 +252,9 @@ class Comercial extends model
 		$valor_desconto 		= controller::PriceSituation($Parametros['valor_desconto']);
 		$valor_negociado 		= controller::PriceSituation($Parametros['valor_negociado']);
 
+		$valor_custo  			= controller::PriceSituation($Parametros['valor_custo']);
+		 
+
 		$data_envio 			= $Parametros['data_envio'];
 
 		if (isset($Parametros['id_' . $this->tabela]) && $Parametros['id_' . $this->tabela] != '') {
@@ -260,7 +267,8 @@ class Comercial extends model
 					valor_proposta 		=	:valor_proposta, 
 					valor_desconto 		=	:valor_desconto, 
 					valor_negociado 	=	:valor_negociado,
-					data_envio 			=	:data_envio
+					data_envio 			=	:data_envio,
+					valor_custo 		= 	:valor_custo
 
 					WHERE id_comercial = :id_comercial
 	        	");
@@ -271,6 +279,8 @@ class Comercial extends model
 				$sql->bindValue(":valor_desconto", $valor_desconto);
 				$sql->bindValue(":valor_negociado", $valor_negociado);
 				$sql->bindValue(":data_envio", $data_envio);
+				$sql->bindValue(":valor_custo", $valor_custo);
+
 
 				if ($sql->execute()) {
 					controller::alert('success', 'Editado com sucesso!!');

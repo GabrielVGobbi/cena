@@ -159,7 +159,7 @@
                         updateTotal();
 
                     } else {
-                        options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca'
+                        options = 'Não existem compras desse serviço com essa concessionaria. Por favor, refaça a busca'
                         $('.span_etapa').hide();
 
                         $('#result_null').html(options).show();
@@ -336,6 +336,7 @@
 
         $('#totalSub').html('R$ ' + formata(total));
         $('input[id=totalProposta]').val('R$ ' + formata(total));
+        $('input[id=valor_custo]').val('R$ ' + formata(total));
         $('input[id=Totalnegociado]').val('R$ ' + formata(total));
 
     }
@@ -397,8 +398,11 @@
 
 $(function () {
 
-    $( document ).ready( readyFn );
-    $( document ).ready( gethistorico );
+
+    if($('#id_comercial').val() != undefined){
+        $( document ).ready( readyFn );
+        $( document ).ready( gethistorico );
+    }
     
 
     function gethistorico() {  

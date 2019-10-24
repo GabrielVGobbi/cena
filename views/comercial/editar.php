@@ -62,25 +62,32 @@
                                 <h3 class="box-title">Financeiro</h3>
                             </div>
                             <div class="box-body" style="">
+								
+								<div class="col-md-2">
+                                    <div class="form-group">
+                                        <label>Valor de Custo</label>
+                                        <input type="text" class="form-control" readonly name="valor_custo" id="valor_custo" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_custo'], 2, ',', '.'); ?>">
+                                    </div>
+                                </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Valor da Proposta</label>
                                         <input type="text" class="form-control" name="valor_proposta" id="totalProposta" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_proposta'], 2, ',', '.'); ?>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Valor de Desconto</label>
                                         <input type="text" class="form-control" onkeyup="updateDesconto()"  name="valor_desconto" id="valor_desconto" autocomplete="off" value="R$ <?php echo ($tableInfo['valor_desconto'] != '' ? number_format($tableInfo['valor_desconto'], 2, ',', '.') : '' ); ?>">
                                     </div>
                                 </div>
 
-                                <div class="col-md-3">
+                                <div class="col-md-2">
                                     <div class="form-group">
                                         <label>Valor Negociado</label>
-                                        <input type="text" class="form-control"  name="valor_negociado" id="Totalnegociado" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_negociado'], 2, ',', '.'); ?>">
+                                        <input type="text" class="form-control" readonly name="valor_negociado" id="Totalnegociado" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_negociado'], 2, ',', '.'); ?>">
                                     </div>
                                 </div>
 
