@@ -6,7 +6,10 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>Admin</title>
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/jQuery-Mask-Plugin-master/dist/jquery.mask.min.js" type="text/javascript"></script>
+
 
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
@@ -20,9 +23,11 @@
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/template.css">
 
 
+
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   <script src="https://unpkg.com/imask"></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
 
 </head>
 
@@ -42,25 +47,31 @@
           <div class="collapse navbar-collapse pull-left" id="navbar-collapse">
             <ul class="nav navbar-nav">
               <?php if ($this->userInfo['user']->hasPermission('user_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>usuario">Usuarios <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?>usuario">Usuarios <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('cliente_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>clientes">Clientes <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?>clientes">Clientes <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('servico_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>servicos">Serviços <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?>servicos">Serviços <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
 
               <?php if ($this->userInfo['user']->hasPermission('concessionaria_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>concessionarias">Concessionarias <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?>concessionarias">Concessionarias <span class="sr-only">(current)</span></a></li>
+              <?php endif; ?>
+
+              <?php if ($this->userInfo['user']->hasPermission('comercial_view')) : ?>
+                <li class=""><a href="<?php echo BASE_URL; ?>comercial">Comercial <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('obra_view')) : ?>
-                <li class="active"><a href="<?php echo BASE_URL; ?>obras">Obras <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?>obras">Obras <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
+
+             
 
               <?php if ($this->userInfo['user']->hasPermission('documento_view')) : ?>
                 <!--<li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>-->

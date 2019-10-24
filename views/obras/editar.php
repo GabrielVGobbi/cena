@@ -63,6 +63,8 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 													echo 'Administativo';
 												} else if ($_GET['tipo'] == OBRA) {
 													echo 'Obra';
+												} else if ($_GET['tipo'] == COMPRA) {
+													echo ' de Compra';
 												}
 											}
 
@@ -75,6 +77,8 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 													<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '2') ?  'selected' : '' ?> value="<?php echo CONCESSIONARIA; ?>">Concessionaria</option>
 													<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '1') ?  'selected' : '' ?> value="<?php echo ADMINISTRATIVA; ?>">Administrativo</option>
 													<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '3') ?  'selected' : '' ?> value="<?php echo OBRA; ?>">Obra</option>
+													<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '4') ?  'selected' : '' ?> value="<?php echo COMPRA; ?>">Compra</option>
+
 												</select>
 											</div>
 

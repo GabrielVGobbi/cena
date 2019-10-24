@@ -29,6 +29,13 @@
 											<input type="text" class="form-control" name="cliente_responsavel" id="cliente_responsavel"  value="<?php echo $tableInfo['cliente_responsavel'];?>">
 										</div>
 									</div>
+
+									<div class="col-md-2">
+										<label>Telefone</label>
+										<div class="input-group">
+											<input type="text" class="form-control" name="cliente_telefone" id="cliente_telefone"  value="<?php echo $tableInfo['cliente_telefone'];?>">
+										</div>
+									</div>
 								</div>
 							</div>
 						</div>

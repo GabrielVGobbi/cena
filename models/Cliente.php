@@ -97,6 +97,9 @@ class Cliente extends model
 		$cliente_rg = controller::ReturnFormatLimpo($Parametros['rg']);
 		$cliente_cpf = controller::ReturnFormatLimpo($Parametros['cpf']);
 
+		$cliente_telefone = $Parametros['cliente_telefone'];
+
+
 		if (isset($Parametros['cep']) && $Parametros['cep'] != '') {
 			try {
 				$sql = $this->db->prepare("INSERT INTO cliente_endereco SET 
@@ -105,7 +108,8 @@ class Cliente extends model
             		cidade = :cidade,
             		bairro = :bairro,
             		estado = :estado,
-					cep = :cep");
+					cep = :cep
+				");
 
 				$sql->bindValue(":rua", $Parametros['rua']);
 				$sql->bindValue(":numero", $Parametros['numero']);
@@ -124,7 +128,8 @@ class Cliente extends model
             			id_company = :id_company,
             			cliente_rg = :cliente_rg,
             			cliente_cpf = :cliente_cpf,
-						clend_id = :id_endereco
+						clend_id = :id_endereco,
+						cliente_telefone = :cliente_telefone
 					");
 
 					$sql->bindValue(":cliente_nome", $cliente_nome);
@@ -133,6 +138,8 @@ class Cliente extends model
 					$sql->bindValue(":cliente_email", $cliente_email);
 					$sql->bindValue(":id_company", $id_company);
 					$sql->bindValue(":id_endereco", $id_endereco);
+					$sql->bindValue(":cliente_telefone", $cliente_telefone);
+
 
 					if ($sql->execute()) {
 						$this->retorno['cliente_add']['mensagem']['sucess'] = 'sucesso';
@@ -151,7 +158,8 @@ class Cliente extends model
             			cliente_email = :cliente_email,
             			id_company = :id_company,
             			cliente_rg = :cliente_rg,
-            			cliente_cpf = :cliente_cpf
+            			cliente_cpf = :cliente_cpf,
+						cliente_telefone = :cliente_telefone
         			");
 
 			$sql->bindValue(":cliente_nome", $cliente_nome);
@@ -159,6 +167,7 @@ class Cliente extends model
 			$sql->bindValue(":cliente_cpf", $cliente_cpf);
 			$sql->bindValue(":cliente_email", $cliente_email);
 			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":cliente_telefone", $cliente_telefone);
 
 			$sql->execute();
 
@@ -178,21 +187,27 @@ class Cliente extends model
 		$cliente_email = mb_strtolower($Parametros['cliente_email']);
 		$cliente_responsavel = $Parametros['cliente_responsavel'];
 
+		$cliente_telefone = $Parametros['cliente_telefone'];
+
+
 		if (isset($Parametros['id_cliente']) && $Parametros['id_cliente'] != '') {
 
 			$sql = $this->db->prepare("UPDATE cliente SET 
 				cliente_nome = :cliente_nome, 
 				cliente_email = :cliente_email, 
-				cliente_responsavel = :cliente_responsavel
+				cliente_responsavel = :cliente_responsavel,
+				cliente_telefone = :cliente_telefone
+
 				WHERE id = :id_cliente AND id_company = :id_company;
         	");
 
 			$sql->bindValue(":cliente_nome", $cliente_nome);
 			$sql->bindValue(":cliente_email", $cliente_email);
 			$sql->bindValue(":cliente_responsavel", $cliente_responsavel);
-
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
 			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":cliente_telefone", $cliente_telefone);
+
 
 			$sql->execute();
 

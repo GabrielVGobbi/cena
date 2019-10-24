@@ -38,6 +38,11 @@ $(function () {
 
 });
 
+function formata(v) {
+    
+    return parseFloat(v).toLocaleString("pt-BR", {minimumFractionDigits: 2});
+}
+
 $(function () {
 
     //Initialize Select2 Elements
@@ -49,7 +54,7 @@ $(function () {
     //Datemask dd/mm/yyyy
     $('#datemask').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
     //Datemask2 mm/dd/yyyy
-    $('#datemask2').inputmask('mm/dd/yyyy', { 'placeholder': 'mm/dd/yyyy' })
+    $('#datemask2').inputmask('dd/mm/yyyy', { 'placeholder': 'dd/mm/yyyy' })
     //Money Euro
     $('[data-mask]').inputmask()
 
@@ -237,7 +242,6 @@ $(function () {
 
 function add_service(obj) {
     var name = $('.select2-search__field').val()
-    console.log(name);
 
     if (name != '' && name != undefined) {
 

@@ -304,6 +304,7 @@ class Obras extends model
 
 		$date = strftime('%d-%m-%Y', strtotime('today'));
 		$data = ucwords($date);
+
 		try {
 			$sql = $this->db->prepare("INSERT INTO obra SET 
 					id_company = :id_company,
@@ -313,7 +314,6 @@ class Obras extends model
 					obr_razao_social = :razao_social,
 					data_obra 		= :data_obra
 
-			
 			");
 
 			$sql->bindValue(":razao_social", $Parametros['obra_nome']);
@@ -335,36 +335,83 @@ class Obras extends model
 
 			$id_obra = $this->db->lastInsertId();
 
+			$sql->bindValue(":razao_social", $Parametros['obra_nome']);
+
 			$this->servico = new Servicos();
+
 			$etapas = $this->servico->getEtapas($Parametros['concessionaria'], $Parametros['servico']);
 
 			if (isset($etapas)) {
 				if (count($etapas) > 0) {
 					for ($q = 0; $q < count($etapas); $q++) {
 
-						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra, ordem)
-							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra, :ordem)
-							");
+						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra, ordem, preco, tipo_compra)
+							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra, :ordem, :preco, :tipo_compra)
+						");
+						
 						$sql->bindValue(":id_etapa", $etapas[$q]['id_etapa']);
 						$sql->bindValue(":id_obra", $id_obra);
 						$sql->bindValue(":etp_nome_etapa_obra", $etapas[$q]['etp_nome']);
 						$sql->bindValue(":ordem", $etapas[$q]['order_id']);
-
+						$sql->bindValue(":preco", $etapas[$q]['preco']);
+						$sql->bindValue(":tipo_compra", $etapas[$q]['tipo_compra']);
 
 
 						$sql->execute();
 					}
 				}
+
 			} else {
 
 			}
+
+			if($Parametros['id_comercial']){
+				$this->updateEtapaCompraObra($Parametros['id_comercial'], $id_obra);
+			}
+
 		} catch (PDOExecption $e) {
 			$sql->rollback();
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 		}
 
 
-		return $this->retorno;
+		return $id_obra;
+	}
+
+	public function updateEtapaCompraObra($id_comercial, $id_obra) 
+	{
+		
+		$sql = $this->db->prepare("SELECT * FROM etapa_compra_comercial WHERE id_comercial = :id_comercial");
+		$sql->bindValue(":id_comercial", $id_comercial);
+		$sql->execute();
+
+		
+		if ($sql->rowCount() > 0) {
+			
+			$array = $sql->fetchAll();
+
+			foreach ($array as $etpC) {
+
+				$sql = $this->db->prepare("UPDATE obra_etapa SET 
+					quantidade = :quantidade
+				
+					WHERE id_etapa = :id_etapa AND id_obra = :id_obra
+        		");
+
+				$sql->bindValue(":quantidade", $etpC['etcc_quantidade']);
+				$sql->bindValue(":id_etapa",   $etpC['id_etapa']);
+				$sql->bindValue(":id_obra",    $id_obra);
+
+				$sql->execute();
+
+			}
+
+		} else { 
+			return false;
+		}
+
+
+
 	}
 
 	public function getEtapas($id_obra, $tipo)
@@ -373,7 +420,7 @@ class Obras extends model
 
 
 		if($tipo == '' || $tipo == '0'){
-			$tipo = '1,2,3';
+			$tipo = '1,2,3,4';
 		}	
 		
 		$sql = "SELECT * FROM  
@@ -550,6 +597,28 @@ class Obras extends model
 			}
 
 		
+	}
+
+	public function validacao($id_company, $nome)
+	{
+
+		$nome = controller::ReturnValor($nome);
+		
+		$sql = $this->db->prepare("SELECT * FROM obra
+
+			WHERE id_company = :id_company AND obr_razao_social = :obra_nome
+		");
+
+		$sql->bindValue(':obra_nome', $nome);
+		$sql->bindValue(':id_company', $id_company);
+
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			return true;
+		} else {
+			return false;
+		}
 	}
 	
 }

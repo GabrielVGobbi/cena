@@ -39,6 +39,13 @@
                                                     <input type="text" class="form-control" name="cliente_responsavel" id="cliente_responsavel" autocomplete="off">
                                                 </div>
                                             </div>
+
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>Telefone</label>
+                                                    <input type="text" class="form-control" name="cliente_telefone" id="cliente_telefone" autocomplete="off">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>

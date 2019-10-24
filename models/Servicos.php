@@ -127,24 +127,47 @@ class Servicos extends model
 		}
 	}
 
-	public function getEtapas($id_concessionaria, $id_servico)
+	public function getEtapas($id_concessionaria, $id_servico, $tipo = false)
 	{
 
-		$sql = "SELECT * FROM  
-			etapas_servico_concessionaria etpsc
-			INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
-		WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico ORDER BY etpsc.order_id ASC";
+		if($tipo == false){
+			$sql = "SELECT * FROM  
+				etapas_servico_concessionaria etpsc
+				INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
+				WHERE etpsc.id_concessionaria = :id_concessionaria 
+				AND etpsc.id_servico = :id_servico 
+				ORDER BY etpsc.order_id ASC";
 
-		$sql = $this->db->prepare($sql);
-		$sql->bindValue(":id_concessionaria", $id_concessionaria);
-		$sql->bindValue(":id_servico", $id_servico);
-		$sql->execute();
+			$sql = $this->db->prepare($sql);
+			$sql->bindValue(":id_concessionaria", $id_concessionaria);
+			$sql->bindValue(":id_servico", $id_servico);
+			$sql->execute();
 
-		if ($sql->rowCount() > 0) {
-			$this->array = $sql->fetchAll();
+			if ($sql->rowCount() > 0) {
+				$this->array = $sql->fetchAll();
+			}
+
+			return $this->array;
+		} else {
+			$sql = "SELECT * FROM  
+				etapas_servico_concessionaria etpsc
+				INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
+				WHERE etpsc.id_concessionaria = :id_concessionaria 
+				AND etpsc.id_servico = :id_servico 
+				AND etp.tipo = 4
+				ORDER BY etpsc.order_id ASC";
+
+			$sql = $this->db->prepare($sql);
+			$sql->bindValue(":id_concessionaria", $id_concessionaria);
+			$sql->bindValue(":id_servico", $id_servico);
+			$sql->execute();
+
+			if ($sql->rowCount() > 0) {
+				$this->array = $sql->fetchAll();
+			}
+
+			return $this->array;
 		}
-
-		return $this->array;
 	}
 
 	public function getServicoByConcessionaria($id_concessionaria)

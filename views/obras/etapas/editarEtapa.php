@@ -79,6 +79,25 @@ $msg = 'prazo';
                         </div>
 
 
+                      <?php elseif ($array[0]['nome'] === 'COMPRA') : ?>
+                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Nome Etapa</label>
+                            <input type="text" class="form-control" name="nome_etapa_obra" id="nome_etapa_obra" value="<?php echo $array[0]['etp_nome_etapa_obra']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+
+
+                        <div class="col-md-12">
+                          <div class="form-group">
+                            <label>Observações do sistema</label>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                          </div>
+                        </div>
+
                       <?php elseif ($array[0]['nome'] === 'CONCESSIONARIA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
 
@@ -116,15 +135,15 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-                        <div class="col-md-12">
-                          <div class="checkbox icheck">
-                            <label class="">
-                              <div class="icheckbox_square-blue">
-                                <input class="flat-blue" name="check_nota" type="checkbox" value="1">
+                        <div class="col-md-12" style="margin-bottom: 13px;margin-top:5px">
+                          <div class="input-group">
+                            <span class="input-group-addon">
+                              <input class="flat-blue" name="check_nota" type="checkbox" value="1">
 
-                              </div> Salvar como ultima nota
-                            </label>
+                            </span>
+                            <span type="text"  class="form-control">Salvar como ultima nota</span>
                           </div>
+                          <!-- /input-group -->
                         </div>
 
 
@@ -142,6 +161,7 @@ $msg = 'prazo';
                             <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
                           </div>
                         </div>
+
 
 
                       <?php elseif ($array[0]['nome'] === 'OBRA') : ?>
@@ -225,7 +245,7 @@ $msg = 'prazo';
                                   <a href="<?php echo BASE_URL ?>assets/documentos/<?php echo $doc['docs_nome']; ?>" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
                                     <i class="fa fa-info"></i>
                                   </a>
-                                  <a href="<?php echo BASE_URL ?>documentos/delete/<?php echo $doc['id']; ?>/<?php echo $array[0]['id_obra'];?>/<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">
+                                  <a href="<?php echo BASE_URL ?>documentos/delete/<?php echo $doc['id']; ?>/<?php echo $array[0]['id_obra']; ?>/<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">
                                     <i class="fa fa-trash"></i>
                                   </a>
                                 </div>

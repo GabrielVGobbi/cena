@@ -717,7 +717,7 @@ class Etapa extends model
         if($sql->rowCount() > 0){
             $row = $sql->fetch();
 
-            if ($tipo == 1) {   
+            if ($tipo == 1 || $tipo == 4) {   
                 return 1;
             }
     

@@ -20,16 +20,10 @@ $etapa = $array[0]['id_etapa_obra'] - 1;
 
             <tr>
                 <td>
-                    
-
-                        <a type="button" data-toggle="modal" data-target="#editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-info"><i class="fa fa-fw fa-check-square-o"></i></a>
-           
-
-                        <button class="btn btn-danger" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL ?>obras/obra_etapa_delete/<?php echo $array[0]['id_etapa_obra']; ?>/<?php echo $array[0]['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
-																<i class="fa fa-fw fa-trash"></i>
-															</button>
-                    
-
+                    <a type="button" data-toggle="modal" data-target="#editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" class="btn btn-info"><i class="fa fa-fw fa-check-square-o"></i></a>
+                    <button class="btn btn-danger" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL ?>obras/obra_etapa_delete/<?php echo $array[0]['id_etapa_obra']; ?>/<?php echo $array[0]['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
+                        <i class="fa fa-fw fa-trash"></i>
+                    </button>
                 </td>
                 <td><?php echo $array[0]['responsavel']; ?></td>
                 <td><?php echo $array[0]['data_programada']; ?></td>

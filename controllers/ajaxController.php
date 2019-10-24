@@ -8,12 +8,12 @@ class ajaxController extends controller
 
         $this->user = new Users();
         $this->user->setLoggedUser();
-        
+
         if ($this->user->isLogged() == false) {
             header("Location: " . BASE_URL . "/login");
             exit;
         }
-       
+
         $this->id_user = $this->user->getId();
 
         $this->retorno = array();
@@ -47,7 +47,7 @@ class ajaxController extends controller
     }
 
 
-    public function search_categoria()
+    public function search_categoria($tipo = false)
     {
         $u = new Users();
         $u->setLoggedUser();
@@ -57,16 +57,92 @@ class ajaxController extends controller
         $id_servico        = $_REQUEST['id_servico'];
 
         $a = new Servicos();
-        $servico = $a->getEtapas($id_concessionaria, $id_servico);
+
+        $servico = $a->getEtapas($id_concessionaria, $id_servico, $tipo);
 
         foreach ($servico as $citem) {
+
+
             $data[] = array(
-                'id' => $citem['id'],
-                'nome_sub_categoria'   => $citem['etp_nome']
+                'id'                    => $citem['id'],
+                'nome_sub_categoria'    => $citem['etp_nome'],
+                'quantidade'            => $citem['quantidade'],
+                'preco'                 => $citem['preco'],
+                'tipo_compra'           => $citem['tipo_compra']
+
             );
         }
 
         echo json_encode($data);
+    }
+
+    public function getHistorico($tipo = false)
+    {
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $id_comercial = $_REQUEST['id_comercial'];
+
+        $a = new Comercial('comercial');
+
+        $servico = $a->getHistoricoByComercial($id_comercial, $u->getCompany());
+
+        foreach ($servico as $citem) {
+
+
+            $data[] = array(
+                'id_historico'      => $citem['histf_id'],
+                'etapa_nome'          => $citem['etp_nome'],
+                'metodo'            => $citem['metodo'],
+                'metodo_valor'      => $citem['metodo_valor'],
+                'valor_receber'     => $citem['valor_receber'],
+                
+
+            );
+        }
+
+        echo json_encode($data);
+    }
+
+    public function getEtapa($tipo = false)
+    {
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $id_concessionaria = $_REQUEST['id_concessionaria'];
+        $id_servico        = $_REQUEST['id_servico'];
+
+        $a = new Comercial('comercial');
+
+        $servico = $a->getEtapasComercial($id_concessionaria, $id_servico);
+
+        foreach ($servico as $citem) {
+
+            $data[] = array(
+                'id'                    => $citem['id'],
+                'nome_sub_categoria'    => $citem['etp_nome']
+            );
+        }
+
+        echo json_encode($data);
+    }
+
+    public function addHistoricoComercial(){
+        
+        $data = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Comercial('comercial');
+        $Parametros = array();
+
+        if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
+
+            $data['id'] = $a->addHistoricoComercial($u->getCompany(), $_POST);
+        }
+
+        echo json_encode($data['id']);
     }
 
     public function searchServicoByConcessionaria()
@@ -132,8 +208,10 @@ class ajaxController extends controller
             $Parametros['rg'] = '';
             $Parametros['email'] = '';
             $Parametros['cpf'] = '';
+            $Parametros['cliente_telefone'] = '';
 
-            $data['id'] = $a->add($u->getCompany(), $Parametros);
+
+            $data['id'] = $a->add($Parametros, $u->getCompany());
         }
 
         echo json_encode($data);
@@ -149,15 +227,15 @@ class ajaxController extends controller
 
         if (isset($_POST['nome']) && !empty($_POST['nome'])) {
 
-            
+
             $Parametros['nome'] = addslashes($_POST['nome']);
             $Parametros['tipo'] = addslashes($_POST['tipo']);
             $Parametros['id_servico'] = addslashes($_POST['id_servico']);
             $Parametros['id_concessionaria'] = addslashes($_POST['id_concessionaria']);
 
-            $Parametros['quantidade']       = ( isset($_POST['quantidade'])  ? $_POST['quantidade'] : '' );	
-            $Parametros['preco']            = ( isset($_POST['preco'])       ? $_POST['preco'] :      '' );	
-            $Parametros['tipo_compra']      = ( isset($_POST['tipo_compra']) ? $_POST['tipo_compra'] : '' );	
+            $Parametros['quantidade']       = (isset($_POST['quantidade'])  ? $_POST['quantidade'] : '');
+            $Parametros['preco']            = (isset($_POST['preco'])       ? $_POST['preco'] : '');
+            $Parametros['tipo_compra']      = (isset($_POST['tipo_compra']) ? $_POST['tipo_compra'] : '');
 
 
             $data['id'] = $a->add($u->getCompany(), $Parametros);
@@ -166,7 +244,28 @@ class ajaxController extends controller
         echo json_encode($data['id']);
         exit;
     }
-    
+
+    public function add_obra()
+    {
+        $data = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Obras();
+        $Parametros = array();
+
+        $validator = $a->validacao($this->user->getCompany(), $_POST['obra_nome']);
+
+        error_log(print_r($validator,1));
+
+        
+            
+            $data['id'] = $a->add($_POST, $u->getCompany());
+            
+            echo json_encode($data['id']);
+
+       
+    }
+
     public function verificarMensagem()
     {
 
@@ -192,12 +291,30 @@ class ajaxController extends controller
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $data['id'] = $a->updateEtapa($_POST, $u->getCompany(), $u->getName());
-      
         }
 
         echo json_encode($data['id']);
         exit;
     }
+
+    public function changeStatusComercial()
+    {
+        $data = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Comercial('comercial');
+        $Parametros = array();
+
+
+        if (isset($_POST['id_comercial']) && !empty($_POST['id_comercial'])) {
+
+            $data['id'] = $a->updateStatusComercial($_POST, $u->getCompany());
+        }
+
+        echo json_encode($data['id']);
+        exit;
+    }
+
 
     public function parcialCheck()
     {
@@ -210,7 +327,6 @@ class ajaxController extends controller
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $data['id'] = $a->parcialCheck($_POST);
-      
         }
 
         echo json_encode($data['id']);
@@ -230,23 +346,23 @@ class ajaxController extends controller
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $array = $a->searchByName($_POST);
-   
         }
 
         echo json_encode($array);
         exit;
     }
 
-    public function searchEtapaByTipo(){
-        
+    public function searchEtapaByTipo()
+    {
+
         $retorno = $this->obra->getEtapas($_GET['id_obra'], $_GET['tipo']);
 
         echo json_encode($retorno);
         exit;
-
     }
 
-    public function lerNotificacao(){
+    public function lerNotificacao()
+    {
 
         $a = new Notificacao('notificacao');
 
@@ -254,23 +370,20 @@ class ajaxController extends controller
         if (isset($_POST['id_not_user']) && !empty($_POST['id_not_user'])) {
 
             $id = $a->ler($_POST['id_not_user'],  $this->id_user);
-      
         }
 
         echo json_encode($id);
         exit;
     }
 
-    public function gerarWinrar(){
+    public function gerarWinrar()
+    {
 
         $doc = new Documentos();
 
-        if(isset($_POST['id_obra'])){
+        if (isset($_POST['id_obra'])) {
 
             $doc->gerarWinrarObra($_POST['id_obra']);
-
-
         }
-
     }
 }

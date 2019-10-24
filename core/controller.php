@@ -71,6 +71,7 @@ class controller
 		$valor = trim($valor);
 		$valor = str_replace(' ', '', $valor);
 		$valor = str_replace('R$', '', $valor);
+		$valor = str_replace(' ', '', $valor);
 		$valor = explode(',', $valor);
 		$valor = str_replace('.', '', $valor);
 
