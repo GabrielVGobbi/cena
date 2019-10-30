@@ -158,23 +158,5 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 
 	});
 
-    $(function() {
-        $('#').on('click', function(event) {
-			
-            id_obra = <?php echo $obr['0'];?>;
-
-            $.ajax({
-
-                url: BASE_URL + 'ajax/gerarWinrar',
-                type: 'POST',
-                data: {
-                    id_obra: id_obra
-                },
-                dataType: 'json',
-                success: function(json) {
-
-                },
-            });
-        });
-    });
+    
 </script>

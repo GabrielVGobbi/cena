@@ -51,7 +51,7 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
             <div id="collapse<?php echo $etp['id_etapa_obra']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                 <div class="box-body">
-                    <?php controller::loadEtapaByTipo($etp['id_etapa_obra']); ?>
+                    <?php controller::loadEtapaByTipo($etp['id_etapa_obra'], $obr['cliente_nome']); ?>
                 </div>
             </div>
 

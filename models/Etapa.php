@@ -496,7 +496,7 @@ class Etapa extends model
                 $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company, $Parametros['id_obra']);
             }
 
-            if (isset($arquivos) && $Parametros['documento_nome'] != '') {
+            if (isset($arquivos) && isset($Parametros['documento_nome'])  && $Parametros['documento_nome'] != '') {
                 $d = new Documentos;
 
 
