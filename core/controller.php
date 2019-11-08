@@ -310,4 +310,10 @@ class controller
 
 		return $dif;
 	}
+
+	static function number_format($valor){
+
+		return $valor != '' ? number_format($valor, 2, ',', '.') : '';
+
+	}
 }

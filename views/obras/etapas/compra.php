@@ -19,9 +19,9 @@
 																<i class="fa fa-fw fa-trash"></i>
 															</button>
                 </td>
-                <td><?php echo $array[0]['responsavel']; ?></td>
-                <td><?php echo $array[0]['data_pedido']; ?></td>
-                <td><?php echo $array[0]['cliente_responsavel']; ?></td>
+                <td><?php echo $array[0]['quantidade']; ?></td>
+                <td><?php echo $array[0]['preco']; ?></td>
+                <td><?php echo $array[0]['tipo_compra']; ?></td>
             </tr>
 
 

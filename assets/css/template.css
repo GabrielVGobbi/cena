@@ -120,6 +120,10 @@ body {
     padding: 0;
 }
 
+.select_obras {
+    width: 14%;
+}
+
 @media screen and (max-width: 767px) {
     .button_edit_delet_mobile {
         width: 100%;
@@ -127,6 +131,9 @@ body {
     }
     .button_edit_delet {
         display: none;
+    }
+    .select_obras {
+        width: 60%;
     }
 }
 

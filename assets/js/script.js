@@ -205,6 +205,24 @@ $(function () {
 
     });
 
+    $('.new_variavel').on('click', function (e) {
+
+        e.preventDefault();
+
+        
+        html = '<div class="row"> ';
+        html += '<div class="col-md-4"><div class="form-group"> <label>Nome da Variavel</label><input type="text" class="form-control" name="variavel[nome_variavel][]" id="nome_variavel" autocomplete="off">';
+                                        
+                          
+                                        
+        html += '</div> </div><div class="col-md-2"><div class="form-group"> <label>Preço</label><input value="R$ " type="text" class="form-control" name="variavel[preco_variavel][]" id="preco_variavel" autocomplete="off"></div></div>';
+        html += '</div>';
+        
+        $('#new_variavel').append(html);
+
+
+    });
+
     $('.new_service').on('click', function (e) {
 
         $('#new_service').toggle();

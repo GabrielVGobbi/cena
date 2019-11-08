@@ -1,4 +1,6 @@
 <?php $etapasConcessionaria = $this->etapa->getEtapasByTipo('COMPRA', $tableInfo['id_concessionaria'], $tableInfo['id_servico']); ?>
+<?php include_once("modalcadastro.php"); ?>
+
 <div class="box box-default box-solid collapsed-box " id="boxcompra">
     <a type="button" class="boxcompra" style="cursor:pointer">
         <div class="box-header with-border">
@@ -17,8 +19,7 @@
                     <div class="box-header with-border">
                         <h3 class="box-title">Todas as Etapas de Compras</h3>
                     </div>
-                    <!-- /.box-header -->
-                    <!-- form start -->
+
                     <div class="box-body">
                         <table class="table table-striped">
                             <thead>
@@ -45,14 +46,13 @@
                                 <?php endforeach; ?>
                                 <tr>
                                     <td colspan="2">
-                                        <input placeholder="Nome" id="etapa_input_compra" type="text" value="" name="add_etapa">
-                                        <input placeholder="Quant" id="etapa_input_quant" type="text" value="" name="add_quantidade">
-                                        <input style="width: 90px;" value="R$ "placeholder="Preço" id="etapa_input_preco" type="text" value="" name="add_preco">
-                                        <input style="width: 60px;"  placeholder="Tipo" id="etapa_input_tipo" type="text" value="" name="add_tipo_compra">
+
                                     </td>
-                                    
+
                                     <td>
-                                        <button id="new_etapa_compra" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Novo</button>
+
+                                        <button data-toggle="modal" data-target="#modalCadastro" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Novo</button>
+
                                     </td>
                                 </tr>
                             </tbody>
@@ -98,30 +98,19 @@
 
 <script>
     $(function() {
-        $('#new_etapa_compra').on('click', function(event) {
 
-            nome            = $('#etapa_input_compra').val();
-            preco           = $('#etapa_input_preco').val();
-            quantidade      = $('#etapa_input_quant').val();
-            tipo_compra     = $('#etapa_input_tipo').val();
+        $("#form_etapa_compra").on("submit", function(event) {
+            event.preventDefault();
+            var data = $(this).serialize();
 
-            tipo = 4;
             id_concessionaria = <?php echo $tableInfo['id_concessionaria']; ?>;
-            id_servico =        <?php echo $tableInfo['id_servico']; ?>;
+            id_servico = <?php echo $tableInfo['id_servico']; ?>;
 
             $.ajax({
 
                 url: BASE_URL + 'ajax/add_etapa',
                 type: 'POST',
-                data: {
-                    nome: nome,
-                    preco: preco,
-                    quantidade: quantidade,
-                    tipo_compra: tipo_compra,
-                    tipo: tipo,
-                    id_servico: id_servico,
-                    id_concessionaria: id_concessionaria
-                },
+                data: data,
                 dataType: 'json',
                 success: function(json) {
 
@@ -129,5 +118,7 @@
                 },
             });
         });
+
+        
     });
 </script>

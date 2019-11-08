@@ -72,6 +72,11 @@
 									Excluir Obra
 								</button>
 							<?php endif; ?>
+							<?php if ($this->user->hasPermission('financeiro_view')) : ?>
+								<a href="<?php echo BASE_URL;?>financeiro/obra/<?php echo $obr[0]; ?>" class="btn btn-sm btn-warning btn-flat text-center" style="    left: 10%;position: relative;" >
+									Financeiro
+								</a>
+							<?php endif; ?>
 						</div>
 					</div>
 

@@ -73,7 +73,9 @@ class Obras extends model
 	private function buildWhere($filtro, $id,$id_cliente = 0)
 	{
 		$where = array(
-			'obr.id_company=' . $id
+			'obr.id_company=' . $id,
+			'obr.id_status=3',
+			'obr.atv<>2'
 		);
 
 		if(!isset($filtro['situacao'])){
@@ -267,9 +269,9 @@ class Obras extends model
 		$Parametros = [
 			'id_obra' => $id
 		];
-		$sql = $this->db->prepare("DELETE FROM obra WHERE id = :id AND id_company = :id_company");
+		$sql = $this->db->prepare("UPDATE obra SET atv = 2 WHERE id = :id_obra AND id_company = :id_company");
 		
-		$sql->bindValue(":id", $id);
+		$sql->bindValue(":id_obra", $id);
 		$sql->bindValue(":id_company", $id_company);
 		
 		if ($sql->execute()) {
@@ -277,7 +279,7 @@ class Obras extends model
 			controller::setLog($Parametros, 'obra', 'delete');
 
 
-			$this->deleteEtapasObras($id);
+			//$this->deleteEtapasObras($id);
 
 		} else {
 			controller::alert('error', 'não foi possivel deletar a obra');
@@ -312,7 +314,8 @@ class Obras extends model
 					id_cliente = :id_cliente,
 					id_concessionaria = :id_concessionaria,
 					obr_razao_social = :razao_social,
-					data_obra 		= :data_obra
+					data_obra 		= :data_obra,
+					id_status =	3
 
 			");
 
@@ -365,9 +368,13 @@ class Obras extends model
 
 			}
 
-			if($Parametros['id_comercial']){
-				$this->updateEtapaCompraObra($Parametros['id_comercial'], $id_obra);
-			}
+			
+
+
+			//if($Parametros['id_comercial']){
+			//	$this->addFinanceiroObra($Parametros['id_comercial'], $id_obra, $id_company);
+
+			//}
 
 		} catch (PDOExecption $e) {
 			$sql->rollback();
@@ -378,41 +385,71 @@ class Obras extends model
 		return $id_obra;
 	}
 
-	public function updateEtapaCompraObra($id_comercial, $id_obra) 
-	{
-		
-		$sql = $this->db->prepare("SELECT * FROM etapa_compra_comercial WHERE id_comercial = :id_comercial");
+	public function addFinanceiroObra($id_comercial, $id_obra, $id_company){
+
+		$sql = $this->db->prepare("SELECT * FROM comercial WHERE id_comercial = :id_comercial");
 		$sql->bindValue(":id_comercial", $id_comercial);
 		$sql->execute();
-
 		
-		if ($sql->rowCount() > 0) {
+		if ($sql->rowCount() == 1) {
 			
-			$array = $sql->fetchAll();
+			$array = $sql->fetch();
 
-			foreach ($array as $etpC) {
+			$sql = $this->db->prepare("INSERT INTO financeiro_obra SET 
+					id_company = :id_company,
+					id_obra = :id_obra,
+					valor_proposta = :valor_proposta,
+					valor_negociado = :valor_negociado,
+					valor_desconto = :valor_desconto, 
+					valor_custo = :valor_custo
 
-				$sql = $this->db->prepare("UPDATE obra_etapa SET 
-					quantidade = :quantidade
-				
-					WHERE id_etapa = :id_etapa AND id_obra = :id_obra
-        		");
+			");
 
-				$sql->bindValue(":quantidade", $etpC['etcc_quantidade']);
-				$sql->bindValue(":id_etapa",   $etpC['id_etapa']);
-				$sql->bindValue(":id_obra",    $id_obra);
+			$sql->bindValue(":id_obra", $id_obra);
+			$sql->bindValue(":valor_proposta", $array['valor_proposta']);
+			$sql->bindValue(":valor_negociado", $array['valor_negociado']);
+			$sql->bindValue(":valor_desconto", $array['valor_desconto']);
+			$sql->bindValue(":valor_custo", $array['valor_custo']);
+			$sql->bindValue(":id_company", $id_company);
+			$sql->execute();
 
-				$sql->execute();
+			$id_financeiro_obra = $this->db->lastInsertId();
 
+			$sql = $this->db->prepare("SELECT * FROM historico_financeiro WHERE id_comercial = :id_comercial");
+			$sql->bindValue(":id_comercial", $id_comercial);
+			$sql->execute();
+
+			if ($sql->rowCount() > 1) {
+
+				$arrayHistoricoFinanceiro = $sql->fetchALL();
+
+				for ($q = 0; $q < count($arrayHistoricoFinanceiro); $q++) {
+
+					$sql = $this->db->prepare("INSERT INTO historico_financeiro_obra (id_company, id_financeiro_obra, id_etapa, metodo, metodo_valor, valor_receber)
+						VALUES (:id_company, :id_financeiro_obra, :id_etapa, :metodo, :metodo_valor, :valor_receber)
+					");
+					
+					$sql->bindValue(":id_company", $id_company);
+					$sql->bindValue(":id_financeiro_obra", $id_financeiro_obra);
+					$sql->bindValue(":id_etapa", $arrayHistoricoFinanceiro[$q]['id_etapa']);
+					$sql->bindValue(":metodo", $arrayHistoricoFinanceiro[$q]['metodo']);
+					$sql->bindValue(":metodo_valor", $arrayHistoricoFinanceiro[$q]['metodo_valor']);
+					$sql->bindValue(":valor_receber", $arrayHistoricoFinanceiro[$q]['valor_receber']);
+
+					$sql->execute();
+				}
 			}
+
+
 
 		} else { 
 			return false;
 		}
 
 
-
 	}
+
+	
 
 	public function getEtapas($id_obra, $tipo)
 	{

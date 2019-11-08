@@ -38,16 +38,16 @@
 												<tr>
 													<td>
 														<?php if ($this->user->hasPermission('comercial_view') && $this->user->hasPermission('comercial_edit')) : ?>
-															<a type="button" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info" href="<?php echo BASE_URL ?>comercial/edit/<?php echo $inf['id_comercial'] ?>"><i class="fa fa-fw fa-edit"></i></a>
+															<a type="button" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info" href="<?php echo BASE_URL ?>comercial/edit/<?php echo $inf['id_obra'] ?>"><i class="fa fa-fw fa-edit"></i></a>
 														<?php endif; ?>
 													</td>
-													<td><?php echo $inf['id_comercial'] ?></td>
-													<td><?php echo $inf['nome_obra'] ?></td>
+													<td><?php echo $inf['id_obra'] ?></td>
+													<td><?php echo $inf['obr_razao_social'] ?></td>
 													<td><?php echo $inf['cliente_responsavel'] ?></td>
 													<td><?php echo $inf['razao_social'] ?></td>
 													<td><?php echo $inf['sev_nome'] ?></td>
 													<td class="text-center">
-														<select class="form-control select2" style="width: 100%;" name="select-etapas" id="comercialStatusSelect<?php echo $inf['id_comercial']; ?>">
+														<select class="form-control select2" style="width: 100%;" name="select-etapas" id="comercialStatusSelect<?php echo $inf['id_obra']; ?>">
 															<option <?php echo $inf['id_status'] == ELABORACAO ?  'selected' : '' ?> value="1">ELABORAÇÃO</option>
 															<option <?php echo $inf['id_status'] == ENVIADA    ?  'selected' : '' ?> value="2">ENVIADA</option>
 															<option <?php echo $inf['id_status'] == APROVADA   ?  'selected' : '' ?> value="3">APROVADA</option>
@@ -59,32 +59,17 @@
 
 												<script>
 													$(function() {
-														$('#comercialStatusSelect' + <?php echo $inf['id_comercial']; ?>).on('change', function(event) {
+														$('#comercialStatusSelect' + <?php echo $inf['id_obra']; ?>).on('change', function(event) {
 
-															var item = '#comercialStatusSelect' + <?php echo $inf['id_comercial']; ?>;
+															var item = '#comercialStatusSelect' + <?php echo $inf['id_obra']; ?>;
 															var itemSelecionado = $(item + " option:selected");
-															var id_comercial = <?php echo $inf['id_comercial']; ?>;
-															var obra_nome = '<?php echo $inf['nome_obra']; ?>';
+															var id = <?php echo $inf['id_obra']; ?>;
+															var obra_nome = '<?php echo $inf['obr_razao_social']; ?>';
 
 															var id_concessionaria = <?php echo $inf['id_concessionaria']; ?>;
-															var id_servico		  = <?php echo $inf['id_servico']; ?>;
-															var id_cliente 		  = <?php echo $inf['id_cliente']; ?>;		
-															var id_comercial 	  = <?php echo $inf['id_comercial']; ?>;											
-
-
-															$.ajax({
-
-																url: BASE_URL + 'ajax/changeStatusComercial',
-																type: 'POST',
-																data: {
-																	tipo: itemSelecionado.val(),
-																	id_comercial: id_comercial
-																},
-																dataType: 'json',
-																success: function(json) {
-
-																},
-															});
+															var id_servico = <?php echo $inf['id_servico']; ?>;
+															var id_cliente = <?php echo $inf['id_cliente']; ?>;
+															var id = <?php echo $inf['id_obra']; ?>;
 
 															if (itemSelecionado.val() == 3) {
 
@@ -102,11 +87,8 @@
 																				url: BASE_URL + 'ajax/add_obra',
 																				type: 'POST',
 																				data: {
-																					servico: id_servico,
-																					concessionaria: id_concessionaria,
-																					id_cliente: id_cliente,
-																					obra_nome: obra_nome,
-																					id_comercial: id_comercial
+																					tipo: 3,
+																					id: id
 																				},
 																				dataType: 'json',
 																				success: function(json) {
@@ -117,9 +99,9 @@
 
 																					})
 
-																					setInterval(window.location.href = BASE_URL+'obras/edit/'+json, 2000);
-																					
-																					
+																					setInterval(window.location.href = BASE_URL + 'obras/edit/' + json, 2000);
+
+
 																				},
 																				error: function(data) {
 																					swal({
@@ -135,6 +117,21 @@
 
 																		}
 																	});
+															} else {
+
+																$.ajax({
+
+																	url: BASE_URL + 'ajax/changeStatusComercial',
+																	type: 'POST',
+																	data: {
+																		tipo: itemSelecionado.val(),
+																		id: id
+																	},
+																	dataType: 'json',
+																	success: function(json) {
+
+																	},
+																});
 															}
 
 														});

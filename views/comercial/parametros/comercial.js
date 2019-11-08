@@ -130,12 +130,13 @@
                     if (j.length != 0) {
                         for (var i = 0; i < j.length; i++) {
 
+                            
+
 
                             options += '<tr>';
-                            //options += '<span class="text" name="etapa_obra[]" >' + j[i].nome_sub_categoria + '</span>';
                             options += '';
 
-                            preco = 'R$ ' + formata(j[i].preco);
+                            precoformatado = 'R$ ' + formata(j[i].preco);
 
 
                             subtotal = j[i].preco * j[i].quantidade;
@@ -143,14 +144,47 @@
                             result += parseInt(j[i].preco);
 
                             options += '<td>' + j[i].nome_sub_categoria + '</td>';
-                            options += '<td>' + '<input type="number" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="' + j[i].preco + '" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
+                            
+                            
+
+                            if(j[i].variavel != ''){
+                                options += '<td>' + '<select class="form-control select2" onchange="updatePriceVariavel(this)" id="select-variavel" style="width: 80%;" name="select-variavel" </td>'; 
+                                options += '<option> selecione </option>'
+                                for (var l = 0; l < j[i].variavel.length; l++) {
+                                    
+                                    options += '<option data-id="' + j[i].quantidade + '"  value="' + j[i].variavel[l].preco_variavel +'">' + j[i].variavel[l].nome_variavel +'  </option>';
+                                    
+                                    preco = '0';
+                                    subtotal = preco * parseInt(j[i].quantidade);
+
+                                    precoformatado = '0';
+                                    id = j[i].variavel[l].id_variavel_etapa;
+                                    
+
+                                }
+
+                                options += '<td>' + '<input type="number" id="preco_variavel" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
+
+
+                                options += '</select>';   
+                                
+                                
+                                
+
+                            }else {
+                                options += '<td></td>'; 
+                                options += '<td>' + '<input type="number" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="' + j[i].preco + '" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
+
+
+                            }
+                            
                             options += '<td>' + j[i].tipo_compra + '</td>';
-                            options += '<td>' + preco + '</td>';
+                            options += '<td class="unitario">' + precoformatado + '</td>';
                             options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
                             options += '</tr>';
 
                             $('.tarefas-tittle').html('Compras de ' + service[0].text)
-                            $('#total').html('R$ ' + formata(result))
+                            //$('#total').html('R$ ' + formata(result))
                         }
                         $('#id_sub_etapas').html(options).show();
                         $('.span_etapa').show();
@@ -182,7 +216,7 @@
                             options += '<option value="' + j[i].id + '">' + j[i].nome_sub_categoria + '</option>';
 
                         }
-                        $('#id_sub_etapas_todas').html(options).show();
+                       // $('#id_sub_etapas_todas').html(options).show();
 
 
                     } else {
@@ -212,7 +246,7 @@
                     type: 'POST',
                     data: {
                         tipo: itemSelecionado.val(),
-                        id_comercial: id_comercial
+                        id_obra: id_obra
                     },
                     dataType: 'json',
                     success: function(json) {
@@ -276,6 +310,8 @@
 
 
     function updateSubTotal(obj) {
+        console.log(obj);
+
         var quantidade = $(obj).val();
         if (quantidade <= 0) {
             $(obj).val(1);
@@ -288,6 +324,36 @@
         $(obj).closest('tr').find('.subtotal').html('R$ ' + formata(subtotal));
         updateTotal();
 
+
+    }
+
+    function updatePrice(){
+
+        var itemSelecionado = $('#select-variavel' + " option:selected");
+
+
+
+        return itemSelecionado.val();
+
+    }
+
+    function updatePriceVariavel(obj) {
+        
+
+        var itemSelecionado = $('#select-variavel' + " option:selected");
+
+        quantidade = $('#preco_variavel').val();
+
+        $("#preco_variavel").attr('data-price', itemSelecionado.val());
+
+        $(obj).closest('tr').find('.unitario').html('R$ ' + formata(itemSelecionado.val()));
+        updateTotal();
+
+        total = itemSelecionado.val() * parseInt(quantidade);
+
+        $(obj).closest('tr').find('.subtotal').html('R$ ' + formata(total));
+        
+        
 
     }
 
@@ -399,7 +465,7 @@
 $(function () {
 
 
-    if($('#id_comercial').val() != undefined){
+    if($('#id_obra').val() != undefined){
         $( document ).ready( readyFn );
         $( document ).ready( gethistorico );
     }
@@ -407,11 +473,10 @@ $(function () {
 
     function gethistorico() {  
         
-    
-        var id_comercial_1 = $('#id_comercial').val()
+        var id_obra_1 = $('#id_obra').val()
 
         $.getJSON(BASE_URL + 'ajax/getHistorico/?search=', {
-            id_comercial: $('#id_comercial').val(),
+            id_obra: $('#id_obra').val(),
             ajax: 'true'
         }, function(j) {
             var options = '';
@@ -436,7 +501,7 @@ $(function () {
                         options += '<td>' + tipo + '</td>';
                         options += '<td>' + 'R$ '+formata(j[i].valor_receber) + '</td>';
                         options += '<td>';
-                        options += '<a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="'+ BASE_URL +'/comercial/deleteHistorico/'+id_comercial_1+'/'+id_historico+'"><i class="ion ion-trash-a"></i></a></td>';
+                        options += '<a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="'+ BASE_URL +'/comercial/deleteHistorico/'+id_obra_1+'/'+id_historico+'"><i class="ion ion-trash-a"></i></a></td>';
 
                     options += '</tr>';
                 }
@@ -449,8 +514,7 @@ $(function () {
                 var totalReplaceZero = totalReplaceRS.replace(',00', '');
                 var totalReplacePonto = totalReplaceZero.replace('.', '');
 
-
-                if(valor_historico[0].value >= totalReplacePonto){
+                if(parseInt(valor_historico[0].value) >= parseInt(totalReplacePonto)){
                     
                     $("#addHistorico").css("display","none")
                 }
@@ -468,10 +532,11 @@ $(function () {
         });
     }
     function readyFn( jQuery ) {
-
+        var id_obra = $('#id_obra').val()
         $.getJSON(BASE_URL + 'ajax/getEtapa/?search=', {
             id_servico: $('#id_servico').val(),
             id_concessionaria: $('#id_concessionaria').val(),
+            id_obra: id_obra,
             ajax: 'true'
         }, function(j) {
             var options = '';
@@ -518,7 +583,7 @@ $(function () {
 
         if(id_etapa != 0){
            
-            var id_comercial =  $('#id_comercial').val();
+            var id_obra =  $('#id_obra').val();
 
             if (metodo_valor != '') {
 
@@ -530,7 +595,7 @@ $(function () {
                         metodo_valor: metodo_valor,
                         metodo: metodo,
                         id_etapa: id_etapa,
-                        id_comercial: id_comercial,
+                        id_obra: id_obra,
                         valor_receber: valor_receber
                     },
                     dataType: 'json',

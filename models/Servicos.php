@@ -130,7 +130,7 @@ class Servicos extends model
 	public function getEtapas($id_concessionaria, $id_servico, $tipo = false)
 	{
 
-		if($tipo == false){
+		if ($tipo == false) {
 			$sql = "SELECT * FROM  
 				etapas_servico_concessionaria etpsc
 				INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
@@ -164,7 +164,28 @@ class Servicos extends model
 
 			if ($sql->rowCount() > 0) {
 				$this->array = $sql->fetchAll();
-			}
+
+				for ($q = 0; $q < count($this->array); $q++) {
+				
+					$sql = $this->db->prepare("SELECT * FROM variavel_etapa WHERE id_etapa = :id_etapa");
+					$sql->bindValue(':id_etapa', $this->array[$q]['id']);
+					$sql->execute();
+
+					if ($sql->rowCount() > 0) {
+						
+						$arrayVariavel = $sql->fetchAll();
+
+						$this->array[$q]['variavel'] = array();
+
+						foreach ($arrayVariavel as $var) {
+							array_push($this->array[$q]['variavel'], $var);
+
+						}
+
+						
+					}
+				}
+			}	
 
 			return $this->array;
 		}
@@ -222,13 +243,17 @@ class Servicos extends model
 		if ($Parametros['checked'] == 1) {
 
 			$check = 1;
+			$status = 6;
 		} else {
+			$status = 5;
+
 			$check = 0;
 		}
 
 		$sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
-			obr.check          	= :checked
+			obr.check          	= :checked, 
+			obr.id_status 		= :id_status
 
 			WHERE (id_etapa = :id) AND (id_obra = :id_obra)
 
@@ -237,6 +262,8 @@ class Servicos extends model
 		$sql->bindValue(':checked',   $check);
 		$sql->bindValue(':id',   $Parametros['id_etapa']);
 		$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+		$sql->bindValue(':id_status',   $status);
+
 
 		$sql->execute();
 
@@ -272,7 +299,6 @@ class Servicos extends model
 
 				//$this->notificacao->insert($id_company, $ParametrosNotificacao);
 			}
-
 		}
 	}
 

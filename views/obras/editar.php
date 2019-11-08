@@ -69,7 +69,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 											}
 
 											?> </h3>
-										<div class="box-tools pull-right" style="width: 14%;">
+										<div class="box-tools pull-right select_obras">
 
 											<div class="form-group">
 												<select class="form-control select2" style="width: 100%;" name="select-etapas" id="select-etapas">
@@ -121,7 +121,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 								<div id="obra_ok">
 									<?php if (count($documento_obra) > 0) : ?>
 										<?php foreach ($documento_obra as $doc) : ?>
-											<div class="col-md-12">
+											<div class="col-md-12 col-xs-12">
 												<div class="input-group" style="width: 50%;">
 													<input type="text" class="form-control" autocomplete="off" value="<?php echo $doc['docs_nome']; ?>">
 													<div class="input-group-btn">
@@ -138,7 +138,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 									<?php endif; ?>
 								</div>
 
-								<div class="col-md-10" style="display:none;" id="new_obra">
+								<div class="col-md-10 col-xs-12" style="display:none;" id="new_obra">
 									<label>Adicionar novo Documento</label>
 									<div class="input-group">
 										<input class="form-control" name="documento_nome" placeholder="Nome do Documento">

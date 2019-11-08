@@ -12,12 +12,13 @@ class Comercial extends model
 	{
 		$where = $this->buildWhere($filtro, $id_company);
 
-		$sql = "SELECT * FROM  
-				$this->tabela com
-			INNER JOIN cliente cli ON (cli.id = com.id_cliente)
-			INNER JOIN concessionaria con ON (con.id = com.id_concessionaria)
-			INNER JOIN servico sev ON (sev.id = com.id_servico)
-			INNER JOIN status_comercial stc ON (stc.stc_id = com.id_status)
+		$sql = "SELECT *, obr.id as id_obra FROM  
+				obra obr
+			INNER JOIN cliente cli ON (cli.id = obr.id_cliente)
+			INNER JOIN concessionaria con ON (con.id = obr.id_concessionaria)
+			INNER JOIN servico sev ON (sev.id = obr.id_servico)
+			INNER JOIN status_comercial stc ON (stc.stc_id = obr.id_status)
+			INNER JOIN financeiro_obra fino ON (fino.id_obra = obr.id)
 
 			WHERE " . implode(' AND ', $where);
 
@@ -37,7 +38,8 @@ class Comercial extends model
 	private function buildWhere($filtro, $id)
 	{
 		$where = array(
-			'com.id_company=' . $id
+			'obr.id_company=' . $id,
+			'obr.id_comercial=1'
 		);
 
 		if (!empty($filtro['example'])) {
@@ -81,22 +83,16 @@ class Comercial extends model
 
 		try {
 
-			$sql = $this->db->prepare("INSERT INTO $this->tabela SET 
+			$sql = $this->db->prepare("INSERT INTO obra SET 
         		
-				nome_obra 			= 	:obra_nome,		
-				id_concessionaria 	=	:id_concessionaria, 	
-				id_servico 			=	:id_servico,		
-				id_cliente 			=	:id_cliente, 	
-				id_company 			=	:id_company, 	
-
-				descricao 			=	:comercial_descricao,
-
-				valor_proposta 		=	:valor_proposta, 
-				valor_desconto 		=	:valor_desconto, 
-				valor_negociado 	=	:valor_negociado,
-				valor_custo			= 	:valor_custo,
-				data_envio 			=	:data_envio,
-				id_status 			= 	1
+				obr_razao_social 			= 	:obra_nome,		
+				id_concessionaria 			=	:id_concessionaria, 	
+				id_servico 					=	:id_servico,		
+				id_cliente 					=	:id_cliente, 	
+				id_company 					=	:id_company, 	
+				descricao 					=	:comercial_descricao,
+				id_status 					= 	1,
+				id_comercial 				= 1
         		
 			");
 
@@ -105,11 +101,6 @@ class Comercial extends model
 			$sql->bindValue(":id_servico", $id_servico);
 			$sql->bindValue(":id_cliente", $id_cliente);
 			$sql->bindValue(":comercial_descricao", $comercial_descricao);
-			$sql->bindValue(":valor_proposta", $valor_proposta);
-			$sql->bindValue(":valor_desconto", $valor_desconto);
-			$sql->bindValue(":valor_negociado", $valor_negociado);
-			$sql->bindValue(":valor_custo", $valor_custo);
-			$sql->bindValue(":data_envio", $data_envio);
 			$sql->bindValue(":id_company", $id_company);
 
 			if ($sql->execute()) {
@@ -118,34 +109,92 @@ class Comercial extends model
 				controller::alert('danger', 'Não foi possivel fazer a inserção');
 			}
 
-			$id_comercial = $this->db->lastInsertId();
+			$id_obra = $this->db->lastInsertId();
+
+			$sql = $this->db->prepare("INSERT INTO financeiro_obra SET 
+
+				id_company 			=	:id_company, 	
+				valor_proposta 		=	:valor_proposta, 
+				valor_desconto 		=	:valor_desconto, 
+				valor_negociado 	=	:valor_negociado,
+				valor_custo			= 	:valor_custo,
+				data_envio 			=	:data_envio,
+				id_obra 			=   :id_obra
+        		
+			");
+			$sql->bindValue(":valor_proposta", $valor_proposta);
+			$sql->bindValue(":valor_desconto", $valor_desconto);
+			$sql->bindValue(":valor_negociado", $valor_negociado);
+			$sql->bindValue(":valor_custo", $valor_custo);
+			$sql->bindValue(":data_envio", $data_envio);
+			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":id_obra", $id_obra);
+
+
+			$sql->execute();
 
 			if (isset($Parametros['compra_quantidade'])) {
 				foreach ($Parametros['compra_quantidade'] as $id_etapa => $quantidade) {
 
 					$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial SET 
 						id_etapa 			=	:id_etapa,
-						id_comercial 			=	:id_comercial,
-						etcc_quantidade 			=	:quantidade
+						id_obra 			=	:id_obra,
+						etcc_quantidade 	=	:quantidade
 					");
 
 					$sql->bindValue(":id_etapa", $id_etapa);
-					$sql->bindValue(":id_comercial", $id_comercial);
+					$sql->bindValue(":id_obra", $id_obra);
 					$sql->bindValue(":quantidade", $quantidade);
 
 					$sql->execute();
 				}
 			}
+
+
+			$sql->bindValue(":razao_social", $Parametros['obra_nome']);
+
+			$this->servico = new Servicos();
+
+			$etapas = $this->servico->getEtapas($Parametros['concessionaria'], $Parametros['servico']);
+
+			if (isset($etapas)) {
+				if (count($etapas) > 0) {
+					for ($q = 0; $q < count($etapas); $q++) {
+
+						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra, ordem, preco, tipo_compra)
+							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra, :ordem, :preco, :tipo_compra)
+						");
+						
+						$sql->bindValue(":id_etapa", $etapas[$q]['id_etapa']);
+						$sql->bindValue(":id_obra", $id_obra);
+						$sql->bindValue(":etp_nome_etapa_obra", $etapas[$q]['etp_nome']);
+						$sql->bindValue(":ordem", $etapas[$q]['order_id']);
+						$sql->bindValue(":preco", $etapas[$q]['preco']);
+						$sql->bindValue(":tipo_compra", $etapas[$q]['tipo_compra']);
+
+
+						$sql->execute();
+					}
+				}
+
+			} else {
+
+			}
+
+			return $id_obra;
+
+
+			
 			
 		} catch (PDOExecption $e) {
 			$sql->rollback();
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 		}
 
-		return $id_comercial;
+		return $id_obra;
 	}
 
-	public function getEtapasComercial($id_concessionaria, $id_servico){
+	public function getEtapasComercial($id_concessionaria, $id_servico, $id_obra){
 	
 		$sql = $this->db->prepare("
 	
@@ -155,14 +204,14 @@ class Comercial extends model
 			SELECT etpsc.id_etapa FROM etapas_servico_concessionaria etpsc
 			WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico
 		)
-		AND etp.id NOT IN ( SELECT id_etapa FROM historico_financeiro WHERE id_comercial = :id_comercial)
+		AND etp.id NOT IN ( SELECT id_etapa FROM historico_financeiro WHERE id_obra = :id_obra)
 		AND etpt.id_etapatipo <> 4
 		
 		");
 
 		$sql->bindValue(':id_concessionaria', $id_concessionaria);
 		$sql->bindValue(':id_servico', $id_servico);
-		$sql->bindValue(':id_comercial', '16');
+		$sql->bindValue(':id_obra', $id_obra);
 		
 
 		$sql->execute();
@@ -174,21 +223,21 @@ class Comercial extends model
 		return $this->array;
 	}
 
-	public function getHistoricoByComercial($id_comercial, $id_company){
+	public function getHistoricoByComercial($id_obra, $id_company){
 	
 		$sql = $this->db->prepare("
 
 			SELECT * FROM historico_financeiro histf
 			INNER JOIN etapa etp ON (etp.id = histf.id_etapa)
-			INNER JOIN comercial com ON (com.id_comercial = histf.id_comercial)
+			INNER JOIN obra obr ON (obr.id = histf.id_obra)
 			
 			
-			WHERE histf.id_comercial = :id_comercial 
+			WHERE histf.id_obra = :id_obra 
 			AND histf.id_company = :id_company
 
 		");
 
-		$sql->bindValue(':id_comercial', $id_comercial);
+		$sql->bindValue(':id_obra', $id_obra);
 		$sql->bindValue(':id_company', $id_company);
 
 		$sql->execute();
@@ -206,7 +255,7 @@ class Comercial extends model
 
 		$metodo = $Parametros['metodo'] == 1 ? 'porcentagem' : 'valor';
 		$id_etapa = $Parametros['id_etapa'];
-		$id_comercial = $Parametros['id_comercial'];
+		$id_obra = $Parametros['id_obra'];
 		$metodo_valor = $Parametros['metodo_valor'];
 		$valor_receber = controller::PriceSituation($Parametros['valor_receber']);
 
@@ -217,7 +266,7 @@ class Comercial extends model
 			$sql = $this->db->prepare("INSERT INTO historico_financeiro SET 
 
 				id_etapa 			=	:id_etapa,
-				id_comercial 		=	:id_comercial,
+				id_obra 			=	:id_obra,
 				id_company 			=	:id_company,
 				metodo				= 	:metodo,
 				metodo_valor		=	:metodo_valor,
@@ -226,7 +275,7 @@ class Comercial extends model
 			");
 
 			$sql->bindValue(":id_etapa", $id_etapa);
-			$sql->bindValue(":id_comercial", $id_comercial);
+			$sql->bindValue(":id_obra", $id_obra);
 			$sql->bindValue(":id_company", $id_company);
 			$sql->bindValue(":metodo", $metodo);
 			$sql->bindValue(":metodo_valor", $metodo_valor);
@@ -257,11 +306,11 @@ class Comercial extends model
 
 		$data_envio 			= $Parametros['data_envio'];
 
-		if (isset($Parametros['id_' . $this->tabela]) && $Parametros['id_' . $this->tabela] != '') {
+		if (isset($Parametros['id_obra']) && $Parametros['id_obra'] != '') {
 			
 			try {
 
-				$sql = $this->db->prepare("UPDATE $this->tabela SET 
+				$sql = $this->db->prepare("UPDATE obra SET 
 					
 					nome_obra = :nome_obra,
 					valor_proposta 		=	:valor_proposta, 
@@ -270,11 +319,11 @@ class Comercial extends model
 					data_envio 			=	:data_envio,
 					valor_custo 		= 	:valor_custo
 
-					WHERE id_comercial = :id_comercial
+					WHERE id = :id_obra
 	        	");
 				
 				$sql->bindValue(":nome_obra", $nome_obra);
-				$sql->bindValue(":id_comercial", $Parametros['id_' . $this->tabela]);
+				$sql->bindValue(":id_obra", $Parametros['id_obra']);
 				$sql->bindValue(":valor_proposta", $valor_proposta);
 				$sql->bindValue(":valor_desconto", $valor_desconto);
 				$sql->bindValue(":valor_negociado", $valor_negociado);
@@ -303,47 +352,93 @@ class Comercial extends model
 		$tipo = 'Editado';
 		$id_status = $Parametros['tipo'];
 
-		if (isset($Parametros['id_' . $this->tabela]) && $Parametros['id_' . $this->tabela] != '') {
+		if (isset($Parametros['id'])  && $Parametros['id'] != '') {
 			try {
 
-				$sql = $this->db->prepare("UPDATE $this->tabela SET 
+				$sql = $this->db->prepare("UPDATE obra SET 
 					
 					id_status = :id_status
 
-					WHERE id_$this->tabela = :id
+					WHERE id = :id
 				
 				");
 
 				$sql->bindValue(":id_status", $id_status);
-				$sql->bindValue(":id", $Parametros['id_' . $this->tabela]);
+				$sql->bindValue(":id", $Parametros['id']);
+
+					error_log(print_r($id_status,1));
 
 				if ($sql->execute()) {
 
-					return $Parametros['id_comercial'];
+					if($id_status == APROVADA){
+						$this->updateEtapaCompraObra($Parametros['id']);
+					}
+
+					return $Parametros['id'];
 				} else {
 					controller::alert('danger', 'Erro ao fazer a edição!!');
 				}
+
+				
+
 			} catch (PDOExecption $e) {
 				$sql->rollback();
 				error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 			}
 		} else {
-			controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
+			controller::alert('danger', 'Não foi selecionado nenhum registro!!');
 		}
 	}
 
-	public function getcomercialById($id_comercial, $id_company){
+	public function updateEtapaCompraObra($id_obra) 
+	{
 		
-		if($id_comercial != ''){
-			$sql = $this->db->prepare("SELECT * FROM $this->tabela com
-				INNER JOIN concessionaria con ON (con.id = com.id_concessionaria)
-				INNER JOIN servico sev ON (sev.id = com.id_servico)
-				INNER JOIN cliente cli ON (cli.id = com.id_cliente)
+		$sql = $this->db->prepare("SELECT * FROM etapa_compra_comercial WHERE id_obra = :id_obra");
+		$sql->bindValue(":id_obra", $id_obra);
+		$sql->execute();
 
-				WHERE com.id_company = :id_company 
-				AND id_comercial = :id_comercial
+		
+		if ($sql->rowCount() > 0) {
+			
+			$array = $sql->fetchAll();
+
+			foreach ($array as $etpC) {
+
+				$sql = $this->db->prepare("UPDATE obra_etapa SET 
+					quantidade = :quantidade
+				
+					WHERE id_etapa = :id_etapa AND id_obra = :id_obra
+        		");
+
+				$sql->bindValue(":quantidade", $etpC['etcc_quantidade']);
+				$sql->bindValue(":id_etapa",   $etpC['id_etapa']);
+				$sql->bindValue(":id_obra",    $id_obra);
+
+				$sql->execute();
+
+			}
+
+		} else { 
+			return false;
+		}
+
+
+
+	}
+
+	public function getcomercialById($id_obra, $id_company){
+		
+		if($id_obra != ''){
+			$sql = $this->db->prepare("SELECT *, obr.id as id_obra FROM obra obr
+				INNER JOIN concessionaria con ON (con.id = obr.id_concessionaria)
+				INNER JOIN servico sev ON (sev.id = obr.id_servico)
+				INNER JOIN cliente cli ON (cli.id = obr.id_cliente)
+				INNER JOIN financeiro_obra fino ON (fino.id_obra = obr.id)
+
+				WHERE obr.id_company = :id_company 
+				AND obr.id = :id_obra
 			");
-			$sql->bindValue(':id_comercial', $id_comercial);
+			$sql->bindValue(':id_obra', $id_obra);
 			$sql->bindValue(':id_company', $id_company);
 
 			$sql->execute();
@@ -361,33 +456,16 @@ class Comercial extends model
 		}
 	}
 
-	public function delete($id, $id_company)
-	{
-		$tipo = 'Deletado';
-		if (isset($Parametros['id' . $this->tabela]) && $Parametros['id' . $this->tabela] != '') {
-			$sql = $this->db->prepare("DELETE FROM $this->tabela WHERE id_$this->tabela = :id AND id_company = :id_company");
-			$sql->bindValue(":id", $id);
-			$sql->bindValue(":id_company", $id_company);
-			if ($sql->execute()) {
-				controller::alert('success', 'Deletado com sucesso!!');
-			} else {
-				controller::alert('danger', 'Erro ao deletar!!');
-			}
-		} else {
-			controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
-		}
-	}
-
-	public function deleteHistorico($id_comercial, $id_historico, $id_company)
+	public function deleteHistorico($id_obra, $id_historico, $id_company)
 	{
 		$tipo = 'Deletado';
 		
-		if (isset($id_comercial) && $id_comercial != '') {
+		if (isset($id_obra) && $id_obra != '') {
 
-			$sql = $this->db->prepare("DELETE FROM historico_financeiro WHERE histf_id = :id_historico AND id_comercial = :id_comercial AND id_company = :id_company");
+			$sql = $this->db->prepare("DELETE FROM historico_financeiro WHERE histf_id = :id_historico AND id_obra = :id_obra AND id_company = :id_company");
 			
 			$sql->bindValue(":id_historico", $id_historico);
-			$sql->bindValue(":id_comercial", $id_comercial);
+			$sql->bindValue(":id_obra", $id_obra);
 			$sql->bindValue(":id_company", $id_company);
 			
 			if ($sql->execute()) {
@@ -401,29 +479,8 @@ class Comercial extends model
 		}
 	}
 
-	public function getCount($id_company)
-	{
-		$r = 0;
-		$sql = $this->db->prepare("SELECT COUNT(*) AS count FROM $this->tabela WHERE id_company = :id_company");
-		$sql->bindValue(':id_company', $id_company);
-		$sql->execute();
-		$row = $sql->fetch();
-		$r = $row['count'];
-		return $r;
+	public function getCount(){
+		
 	}
 
-	public function searchByName($var, $id_company)
-	{
-		$sql = $this->db->prepare("SELECT * FROM $this->tabela
-			WHERE id_company = :id_company AND example like :example
-		");
-		$sql->bindValue(':example', '%' . $var . '%');
-		$sql->bindValue(':id_company', $id_company);
-
-		$sql->execute();
-		if ($sql->rowCount() > 0) {
-			$this->array = $sql->fetchAll();
-		}
-		return $this->array;
-	}
 }

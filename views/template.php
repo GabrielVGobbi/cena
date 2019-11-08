@@ -8,7 +8,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
-  
+
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap/dist/css/bootstrap.min.css">
@@ -37,7 +37,7 @@
       <nav class="navbar navbar-static-top">
         <div class="container">
           <div class="navbar-header">
-            <a href="<?php echo BASE_URL;?>/home" class="navbar-brand"><b>Admin</b>CENA</a>
+            <a href="<?php echo BASE_URL; ?>/home" class="navbar-brand"><b>Admin</b>CENA</a>
             <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar-collapse">
               <i class="fa fa-bars"></i>
             </button>
@@ -70,7 +70,7 @@
                 <li class=""><a href="<?php echo BASE_URL; ?>obras">Obras <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
-             
+
 
               <?php if ($this->userInfo['user']->hasPermission('documento_view')) : ?>
                 <!--<li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>-->
@@ -116,7 +116,7 @@
                     <li class="footer"><a href="<?php echo BASE_URL; ?>notificacao">Ver todas</a></li>
                   </ul>
                 </li>
-            
+
                 <li class="dropdown tasks-menu">
 
 
@@ -125,7 +125,7 @@
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                   <!-- Menu Toggle Button -->
-                  <a href="<?php echo BASE_URL;?>/login/logout">
+                  <a href="<?php echo BASE_URL; ?>/login/logout">
                     <!-- The user image in the navbar-->
                     <!-- <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
                     <!-- hidden-xs hides the username on small devices so only the image appears. -->
@@ -138,7 +138,7 @@
 
                       <p>
                         <?php echo $this->userInfo['userName']['login']; ?>
-                        
+
                       </p>
                     </li>
                     <!-- Menu Body -->
@@ -181,7 +181,7 @@
                 <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
                   <!-- Menu Toggle Button -->
-                  <a href="<?php echo BASE_URL;?>login/logout">
+                  <a href="<?php echo BASE_URL; ?>login/logout">
                     <!-- The user image in the navbar-->
                     <!-- <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
                     <!-- hidden-xs hides the username on small devices so only the image appears. -->
@@ -233,7 +233,7 @@
     </header>
     <!-- Full Width Column -->
     <div class="content-wrapper">
-      <div class="container<?php echo ( ($viewData['titlePage'] == 'financeiro' || isset($viewData['fluid'])) ? '-fluid' : '') ?>">
+      <div class="container<?php echo (($viewData['titlePage'] == 'financeiro' || isset($viewData['fluid'])) ? '-fluid' : '') ?>">
         <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1 style="text-align: center;">
@@ -295,11 +295,11 @@
         type: 'POST',
         dataType: 'json',
         success: function(json) {
-        
+
 
           if (json['qtn'] > 0) {
             $('.notificacao-mensagem').html(json['qtn']);
-            $('.notificacao-mensagem-header').html('Você tem ' + json['qtn']+ ' Notificações Pendente<a href="<?php echo BASE_URL;?>notificacao/lertudo">ler tudo</a>');
+            $('.notificacao-mensagem-header').html('Você tem ' + json['qtn'] + ' Notificações Pendente<a href="<?php echo BASE_URL; ?>notificacao/lertudo">ler tudo</a>');
 
 
           } else {
@@ -371,18 +371,37 @@
       var text = '<?php echo $_SESSION['form']['mensagem']; ?>';
       var icon = '<?php echo $_SESSION['form']['type']; ?>';
       var pageController = '<?php echo $viewData['pageController']; ?>';
+      var id_obra = '<?php echo isset($_SESSION['form']['id_obra']) ? $_SESSION['form']['id_obra'] : ''; ?>';
+      var buttons = true;
+
+
+      <?php if (isset($_SESSION['form']['buttons'])) : ?>
+        var buttons = {
+          cancel: 'Cancelar',
+          criar: 'Criar',
+        }
+      <?php endif; ?>
+
 
       swal({
           title: title,
           text: text,
           icon: icon,
-          buttons: 'OK',
-        })
-        .then((value) => {
+          buttons: buttons,
+          dangerMode: true,
 
-          <?php unset($_SESSION['form']); ?>
-          /*window.location.href = BASE_URL+pageController;*/
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            swal("Ainda não disponivel!");
+            //window.location.href = BASE_URL+'financeiro/add/'+id_obra;
+            
+          } else {
+            <?php unset($_SESSION['form']); ?>
+            /*window.location.href = BASE_URL+pageController;*/
+          }
         });
+ 
     </script>
 
   <?php endif; ?>

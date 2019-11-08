@@ -89,9 +89,6 @@ class ComercialController extends controller
 
             $_POST['valor_proposta'] =  str_replace(' ', '', $_POST['valor_proposta']);
 
-
-		
-
             $result = $this->comercial->add($this->user->getCompany(),$_POST);
             
             header('Location:' . BASE_URL . 'comercial/edit/'.$result);
@@ -111,7 +108,7 @@ class ComercialController extends controller
 
             $this->dataInfo['tableInfo']            = $this->comercial->getcomercialById($id, $this->user->getCompany());
 
-            if (isset($_POST['nome_obra']) && isset($_POST['id_comercial'])) {
+            if (isset($_POST['nome_obra']) && isset($_POST['id_obra'])) {
 
                 $result = $this->comercial->edit($_POST, $this->user->getCompany());
                 
@@ -147,13 +144,13 @@ class ComercialController extends controller
         }
     }
 
-    public function deleteHistorico($id_comercial, $id_historico)
+    public function deleteHistorico($id_obra, $id_historico)
     {
         if ($this->user->hasPermission('comercial_view') && $this->user->hasPermission('comercial_delete')) {
 
-            $result = $this->comercial->deleteHistorico($id_comercial,$id_historico, $this->user->getCompany());
+            $result = $this->comercial->deleteHistorico($id_obra,$id_historico, $this->user->getCompany());
 
-            header("Location: " . BASE_URL . "comercial/edit/".$id_comercial);
+            header("Location: " . BASE_URL . "comercial/edit/".$id_obra);
             exit();
 
         } else {

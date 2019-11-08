@@ -76,21 +76,18 @@ class Etapa extends model
         $id_concessionaria = $Parametros['id_concessionaria'];
 
 
+        $quantidade = (isset($Parametros['quantidade']) ? $Parametros['quantidade'] : '');
+        $preco      = (isset($Parametros['preco'])      ? controller::PriceSituation($Parametros['preco'])      : '');
+        $tipo_compra      = (isset($Parametros['tipo_compra'])      ? $Parametros['tipo_compra']      : '');
 
-        $quantidade = ( isset($Parametros['quantidade']) ? $Parametros['quantidade'] : '' );	
-        $preco      = ( isset($Parametros['preco'])      ? controller::PriceSituation($Parametros['preco'])      : '' );	
-        $tipo_compra      = ( isset($Parametros['tipo_compra'])      ? $Parametros['tipo_compra']      : '' );	
-
-        if($Parametros['tipo'] == 1){
+        if ($Parametros['tipo'] == 1) {
             $tipo = 'adm';
-        }else if ($Parametros['tipo'] == 2){
+        } else if ($Parametros['tipo'] == 2) {
             $tipo = 'com';
-        }else if ($Parametros['tipo'] == 3){
+        } else if ($Parametros['tipo'] == 3) {
             $tipo = 'obr';
-
-        }else {
+        } else {
             $tipo = 'compra';
-
         }
 
         try {
@@ -115,8 +112,7 @@ class Etapa extends model
 
             controller::setLog($Parametros, 'etapa', 'add');
 
-            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa,$tipo );
-
+            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo);
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -125,16 +121,108 @@ class Etapa extends model
         return $this->db->lastInsertId();
     }
 
-    public function edit($id_company,$Parametros)
+    public function addEtapaCompra($id_company, $Parametros)
+    {
+
+        $tipo = "Inserido";
+
+        $id_servico = $Parametros['id_servico'];
+        $id_concessionaria = $Parametros['id_concessionaria'];
+
+        $quantidade       = (isset($Parametros['quantidade']) ? $Parametros['quantidade'] : '');
+        $preco            = (isset($Parametros['preco'])      ? controller::PriceSituation($Parametros['preco'])      : '');
+        $tipo_compra      = (isset($Parametros['tipo_compra'])      ? $Parametros['tipo_compra']      : '');
+
+
+        try {
+            $sql = $this->db->prepare("INSERT INTO etapa SET 
+                etp_nome    = :nome,
+                tipo        = :tipo,
+                quantidade  = :quantidade,
+                preco       = :preco,
+                tipo_compra  = :tipo_compra
+            ");
+
+            $sql->bindValue(":tipo", 4);
+            $sql->bindValue(":nome", $Parametros['add_etapa_compra']);
+            $sql->bindValue(":quantidade", $quantidade);
+            $sql->bindValue(":preco", $preco);
+            $sql->bindValue(":tipo_compra", $tipo_compra);
+
+
+            $sql->execute();
+
+            $id_etapa = $this->db->lastInsertId();
+
+            controller::setLog($Parametros, 'etapa', 'add');
+
+            if (isset($Parametros['variavel'])) {
+                $this->addVariavelEtapa($Parametros, $id_etapa);
+            }
+
+            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo);
+        } catch (PDOExecption $e) {
+            $sql->rollback();
+            error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+        }
+
+        return $this->db->lastInsertId();
+    }
+
+    public function addVariavelEtapa($Parametros, $id_etapa)
+    {
+
+        if (isset($Parametros['variavel'])) {
+            if (count($Parametros['variavel']) > 0) {
+                for ($q = 0; $q < count($Parametros['variavel']['nome_variavel']); $q++) {
+
+                    if ($Parametros['variavel']['nome_variavel'][$q] != '') {
+
+                        $sql = $this->db->prepare("INSERT INTO variavel_etapa (id_etapa, nome_variavel, preco_variavel)
+                            VALUES (:id_etapa, :nome_variavel, :preco_variavel)
+                        ");
+
+                        $sql->bindValue(":id_etapa", $id_etapa);
+                        $sql->bindValue(":nome_variavel", $Parametros['variavel']['nome_variavel'][$q]);
+                        $sql->bindValue(":preco_variavel", controller::PriceSituation($Parametros['variavel']['preco_variavel'][$q]));
+
+
+                        $sql->execute();
+                    }
+                }
+            }
+        } else { }
+    }
+
+    public function getVariavelEtapa($id_etapa)
+    {
+
+        $variavel_array = array();
+
+        $sql = $this->db->prepare("SELECT * FROM variavel_etapa WHERE id_etapa = :id_etapa");
+        $sql->bindValue(':id_etapa', $id_etapa);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $variavel_array = $sql->fetchAll();
+        }
+
+        return $variavel_array;
+    }
+
+    public function edit($id_company, $Parametros)
     {
         $tipo = 'Editado';
+
+
 
         $etp_nome  = $Parametros['nome_etapa'];
         $id_etapa  = $Parametros['id_etapa'];
 
-        $quantidade         = ( isset($Parametros['quantidade'])  ? $Parametros['quantidade'] : '' );	
-        $preco              = ( isset($Parametros['preco'])       ? $Parametros['preco'] :      '' );	
-        $tipo_compra        = ( isset($Parametros['tipo_compra']) ? $Parametros['tipo_compra'] : '' );	
+        $quantidade         = (isset($Parametros['quantidade'])  ? $Parametros['quantidade'] : '');
+        $preco              = (isset($Parametros['preco'])       ? controller::PriceSituation($Parametros['preco']) : '');
+        $tipo_compra        = (isset($Parametros['tipo_compra']) ? $Parametros['tipo_compra'] : '');
 
         if (isset($id_etapa) && $id_etapa != '') {
             try {
@@ -156,6 +244,31 @@ class Etapa extends model
                 $sql->bindValue(":tipo_compra", $tipo_compra);
 
                 if ($sql->execute()) {
+
+                    if (isset($Parametros['variavel']) && $Parametros['variavel'] != '') {
+                        foreach ($Parametros['variavel'] as $var) {
+
+                            $nome_variavel = $var['nome_variavel'];
+                            $preco_variavel = $var['preco_variavel'];
+                            $id = $var['id'];
+
+
+                            $sql = $this->db->prepare("UPDATE variavel_etapa SET 
+                        
+                                nome_variavel = :nome_variavel,
+                                preco_variavel  = :preco_variavel
+
+                                WHERE id_variavel_etapa = :id
+                            ");
+
+                            $sql->bindValue(":nome_variavel", $nome_variavel);
+                            $sql->bindValue(":preco_variavel", controller::PriceSituation($preco_variavel));
+                            $sql->bindValue(":id", $id);
+                            $sql->execute();
+                        }
+                    }
+
+
                     controller::alert('success', 'Editado com sucesso!!');
                     controller::setLog($Parametros, 'etapa', 'edit');
                 } else {
@@ -166,7 +279,6 @@ class Etapa extends model
                 $sql->rollback();
                 error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
             }
-
         } else {
             controller::alert('danger', 'Não foi selecionado nada!!');
         }
@@ -195,6 +307,29 @@ class Etapa extends model
         }
     }
 
+    public function deleteVariavelEtapa($id_variavel_etapa)
+    {
+        $tipo = 'Deletado';
+
+        if (isset($id_variavel_etapa) && $id_variavel_etapa != '') {
+
+            $sql = $this->db->prepare("DELETE FROM variavel_etapa WHERE id_variavel_etapa = :id_variavel_etapa");
+            $sql->bindValue(":id_variavel_etapa", $id_variavel_etapa);
+
+            if ($sql->execute()) {
+                //controller::alert('success', 'Deletado com sucesso!!');
+                //controller::setLog($id_variavel_etapa, 'etapaDeleteVariavel', 'delete');
+
+                return true;
+            } else {
+                controller::alert('danger', 'Erro ao deletar!!');
+            }
+        } else {
+            controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
+        }
+    }
+
+
     public function delete_etapa_obra($id_etapa_obra, $id_company)
     {
         $tipo = 'Deletado';
@@ -208,11 +343,10 @@ class Etapa extends model
 
             $sql = $this->db->prepare("DELETE FROM obra_etapa WHERE id_etapa_obra = :id_etapa_obra");
             $sql->bindValue(":id_etapa_obra", $id_etapa_obra);
-            
+
             if ($sql->execute()) {
                 controller::alert('success', 'Deletado com sucesso!!');
                 controller::setLog($Parametros, 'delete_etapa_obra', 'obra_etapa');
-
             } else {
                 controller::alert('danger', 'Erro ao deletar!!');
             }
@@ -222,7 +356,7 @@ class Etapa extends model
     }
 
 
-    
+
 
     public function getCount($id_company)
     {
@@ -346,7 +480,7 @@ class Etapa extends model
 
 
             if ($sql->execute()) {
-                
+
 
                 $id = $this->db->lastInsertId();
 
@@ -421,6 +555,7 @@ class Etapa extends model
     {
         $tipo = 'Editado';
 
+
         if (isset($id_etapa) && $id_etapa != '') {
 
             if ($Parametros['tipo'] === 'ADMINISTRATIVA') {
@@ -429,7 +564,7 @@ class Etapa extends model
 
                 $adm['id_obra'] = $Parametros['id_obra'];
 
-                $adm['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
+                $adm['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';
 
                 $adm['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -441,16 +576,15 @@ class Etapa extends model
                 $adm['observacao_sistema'] = $Parametros['observacao_sistema'];
 
                 $this->etapaAdministrativo($id_etapa, $adm, $id_company, $id_user);
-
             } elseif ($Parametros['tipo'] === 'CONCESSIONARIA') {
 
                 $com = array();
 
-                $com['check_nota'] = isset($Parametros['check_nota']) ? $Parametros['check_nota'] : ''; 
+                $com['check_nota'] = isset($Parametros['check_nota']) ? $Parametros['check_nota'] : '';
 
                 $com['id_obra'] = $Parametros['id_obra'];
 
-                $com['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
+                $com['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';
 
                 $com['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -463,14 +597,13 @@ class Etapa extends model
                 $com['nova_data'] = controller::SomarData(controller::returnDate($com['data_abertura_concessionaria']), $com['prazo_atendimento_concessionaria']);
 
                 $this->etapaConcessionaria($id_etapa, $com, $id_company, $id_user);
-
             } elseif ($Parametros['tipo'] === 'OBRA') {
 
                 $obr = array();
 
                 $obr['id_obra'] = $Parametros['id_obra'];
 
-                $obr['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';   
+                $obr['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';
 
                 $obr['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
 
@@ -492,7 +625,7 @@ class Etapa extends model
             if (isset($arquivos) && $Parametros['documento_etapa_nome'] != '') {
                 $d = new Documentos;
 
-                $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'].'_'.$Parametros['cliente'];
+                $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'] . '_' . $Parametros['cliente'];
                 $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company, $Parametros['id_obra']);
             }
 
@@ -500,15 +633,14 @@ class Etapa extends model
                 $d = new Documentos;
 
 
-                $Parametros['documento_nome'] = $Parametros['documento_nome'].'_'.$Parametros['cliente'];
+                $Parametros['documento_nome'] = $Parametros['documento_nome'] . '_' . $Parametros['cliente'];
                 $d->add($arquivos, $id_company, $Parametros['id_obra'], $Parametros['documento_nome']);
             }
-            
-
         } else {
             controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
         }
     }
+
 
     public function etapaAdministrativo($id_etapa, $Parametros, $id_company, $id_user)
     {
@@ -619,7 +751,7 @@ class Etapa extends model
                 controller::alert('danger', 'Erro ao fazer a edição!!');
             }
 
-            if($Parametros['check_nota'] == 1){
+            if ($Parametros['check_nota'] == 1) {
                 $sql = $this->db->prepare("UPDATE obra SET 
                     
                 
@@ -714,29 +846,24 @@ class Etapa extends model
 
         $sql->execute();
 
-        if($sql->rowCount() > 0){
+        if ($sql->rowCount() > 0) {
             $row = $sql->fetch();
 
-            if ($tipo == 1 || $tipo == 4) {   
+            if ($tipo == 1 || $tipo == 4) {
                 return 1;
             }
-    
+
             if ($row['parcial'] == 1  || $row['check'] == 1 || $row['check'] == '') {
-               
+
                 return 1;
-            
             } else {
-    
+
                 return 0;
             }
-            
-        }else {
-            
+        } else {
+
             return 1;
         }
-
-
-        
     }
 
 

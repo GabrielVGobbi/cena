@@ -193,6 +193,54 @@
                                     </div>
                                 </div>
                             </div>
+                            <?php $id_etapa = (isset($etpComp['id']) ? $etpComp['id'] : ""); ?>
+                            <?php $variavel_etapa = $this->etapa->getVariavelEtapa($id_etapa); ?>
+                            <?php if (count($variavel_etapa) > 0) : ?>
+                                <div class="box box-primary">
+                                    <div class="box-header with-border">
+                                        <h3 class="box-title">Variaveis</h3>
+
+                                        <div class="box-tools pull-right">
+                                        </div>
+                                    </div>
+                                    <div class="box-body">
+                                        <?php foreach ($variavel_etapa as $var) : ?>
+                                            <input type="hidden" class="form-control" value="<?php echo $var['id_variavel_etapa']  ?>" name="variavel[<?php echo $var['id_variavel_etapa']; ?>][id]" id="id_variavel" autocomplete="off">
+
+                                            <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Nome da Variavel</label>
+                                                        <input type="text" class="form-control" value="<?php echo $var['nome_variavel']  ?>" name="variavel[<?php echo $var['id_variavel_etapa']; ?>][nome_variavel]" id="nome_variavel" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Preço</label>
+                                                        <input type="text" class="form-control" name="variavel[<?php echo $var['id_variavel_etapa']; ?>][preco_variavel]" value="R$ <?php echo (isset($var['preco_variavel']) ? number_format($var['preco_variavel'], 2, ',', '.') : ""); ?>" id="preco_variavel" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+
+                                                    <button type="button" style="position: relative;top: 25px;" data-toggle="tooltip" title="" onclick="deleteVariavelEtapa(<?php echo $var['id_variavel_etapa']; ?>)" data-original-title="Deletar" class="btn btn-danger"><i class="ion ion-trash-a"></i></button>
+
+                                                </div>
+
+
+                                            </div>
+                                        <?php endforeach; ?>
+                                        <!--<div class="col-md-6">
+                                                    <a class="btn btn-sm btn-info btn-flat pull-left new_variavel" style="position: relative;top: 27px;"> <i class="fa fa-fw fa-plus-circle"></i></a>
+                                                </div>-->
+                                        <div class="row" id="new_variavel"> </div>
+
+                                    </div>
+
+                                </div>
+                            <?php else : ?>
+
+                            <?php endif; ?>
                         </div>
 
                         <div class="modal-footer">
@@ -204,3 +252,25 @@
         </div>
     </div>
 </div>
+
+<script>
+    function deleteVariavelEtapa(id) {
+
+        $(function() {
+
+            $.ajax({
+
+                url: BASE_URL + 'ajax/deleteVariavelEtapa',
+                type: 'POST',
+                data: {
+                    id:id
+                },
+                dataType: 'json',
+                success: function(json) {
+                    location.reload(); 
+                },
+            });
+
+        });
+    }
+</script>

@@ -46,12 +46,26 @@ class ajaxController extends controller
         echo json_encode($servico);
     }
 
+    function deleteVariavelEtapa(){
+
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $e = new Etapa('');
+
+        $etapa = $e->deleteVariavelEtapa($_POST['id']);
+
+        echo json_encode($etapa);
+
+    }
+
 
     public function search_categoria($tipo = false)
     {
         $u = new Users();
         $u->setLoggedUser();
         $data = array();
+        $variavel = array();
 
         $id_concessionaria = $_REQUEST['id_concessionaria'];
         $id_servico        = $_REQUEST['id_servico'];
@@ -62,14 +76,17 @@ class ajaxController extends controller
 
         foreach ($servico as $citem) {
 
+            if(isset($citem['variavel'])){
+                $variavel = $citem['variavel'];
+            }
 
             $data[] = array(
                 'id'                    => $citem['id'],
                 'nome_sub_categoria'    => $citem['etp_nome'],
                 'quantidade'            => $citem['quantidade'],
                 'preco'                 => $citem['preco'],
-                'tipo_compra'           => $citem['tipo_compra']
-
+                'tipo_compra'           => $citem['tipo_compra'],
+                'variavel'              => $variavel
             );
         }
 
@@ -82,11 +99,11 @@ class ajaxController extends controller
         $u->setLoggedUser();
         $data = array();
 
-        $id_comercial = $_REQUEST['id_comercial'];
+        $id_obra = $_REQUEST['id_obra'];
 
         $a = new Comercial('comercial');
 
-        $servico = $a->getHistoricoByComercial($id_comercial, $u->getCompany());
+        $servico = $a->getHistoricoByComercial($id_obra, $u->getCompany());
 
         foreach ($servico as $citem) {
 
@@ -105,7 +122,7 @@ class ajaxController extends controller
         echo json_encode($data);
     }
 
-    public function getEtapa($tipo = false)
+    public function getEtapa()
     {
         $u = new Users();
         $u->setLoggedUser();
@@ -113,10 +130,12 @@ class ajaxController extends controller
 
         $id_concessionaria = $_REQUEST['id_concessionaria'];
         $id_servico        = $_REQUEST['id_servico'];
+        $id_obra        = $_REQUEST['id_obra'];
+
 
         $a = new Comercial('comercial');
 
-        $servico = $a->getEtapasComercial($id_concessionaria, $id_servico);
+        $servico = $a->getEtapasComercial($id_concessionaria, $id_servico, $id_obra);
 
         foreach ($servico as $citem) {
 
@@ -227,7 +246,6 @@ class ajaxController extends controller
 
         if (isset($_POST['nome']) && !empty($_POST['nome'])) {
 
-
             $Parametros['nome'] = addslashes($_POST['nome']);
             $Parametros['tipo'] = addslashes($_POST['tipo']);
             $Parametros['id_servico'] = addslashes($_POST['id_servico']);
@@ -239,6 +257,9 @@ class ajaxController extends controller
 
 
             $data['id'] = $a->add($u->getCompany(), $Parametros);
+        } else if (isset($_POST['add_etapa_compra']) && $_POST['add_etapa_compra'] != '') {
+
+            $data['id'] = $a->addEtapaCompra($u->getCompany(), $_POST);
         }
 
         echo json_encode($data['id']);
@@ -250,18 +271,16 @@ class ajaxController extends controller
         $data = array();
         $u = new Users();
         $u->setLoggedUser();
-        $a = new Obras();
+        $a = new Comercial('comercial');
         $Parametros = array();
 
-        $validator = $a->validacao($this->user->getCompany(), $_POST['obra_nome']);
+        if($_POST['id'] && $_POST['id'] != ''){
+            
 
-        error_log(print_r($validator,1));
-
+            $data['id'] = $a->updateStatusComercial($_POST, $u->getCompany());
+        }
         
-            
-            $data['id'] = $a->add($_POST, $u->getCompany());
-            
-            echo json_encode($data['id']);
+        echo json_encode($data['id']);
 
        
     }
@@ -306,7 +325,7 @@ class ajaxController extends controller
         $Parametros = array();
 
 
-        if (isset($_POST['id_comercial']) && !empty($_POST['id_comercial'])) {
+        if (isset($_POST['id']) && !empty($_POST['id'])) {
 
             $data['id'] = $a->updateStatusComercial($_POST, $u->getCompany());
         }

@@ -6,9 +6,9 @@
 	</div>
 
 	<div class="box-body" style="">
-		<form method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>comercial/edit/<?php echo $tableInfo['id_comercial']; ?>">
+		<form method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>comercial/edit/<?php echo $tableInfo['id_obra']; ?>">
 			<div class="tab-content">
-				<input type="hidden" class="form-control" name="id_comercial" id="id_comercial" autocomplete="off" value="<?php echo $tableInfo['id_comercial']; ?>">
+				<input type="hidden" class="form-control" name="id_obra" id="id_obra" autocomplete="off" value="<?php echo $tableInfo['id_obra']; ?>">
 				<input type="hidden" class="form-control" name="id_concessionaria" id="id_concessionaria" autocomplete="off" value="<?php echo $tableInfo['id_concessionaria']; ?>">
 				<input type="hidden" class="form-control" name="id_servico" id="id_servico" autocomplete="off" value="<?php echo $tableInfo['id_servico']; ?>">
 
@@ -22,7 +22,7 @@
 								<div class="col-md-4">
 									<div class="form-group">
 										<label>Nome da Obra</label>
-										<input type="text" class="form-control" name="nome_obra" id="nome_obra" value="<?php echo $tableInfo['nome_obra']; ?>" autocomplete="off">
+										<input type="text" class="form-control" name="nome_obra" id="nome_obra" value="<?php echo $tableInfo['obr_razao_social']; ?>" autocomplete="off">
 									</div>
 
 								</div>
@@ -47,7 +47,7 @@
 
 								<div class="col-md-2" style="margin-bottom:6px;">
 									<label>Data de Criação</label>
-									<input type="text" class="form-control" name="data_obra" id="data_obra" data-inputmask="'alias': 'dd/mm/yy'" data-mask="" value="<?php echo $tableInfo['data_envio']; ?>" autocomplete="off" required>
+									<input type="text" class="form-control" name="data_obra" id="data_obra" data-inputmask="'alias': 'dd/mm/yy'" data-mask="" value="<?php echo $tableInfo['data_obra']; ?>" autocomplete="off" required>
 								</div>
 							</div>
 						</div>
