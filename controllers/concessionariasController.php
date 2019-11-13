@@ -130,6 +130,7 @@ class concessionariasController extends controller
 
         if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_edit')) {
 
+            
             $this->dataInfo['tableInfo']                    = $this->concessionaria->getConcessionariaByService($id, $id_servico, $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = $this->dataInfo['tableInfo']['razao_social'] . ' x ' . $this->dataInfo['tableInfo']['sev_nome'];

@@ -1,4 +1,4 @@
-<?php $etapasConcessionaria = $this->etapa->getEtapasByTipo('OBRA', $tableInfo['id_concessionaria'], $tableInfo['id_servico']); ?>
+<?php $etapasConcessionaria = $this->etapa->getEtapasByTipo($offset = 0, 'OBRA', $tableInfo['id_concessionaria'], $tableInfo['id_servico']); ?>
 
 <div class="box box-default box-solid collapsed-box " id="boxobra">
     <a type="button" class="boxobra" style="cursor:pointer">

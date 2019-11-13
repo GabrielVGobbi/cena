@@ -46,7 +46,8 @@ class ajaxController extends controller
         echo json_encode($servico);
     }
 
-    function deleteVariavelEtapa(){
+    function deleteVariavelEtapa()
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -56,7 +57,6 @@ class ajaxController extends controller
         $etapa = $e->deleteVariavelEtapa($_POST['id']);
 
         echo json_encode($etapa);
-
     }
 
 
@@ -76,7 +76,7 @@ class ajaxController extends controller
 
         foreach ($servico as $citem) {
 
-            if(isset($citem['variavel'])){
+            if (isset($citem['variavel'])) {
                 $variavel = $citem['variavel'];
             }
 
@@ -93,6 +93,7 @@ class ajaxController extends controller
         echo json_encode($data);
     }
 
+   
     public function getHistorico($tipo = false)
     {
         $u = new Users();
@@ -114,7 +115,7 @@ class ajaxController extends controller
                 'metodo'            => $citem['metodo'],
                 'metodo_valor'      => $citem['metodo_valor'],
                 'valor_receber'     => $citem['valor_receber'],
-                
+
 
             );
         }
@@ -148,8 +149,9 @@ class ajaxController extends controller
         echo json_encode($data);
     }
 
-    public function addHistoricoComercial(){
-        
+    public function addHistoricoComercial()
+    {
+
         $data = array();
         $u = new Users();
         $u->setLoggedUser();
@@ -274,15 +276,13 @@ class ajaxController extends controller
         $a = new Comercial('comercial');
         $Parametros = array();
 
-        if($_POST['id'] && $_POST['id'] != ''){
-            
+        if ($_POST['id'] && $_POST['id'] != '') {
+
 
             $data['id'] = $a->updateStatusComercial($_POST, $u->getCompany());
         }
-        
-        echo json_encode($data['id']);
 
-       
+        echo json_encode($data['id']);
     }
 
     public function verificarMensagem()
@@ -405,4 +405,94 @@ class ajaxController extends controller
             $doc->gerarWinrarObra($_POST['id_obra']);
         }
     }
+
+    public function buscarEtapa()
+    {
+
+        $data = array();
+        $u = new Users();
+        $e = new Etapa('etapa');
+        $u->setLoggedUser();
+
+        $requestData = $_REQUEST;
+        
+        $etapas = $e->getEtapasByTipoAjax($offset = 0, 'COMPRA', $requestData['id_concessionaria'], $requestData['id_servico'], $requestData);
+        $total  = $this->etapa->getCountEtapaByTipo('COMPRA', $requestData['id_concessionaria'], $requestData['id_servico']);
+    
+        
+        $dados = array();
+        foreach ($etapas as $etp) {
+
+           
+            $dado = array();
+            $dado[] = "<a type='button' data-toggle='tooltip' title='' data-original-title='Deletar' class='btn btn-danger' href='".BASE_URL."concessionarias/delete_etapa/".$etp['id']."/".$requestData['id_concessionaria']."/".$requestData['id_servico']."/compra'><i class='ion ion-trash-a'></i></a>
+            <a class='btn btn-info' href='javascript:void(0)' onclick='edit_person(".$etp['id'].")'><i class='glyphicon glyphicon-pencil'></i> </a>
+
+            <a type='button' class='btn btn-primary btn-xs' href='".BASE_URL."concessionarias/add_etapa/".$requestData['id_concessionaria']."/".$requestData['id_servico']."/".$etp['id']."/compra'><i class='fa fa-arrow-right'></i> Add</a>
+        ";
+
+
+            $dado[] = $etp["etp_nome"];
+
+ 
+            
+            $dados[] = $dado;
+
+            
+
+            
+
+        
+        }
+
+        
+
+        if(isset($requestData['search']['value']) && !empty($requestData['search']['value']) && count($etapas) > 0 ){
+            $total = $etapas['rowCount']; 
+        }
+
+        if(count($etapas) == 0 ){
+            $total = 0;
+        }
+
+
+        $json_data = array(
+            "draw" => intval( $requestData['draw'] ),//para cada requisição é enviado um número como parâmetro
+            "recordsTotal" => intval($total),  //Quantidade de registros que há no banco de dados
+            "recordsFiltered" => intval($total), //Total de registros quando houver pesquisa
+            "data" => $dados   //Array de dados completo dos dados retornados da tabela 
+        );
+
+
+        echo json_encode($json_data);
+    }
+
+    public function getEtapaComprabyId($id_etapa){
+
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $a = new Etapa('etapa');
+
+        $data = $a->getEtapasById($id_etapa);
+
+        echo json_encode($data);
+
+    }
+
+    public function getVariavelEtapa($id_etapa){
+
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $a = new Etapa('etapa');
+
+        $data = $a->getVariavelEtapa($id_etapa);
+
+        echo json_encode($data);
+
+    }
+
 }

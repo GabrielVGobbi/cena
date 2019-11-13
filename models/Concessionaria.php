@@ -98,6 +98,8 @@ class Concessionaria extends model
 		return $r;
 	}
 
+	
+
 	//Selecionar por ID
 	public function getInfo($id, $id_company)
 	{

@@ -43,14 +43,14 @@ class Etapa extends model
     {
 
         $where = array(
-            'id_company=' . $id
+            '1=1'
         );
 
-        if (!empty($filtro['example'])) {
+        if (!empty($filtro['search']['value'])) {
 
-            if ($filtro['example'] != '') {
+            if ($filtro['search']['value'] != '') {
 
-                $where[] = "etp.example LIKE :example";
+                $where[] = "etp.etp_nome LIKE :etp_nome";
             }
         }
 
@@ -60,9 +60,9 @@ class Etapa extends model
     private function bindWhere($filtro, &$sql)
     {
 
-        if (!empty($filtro['example'])) {
-            if ($filtro['example'] != '') {
-                $sql->bindValue(":example", '%' . $filtro['example'] . '%');
+        if (!empty($filtro['search']['value'])) {
+            if ($filtro['search']['value'] != '') {
+                $sql->bindValue(":etp_nome", '%' . $filtro['search']['value'] . '%');
             }
         }
     }
@@ -407,7 +407,7 @@ class Etapa extends model
         return $this->array;
     }
 
-    public function getEtapasByTipo($tipo, $id_concessionaria, $id_servico)
+    public function getEtapasByTipo($offset = 0, $tipo, $id_concessionaria, $id_servico)
     {
 
         $arrayTipo = array();
@@ -434,6 +434,92 @@ class Etapa extends model
 
         return $arrayTipo;
     }
+
+    public function getEtapasByTipoAjax($offset, $tipo, $id_concessionaria, $id_servico, $filtro = array())
+    {
+
+        $start = isset($filtro['start']) ? $filtro['start'] : '0';
+        $length = isset($filtro['length']) ? $filtro['length'] : '5';
+
+        $arrayTipo = array();
+
+        $where = $this->buildWhere($filtro, $id_company = 1);
+
+        $sql = ("
+        
+            SELECT * FROM etapa etp
+            INNER JOIN etapa_tipo etpt ON (etp.tipo = etpt.id_etapatipo)
+            WHERE etp.id NOT IN(
+                SELECT etpsc.id_etapa FROM etapas_servico_concessionaria etpsc
+                WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico)
+
+                AND etpt.nome = :nome AND " . implode(' AND ', $where). " ORDER BY etp_nome LIMIT ".$start." ,".$length
+        );
+
+
+        $sql = $this->db->prepare($sql);
+        
+        $this->bindWhere($filtro, $sql);
+
+        $sql->bindValue(':nome', $tipo);
+        $sql->bindValue(':id_concessionaria', $id_concessionaria);
+        $sql->bindValue(':id_servico', $id_servico);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $arrayTipo = $sql->fetchAll();
+            $arrayTipo['rowCount'] = $sql->rowCount();
+        }
+
+        return $arrayTipo;
+        
+    }
+
+    public function criarBotao($id_etapa){
+
+
+        
+        
+        $botao = sprintf('<a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="delete_etapa/%s/%s/%s/compra"><i class="ion ion-trash-a"></i></a>
+        <a type="button" class="btn btn-info" onclick="modalEditar(%s, %-"Comp)"><i class="ion-android-create"></i></a>', $id_etapa,$id_etapa,$id_etapa,$id_etapa, 'Comp');
+                                       
+        
+        return $botao;
+
+    }
+
+    public function getCountEtapaByTipo($tipo, $id_concessionaria, $id_servico)
+    {
+
+        $arrayTipo = array();
+        $sql = $this->db->prepare("
+        
+        SELECT COUNT(*) AS c FROM etapa etp
+		INNER JOIN etapa_tipo etpt ON (etp.tipo = etpt.id_etapatipo)
+		WHERE etp.id NOT IN(
+            SELECT etpsc.id_etapa FROM etapas_servico_concessionaria etpsc
+            WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico)
+
+			AND etpt.nome = :nome ORDER BY etp_nome
+		");
+
+        $sql->bindValue(':nome', $tipo);
+        $sql->bindValue(':id_concessionaria', $id_concessionaria);
+        $sql->bindValue(':id_servico', $id_servico);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+			$row = $sql->fetch();
+		}
+
+		$r = $row['c'];
+
+		return $r;
+    }
+
+
 
     public function getEtapasByServicoConcessionaria($tipo, $id_concessionaria, $id_servico)
     {
@@ -919,5 +1005,23 @@ class Etapa extends model
         $sql->bindValue(':id_obra',   $Parametros['id_obra']);
 
         $sql->execute();
+    }
+
+    public function getEtapasById($id_etapa){
+
+        $sql = $this->db->prepare("
+            SELECT * FROM etapa WHERE id = :id_etapa
+        ");
+
+        $sql->bindValue(':id_etapa', $id_etapa);
+
+        $sql->execute();
+
+        if ($sql->rowCount() == 1) {
+            $arrayTipo = $sql->fetch();
+        }
+
+        return $arrayTipo;
+
     }
 }

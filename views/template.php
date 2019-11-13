@@ -18,6 +18,7 @@
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/all.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/dist/css/skins/_all-skins.min.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/select2/dist/css/select2.min.css">
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/template.css">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/icheck.min.js"></script>
@@ -346,6 +347,8 @@
 
 
   <script src="<?php echo BASE_URL; ?>node_modules/sweetalert/dist/sweetalert.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables/jquery.dataTables.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/input-mask/jquery.inputmask.js"></script>

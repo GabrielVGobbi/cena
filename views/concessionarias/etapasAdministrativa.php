@@ -1,4 +1,4 @@
-<?php $etapasAdministrativas = $this->etapa->getEtapasByTipo('ADMINISTRATIVA', $tableInfo['id_concessionaria'], $tableInfo['id_servico']); ?>
+<?php $etapasAdministrativas = $this->etapa->getEtapasByTipo($offset = 0, 'ADMINISTRATIVA', $tableInfo['id_concessionaria'], $tableInfo['id_servico']); ?>
 
 <div class="box box-default box-solid collapsed-box " id="boxadm">
     <a type="button" class="boxadm" style="cursor:pointer">

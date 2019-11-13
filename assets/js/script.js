@@ -5,6 +5,7 @@ function modalEditar(id, tipo) {
 
 }
 
+
 function lerMensagem(id_not_user, link) {
 
     $(function () {
@@ -36,6 +37,8 @@ $(function () {
         $('.popover').popover('hide');
     });
 
+    
+    
 });
 
 function formata(v) {
