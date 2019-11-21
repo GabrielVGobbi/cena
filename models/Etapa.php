@@ -219,6 +219,8 @@ class Etapa extends model
 
         $etp_nome  = $Parametros['nome_etapa'];
         $id_etapa  = $Parametros['id_etapa'];
+        $descricao  = $Parametros['descricao'];
+
 
         $quantidade         = (isset($Parametros['quantidade'])  ? $Parametros['quantidade'] : '');
         $preco              = (isset($Parametros['preco'])       ? controller::PriceSituation($Parametros['preco']) : '');
@@ -232,7 +234,8 @@ class Etapa extends model
 					etp_nome = :etp_nome,
                     quantidade  = :quantidade,
                     preco       = :preco,
-                    tipo_compra  = :tipo_compra
+                    tipo_compra  = :tipo_compra,
+                    descricao = :descricao
 
 					WHERE id = :id_etapa
 	        	");
@@ -242,6 +245,8 @@ class Etapa extends model
                 $sql->bindValue(":quantidade", $quantidade);
                 $sql->bindValue(":preco", $preco);
                 $sql->bindValue(":tipo_compra", $tipo_compra);
+                $sql->bindValue(":descricao", $descricao);
+
 
                 if ($sql->execute()) {
 
@@ -617,7 +622,7 @@ class Etapa extends model
     public function getIdEtapaObra($id)
     {
         $array = array();
-        $sql = $this->db->prepare("SELECT * FROM obra_etapa obrt
+        $sql = $this->db->prepare("SELECT *, obrt.quantidade AS quantidade_obra, obrt.preco AS preco_obra, obrt.tipo_compra AS tipo_compra_obra FROM obra_etapa obrt
             INNER JOIN etapa etp ON (etp.id = obrt.id_etapa)
             INNER JOIN etapa_tipo etpt ON (etp.tipo = etpt.id_etapatipo)
 
@@ -703,6 +708,22 @@ class Etapa extends model
 
 
                 $this->etapaObra($id_etapa, $obr, $id_company, $id_user);
+            } elseif ($Parametros['tipo'] === 'COMPRA') {
+
+                $comp = array();
+
+                $comp['id_obra'] = $Parametros['id_obra'];
+
+                $comp['etp_nome'] = isset($Parametros['nome_etapa']) ? $Parametros['nome_etapa'] : '';
+                $comp['nome_etapa_obra'] = $Parametros['nome_etapa_obra'];
+                
+                $comp['quantidade'] = $Parametros['quantidade'];
+                $comp['preco'] = (isset($Parametros['preco'])  && !empty($Parametros['preco']) ? controller::PriceSituation($Parametros['preco'])      : '');
+                $comp['tipo_compra'] = $Parametros['tipo_compra'];
+
+                
+
+                $this->etapaCompra($id_etapa, $comp, $id_company, $id_user);
             }
 
             controller::setLog($Parametros, 'etapa', 'obra_etapa');
@@ -886,6 +907,57 @@ class Etapa extends model
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
 
+
+            $sql->bindValue(":id", $id_etapa);
+
+            if ($sql->execute()) {
+
+                $ParametrosNotificacao = array(
+                    'props' => array(
+                        'msg' => 'Foi definido um prazo na etapa ' . $Parametros['nome_etapa_obra'],
+                        'etapa' => OBRA,
+                        'id_obra' => $Parametros['id_obra']
+                    ),
+                    'usuario' => $id_user,
+                    'tipo' => 'DEFINIDO',
+                    'id_company' => $id_company,
+                    'link' => BASE_URL . 'obras/edit/' . $Parametros['id_obra']
+                );
+
+                //$this->notificacao->insert($id_company, $ParametrosNotificacao);
+
+                controller::alert('success', 'Editado com sucesso!!');
+            } else {
+                controller::alert('danger', 'Erro ao fazer a edição!!');
+            }
+        } catch (PDOExecption $e) {
+            $sql->rollback();
+            error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+        }
+    }
+
+    public function etapaCompra($id_etapa, $Parametros, $id_company, $id_user)
+    {
+
+        
+        try {
+
+            $sql = $this->db->prepare("UPDATE obra_etapa SET 
+                
+                quantidade = :quantidade,
+                preco = :preco,
+                tipo_compra = :tipo_compra,
+                
+                etp_nome_etapa_obra = :etp_nome_etapa_obra
+
+                WHERE id_etapa_obra = :id
+            ");
+
+            $sql->bindValue(":quantidade", $Parametros['quantidade']);
+            $sql->bindValue(":preco", $Parametros['preco']);
+            $sql->bindValue(":tipo_compra", $Parametros['tipo_compra']);
+  
+            $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
             $sql->bindValue(":id", $id_etapa);
 

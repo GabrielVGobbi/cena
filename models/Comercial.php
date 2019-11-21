@@ -10,6 +10,7 @@ class Comercial extends model
 	}
 	public function getAll($offset, $filtro, $id_company)
 	{
+
 		$where = $this->buildWhere($filtro, $id_company);
 
 		$sql = "SELECT *, obr.id as id_obra FROM  
@@ -41,12 +42,24 @@ class Comercial extends model
 			'obr.id_company=' . $id,
 			'obr.id_comercial=1'
 		);
+	
 
 		if (!empty($filtro['example'])) {
 			if ($filtro['example'] != '') {
 				$where[] = "com
 			INNER JOIN cliente cli ON (cli.id_cliente = com.id_cliente).example LIKE :example";
 			}
+		}
+
+		if (!empty($filtro['situacao'])) {
+			if ($filtro['situacao'] != '' && $filtro['situacao'] != 'todas') {
+				$where[] = "obr.id_status = :id_status";
+			} else {
+				$where[] = 'obr.id_status in (1,2,3,4)';
+			}
+		} else {
+			
+			$where[] = 'obr.id_status in (1,2)';
 		}
 
 		return $where;
@@ -57,6 +70,12 @@ class Comercial extends model
 		if (!empty($filtro['example'])) {
 			if ($filtro['example'] != '') {
 				$sql->bindValue(":example", '%' . $filtro['example'] . '%');
+			}
+		}
+
+		if (!empty($filtro['situacao'])) {
+			if ($filtro['situacao'] != '') {
+				$sql->bindValue(":id_status", $filtro['situacao']);
 			}
 		}
 	}
@@ -366,7 +385,6 @@ class Comercial extends model
 				$sql->bindValue(":id_status", $id_status);
 				$sql->bindValue(":id", $Parametros['id']);
 
-					error_log(print_r($id_status,1));
 
 				if ($sql->execute()) {
 

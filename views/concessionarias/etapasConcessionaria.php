@@ -38,7 +38,12 @@
                                             <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpCon['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/com"><i class="ion ion-trash-a"></i></a>
                                             <a type="button" class="btn btn-info" onclick="modalEditar(<?php echo $etpCon['id']; ?>, 'Con')"><i class="ion-android-create"></i></a>
                                         </td>
-                                        <td><?php echo $etpCon['etp_nome']; ?></td>
+                                        <td>
+                                            <?php echo $etpCon['etp_nome']; ?>
+                                            <?php if(!empty($etpCon['descricao'])): ?>
+                                                <i data-toggle="tooltip" title="" data-original-title="<?php echo $etpCon['descricao'];?>" style="color:#fff;width: 63%;position: relative;right: 63px;" class="fa fa-fw fa-info"></i>
+                                            <?php endif; ?>
+                                        </td>
                                         <td>
                                             <a href="<?php echo BASE_URL; ?>concessionarias/add_etapa/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/<?php echo $etpCon['id']; ?>/com" class="btn btn-primary btn-xs pull-right"><i class="fa fa-arrow-right"></i> Adicionar</a>
                                         </td>

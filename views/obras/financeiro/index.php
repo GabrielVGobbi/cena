@@ -3,7 +3,7 @@
 	<div class="row">
 		<div class="col-xs-12">
 			<h2 class="page-header">
-				<i class="fa fa-fw fa-money"></i> <?php error_log(print_r($viewData, 1)); ?>.
+				<i class="fa fa-fw fa-money"></i> 
 				<small class="pull-right">Date: 02/10/2019</small>
 			</h2>
 		</div>
@@ -60,7 +60,7 @@
 									<span data-toggle="tooltip" title="" data-original-title="Etapa ainda não foi concluida" class="label label-warning">Pendente</span>
 								<?php elseif ($etpF['id_status'] == FATURAR) : ?>
 									<span data-toggle="tooltip" title="" data-original-title="clique para faturar" class="label label-primary">Faturar</span>
-								<?php else : ?>
+								<?php elseif ($etpF['id_status'] == FATURARADO) : ?>
 									<span data-toggle="tooltip" title="" data-original-title="Etapa Faturada" class="label label-success">Faturado</span>
 								<?php endif; ?>
 							</td>

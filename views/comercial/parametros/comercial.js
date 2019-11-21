@@ -551,11 +551,7 @@ $(function () {
                 $('#id_sub_etapas_todas').html(options).show();
                
             } else {
-                options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca'
-                $('.span_etapa').hide();
-
-                $('#result_null').html(options).show();
-                $('.result_null').show();
+                $("#id_sub_etapas_todas").empty();
             }
         });
 

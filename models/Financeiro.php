@@ -77,16 +77,17 @@ class Financeiro extends model
 
     public function getEtapasFinanceiro($id_obra){
 
+        
         $sql = $this->db->prepare("
             SELECT obrt.check, obrt.id_etapa, obrt.etp_nome_etapa_obra, obrt.id_status, hfo.* FROM obra_etapa obrt
                 INNER JOIN historico_financeiro hfo ON (obrt.id_etapa = hfo.id_etapa)
-            WHERE hfo.id_obra = :id_obra and obrt.id_obra = :id_obra GROUP BY obrt.id_etapa
+            WHERE hfo.id_obra = :id_obra AND obrt.id_obra = :id_obra GROUP BY obrt.id_etapa
         ");
         $sql->bindValue('id_obra', $id_obra);
     
         $sql->execute();
 
-        if($sql->rowCount() > 1){
+        if($sql->rowCount() > 0){
             $this->retorno = $sql->fetchAll();
         }
 

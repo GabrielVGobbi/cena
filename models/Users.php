@@ -26,10 +26,10 @@ class Users extends model
 		}
 	}
 
-	private function hashForCookie( $str )
+	private function hashForCookie($str)
 	{
-		$strHash = sprintf( HASH_PATTERN, time(), $str );
-		return sha1( $strHash );
+		$strHash = sprintf(HASH_PATTERN, time(), $str);
+		return sha1($strHash);
 	}
 
 	//Verifica os dados do POST corretamente
@@ -45,15 +45,13 @@ class Users extends model
 
 			$_SESSION['ccUser'] = $row['id'];
 
-			if(isset($lembrar)){
-				
-				setcookie( 'lembrar', $_SESSION['ccUser'], time() + (60*60*3600), '/');
-				setcookie( 'user', $login, time() + (60*60*24), '/');
-				setcookie( 'pass', md5($password), time() + (60*60*24), '/');
+			if (isset($lembrar)) {
 
-			}			
+				setcookie('lembrar', $_SESSION['ccUser'], time() + (60 * 60 * 3600), '/');
+				setcookie('user', $login, time() + (60 * 60 * 24), '/');
+				setcookie('pass', md5($password), time() + (60 * 60 * 24), '/');
+			}
 			return true;
-			
 		} else {
 			return false;
 		}
@@ -85,7 +83,7 @@ class Users extends model
 	{
 
 		session_destroy();
-		setcookie('lembrar', true, time()-1, '/');
+		setcookie('lembrar', true, time() - 1, '/');
 	}
 
 	public function hasPermission($name)
@@ -111,7 +109,7 @@ class Users extends model
 		} else
 			return 0;
 	}
-	
+
 	public function getId()
 	{
 		if (isset($this->userInfo['id'])) {
@@ -240,7 +238,7 @@ class Users extends model
 	{
 
 		$where = array(
-			'usr.id_company=' . $id, 
+			'usr.id_company=' . $id,
 			'usr_info <> "cliente"'
 		);
 
@@ -284,7 +282,7 @@ class Users extends model
 		}
 	}
 
-	public function add($Parametros,$id_company)
+	public function add($Parametros, $id_company)
 	{
 		$email = controller::ReturnFormatLimpo($Parametros['email']);
 		$login = ($Parametros['login']);
@@ -308,21 +306,20 @@ class Users extends model
 		$sql->execute();
 		$id = $this->db->lastInsertId();
 
-		if($id != ''){
+		if ($id != '') {
 			$sql = $this->db->prepare("INSERT INTO permission_groups SET 
             			id_usuario = :id, 
 						id_company = :id_company,
 						params = :params				
         			");
 
-		$sql->bindValue(":id", $id);
-		$sql->bindValue(":id_company", $id_company);
-		$sql->bindValue(":params", '1');
+			$sql->bindValue(":id", $id);
+			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":params", '1');
 
-		$sql->execute();
+			$sql->execute();
 
-		controller::setLog($Parametros, 'usuario', 'add');
-
+			controller::setLog($Parametros, 'usuario', 'add');
 		}
 	}
 
@@ -362,8 +359,6 @@ class Users extends model
 		} else {
 			return $this->retorno = 'error';
 		}
-
-
 	}
 
 	public function delete($id, $id_company)
@@ -400,9 +395,66 @@ class Users extends model
 			if ($sql->execute()) {
 				controller::alert('success', 'Usuario ativado com sucesso');
 				controller::setLog($Parametros, 'usuario', 'ativar');
-
 			} else {
 				controller::alert('danger', 'Não foi possivel ativar o usuario, contate o administrador do sistema');
+			}
+		}
+	}
+
+	public function getNotepad($id_usuario, $id_company){
+		
+		$array = array();
+		
+
+		$sql = $this->db->prepare("SELECT * FROM notepad WHERE id_user = :id_user AND id_company = :id_company LIMIT 1");
+		$sql->bindValue(":id_user", $id_usuario);
+		$sql->bindValue(":id_company", $id_company);
+		$sql->execute();
+
+		if ($sql->rowCount() == 1) {
+			$array = $sql->fetch();
+		}
+
+		return $array;
+	}
+
+	public function saveNotepad($Parametros, $id_usuario, $id_company)
+	{
+
+		$notepad = ltrim($Parametros['text']);
+
+		$sql = $this->db->prepare("SELECT * FROM notepad WHERE id_user = :id_user AND id_company = :id_company LIMIT 1");
+		$sql->bindValue(":id_user", $id_usuario);
+		$sql->bindValue(":id_company", $id_company);
+		$sql->execute();
+
+		if ($sql->rowCount() == 1) {
+			$sql = $this->db->prepare("UPDATE notepad SET notepad = :notepad WHERE id_user = :id_user AND id_company = :id_company");
+			$sql->bindValue(":id_user", $id_usuario);
+			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":notepad", $notepad);
+
+			if ($sql->execute()) {
+				return true;
+			} else {
+				return false;
+			}
+
+		} else {
+
+			$sql = $this->db->prepare("INSERT INTO notepad SET 
+					notepad = :notepad, 
+					id_user = :id_user,
+					id_company = :id_company				
+				");
+
+			$sql->bindValue(":id_user", $id_usuario);
+			$sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":notepad", $notepad);
+			if ($sql->execute()) {
+				return true;
+			} else {
+				return false;
 			}
 		}
 	}
@@ -492,7 +544,7 @@ class Users extends model
 		INNER JOIN users usr ON (usr.id = notfu.id_user) 
 
 		WHERE notf.id_company = :id_company AND notfu.lido = '0' AND notfu.id_user = :id_user ORDER BY notf.id ASC ");
-		
+
 		$sql->bindValue(':id_company', $id_company);
 		$sql->bindValue(':id_user', $id_user);
 
@@ -517,7 +569,7 @@ class Users extends model
 			INNER JOIN users usr ON (usr.id = notfu.id_user) 
 
 			WHERE notf.id_company = :id_company AND notfu.lido = '0' AND notfu.id_user = :id_user ORDER BY notf.id DESC");
-		
+
 		$sql->bindValue(':id_company', $id_company);
 		$sql->bindValue(':id_user', $id_user);
 		$sql->execute();

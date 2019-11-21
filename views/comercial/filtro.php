@@ -23,6 +23,17 @@
                             <input class="form-control" id="filtro_descricao" name="filtros[cliente_responsavel]" placeholder="" autocomplete="off">
                         </div>
                     </div>
+
+                    <div class="col-md-2">
+                        <label for="fl_art_nome">Situação</label>
+                        <div class="form-group">
+                            <select class="form-control select2" style="width: 100%;" name="filtros[situacao]" id="filtros[situacao]">
+                                <option <?php echo ((isset($viewData['filtro']['situacao']) && $viewData['filtro']['situacao'] == '')) ?  'selected' : '' ?> value="todas">Todas</option>
+                                <option <?php echo ((isset($viewData['filtro']['situacao']) && $viewData['filtro']['situacao'] == '3')) ? 'selected' : '' ?> value="3">Aprovadas</option>
+                                <option <?php echo ((isset($viewData['filtro']['situacao']) && $viewData['filtro']['situacao'] == '4')) ? 'selected' : '' ?> value="4">Recusadas</option>
+                            </select>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="pull-right">

@@ -134,21 +134,6 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                         </div>
                     </div>
                   
-                    
-                    <div class="box box-primary">
-                        <div class="box-header with-border">
-                            <h3 class="box-title">Variaveis</h3>
-
-                            <div class="box-tools pull-right">
-                            </div>
-                        </div>
-                        <div class="box-body" id="variavel_etapa">
-                            
-                                
-
-                        </div>
-
-                    </div>
                    
                 </form>
             </div>
@@ -267,8 +252,6 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                 
 
                 for (var i = 0; i < data.length; i++) {
-
-                    console.log(data);
 
                     options += '<input type="hidden" class="form-control" value="" name="variavel['+data[i].id_variavel_etapa+'][id]" id="id_variavel" autocomplete="off">'
                     options += '<div class="row" style="    left: 10px;position: relative;">'

@@ -81,19 +81,13 @@
 				</table>
 			</div>
 			<div class="pull-left" style="right: 10px;">
-				<p> Quantidade de Clientes: <?php echo $getCount; ?> </p>
+				<p> Quantidade de Clientes: <?php echo ''; ?> </p>
 			</div>
 		</div>
 		<div class="box-footer no-padding">
 			<div class="mailbox-controls">
 				<ul class="pagination pagination-sm pull-right">
-					<?php for ($q = 1; $q <= $p_count; $q++) : ?>
-						<li class="<?php echo ($q == $p) ? 'active' : '' ?> ">
-							<a href="<?php echo BASE_URL; ?>clientes?p=<?php $w = $_GET;
-																					$w['p'] = $q;
-																					echo http_build_query($w); ?>"><?php echo $q; ?></a>
-						</li>
-					<?php endfor; ?>
+					<?php echo $links; ?>
 				</ul>
 			</div>
 		</div>

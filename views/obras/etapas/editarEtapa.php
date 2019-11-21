@@ -80,12 +80,33 @@ $msg = 'prazo';
 
 
                       <?php elseif ($array[0]['nome'] === 'COMPRA') : ?>
-                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
 
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Nome Etapa</label>
                             <input type="text" class="form-control" name="nome_etapa_obra" id="nome_etapa_obra" value="<?php echo $array[0]['etp_nome_etapa_obra']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Quantidade</label>
+                            <input type="text" class="form-control" name="quantidade" id="quantidade" value="<?php  echo $array[0]['quantidade_obra']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Preço</label>
+                            <input type="text" class="form-control" name="preco" id="preco" value="<?php echo  (isset($array[0]['preco_obra'])? 'R$ '.controller::number_format($array[0]['preco']): ''); ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Tipo</label>
+                            <input type="text" class="form-control" name="tipo_compra" id="tipo_compra" value="<?php echo $array[0]['tipo_compra_obra']; ?>" autocomplete="off">
                           </div>
                         </div>
 
