@@ -235,16 +235,16 @@
     </footer>
   </div>
 
-  <aside class="control-sidebar control-sidebar-dark" id="notepad" style="background: #f1f1f1;">
+  <aside class="control-sidebar control-sidebar-dark" id="notepad" style="background: #f1f1f1; height:100%">
 
     <div class="tab-content">
 
       <h3 style="color:#000">Bloco de notas</h3>
       <?php $notepad = $this->userInfo['user']->getNotepad($this->userInfo['user']->getId(), $this->userInfo['user']->getCompany()); ?>
       <?php if($notepad): ?>
-        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"><?php echo $notepad['notepad']; ?></textarea>
+        <textarea id="story" style="color:#000; padding: 18px 9px;;" name="story" rows="50" cols="53"><?php echo $notepad['notepad']; ?></textarea>
       <?php else: ?>
-        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"></textarea>
+        <textarea id="story" style="color:#000; padding: 18px 9px;;" name="story" rows="50" cols="53"></textarea>
       <?php endif;?>
 
       <div>
@@ -324,7 +324,6 @@
 
 
   <script src="<?php echo BASE_URL; ?>node_modules/sweetalert/dist/sweetalert.min.js"></script>
-  <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables/jquery.dataTables.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>

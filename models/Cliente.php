@@ -3,7 +3,9 @@
 class Cliente extends model
 {
 
-	protected $table = 'cliente';
+	protected $table 	= 'cliente';
+	protected $slgName  = 'cli';
+
 
 	use Pagination;
 
@@ -41,11 +43,9 @@ class Cliente extends model
 	private function buildWhere($filtro, $id)
 	{
 
-
 		$where = array(
 			'id_company=' . $id
 		);
-
 
 		if (!empty($filtro['cliente_nome'])) {
 
@@ -70,8 +70,20 @@ class Cliente extends model
 				$where[] = "cli.id = :id";
 			}
 		}
+
 		return $where;
 	}
+
+	private function Filds($filtro){
+
+		$placesValues = array();
+	
+		if (!empty($filtro['cliente_nome'])) {
+		  $placesValues += (["cliente_nome" => $filtro['cliente_nome']]);
+		}
+		$this->bindValues($placesValues);
+	
+	  }
 
 	private function bindWhere($filtro, &$sql)
 	{

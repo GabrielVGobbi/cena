@@ -34,11 +34,13 @@ class ClientesController extends controller
 
             if (isset($_GET['filtros'])) {
                 $this->filtro = $_GET['filtros'];
+
             }
 
             $this->cliente->maxPerPage(10);
-            $this->dataInfo['tableDados'] =  $this->cliente->paginate();
-            $this->dataInfo['links']      =  $this->cliente->createLinks();
+
+            $this->dataInfo['tableDados'] =  $this->cliente->paginate($this->user->getCompany(),$this->filtro);
+            $this->dataInfo['links']      =  $this->cliente->createLinks($this->filtro);
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
 

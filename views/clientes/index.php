@@ -17,12 +17,14 @@
 				</div>
 			</div>
 		</div>
+		<?php if (!empty($tableDados)) : ?>
+			<div class="box-body no-padding">
+				<?php include_once("filtro.php"); ?>
 
-		<div class="box-body no-padding">
-			<?php include_once("filtro.php"); ?>
-			<div class="table-responsive mailbox-messages">
-				<table class="table table-hover table-striped table-bordered">
-					<?php if (count($tableDados) > 0) : ?>
+				<div class="table-responsive mailbox-messages">
+
+					<table class="table table-hover table-striped table-bordered">
+
 						<tbody>
 							<div class="box">
 								<div class="box-body table-responsive no-padding">
@@ -73,17 +75,16 @@
 								</div>
 							</div>
 						</tbody>
-					<?php else : ?>
-						<tr>
-							<td style="width: 50%;text-align: center;"> Não foram encontrados resultados </td>
-						</tr>
-					<?php endif; ?>
-				</table>
+					</table>
+				</div>
+				<div class="pull-left" style="right: 10px;">
+					<p> Quantidade de Clientes: <?php echo ''; ?> </p>
+				</div>
+
 			</div>
-			<div class="pull-left" style="right: 10px;">
-				<p> Quantidade de Clientes: <?php echo ''; ?> </p>
-			</div>
-		</div>
+		<?php else : ?>
+			<p style="text-align: center;"> sem resultados </p>
+		<?php endif; ?>
 		<div class="box-footer no-padding">
 			<div class="mailbox-controls">
 				<ul class="pagination pagination-sm pull-right">
