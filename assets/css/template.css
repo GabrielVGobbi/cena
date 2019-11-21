@@ -3,6 +3,14 @@ body {
     margin: 0;
 }
 
+@media (max-width: 767px) {
+    .control-sidebar.control-sidebar-open,
+    .control-sidebar.control-sidebar-open+.control-sidebar-bg {
+        padding-top: 100px;
+        width: 100% !important;
+    }
+}
+
 .topo {
     height: 40px;
     background-color: #999;
@@ -110,8 +118,6 @@ body {
     z-index: 1051;
     border-top: 0;
     border-bottom: 0;
-    "
-
 }
 
 .ul-span-dropdown {

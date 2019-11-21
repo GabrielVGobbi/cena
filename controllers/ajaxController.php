@@ -59,6 +59,19 @@ class ajaxController extends controller
         echo json_encode($etapa);
     }
 
+    function saveNotepad()
+    {
+
+        $u = new Users();
+        $u->setLoggedUser();
+        
+        $notepad = $u->saveNotepad($_POST, $u->getId(),$u->getCompany());
+
+        echo json_encode($notepad);
+    }
+
+    
+
 
     public function search_categoria($tipo = false)
     {

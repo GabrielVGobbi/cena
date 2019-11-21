@@ -22,8 +22,6 @@ class loginController extends controller {
 	public function index_post(){
 
 
-
-
 		if(isset($_POST['login']) && !empty($_POST['password'])){
 
 			$login = addslashes(lcfirst($_POST['login']));

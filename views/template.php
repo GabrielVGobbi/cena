@@ -8,6 +8,7 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
+  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/template.css">
 
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-daterangepicker/daterangepicker.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-datepicker/dist/css/bootstrap-datepicker.min.css">
@@ -19,7 +20,6 @@
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/dist/css/skins/_all-skins.min.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
-  <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/template.css">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/icheck.min.js"></script>
 
@@ -28,6 +28,9 @@
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   <script src="https://unpkg.com/imask"></script>
   <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
+
+  
+  
 
 </head>
 
@@ -123,50 +126,14 @@
 
                 </li>
 
-                <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
-                  <!-- Menu Toggle Button -->
                   <a href="<?php echo BASE_URL; ?>/login/logout">
-                    <!-- The user image in the navbar-->
-                    <!-- <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
-                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
                     <span class="hidden-xs"> <?php echo ucfirst($this->userInfo['userName']['login']); ?></span>
                   </a>
-                  <ul class="dropdown-menu">
-                    <!-- The user image in the menu -->
-                    <li class="user-header">
-                      <!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
+                </li>
 
-                      <p>
-                        <?php echo $this->userInfo['userName']['login']; ?>
-
-                      </p>
-                    </li>
-                    <!-- Menu Body -->
-                    <li class="user-body">
-                      <div class="row">
-                        <div class="col-xs-4 text-center">
-                          <a href="#">Followers</a>
-                        </div>
-                        <div class="col-xs-4 text-center">
-                          <a href="#">Sales</a>
-                        </div>
-                        <div class="col-xs-4 text-center">
-                          <a href="#">Friends</a>
-                        </div>
-                      </div>
-                      <!-- /.row -->
-                    </li>
-                    <!-- Menu Footer-->
-                    <li class="user-footer">
-                      <div class="pull-left">
-                        <a href="#" class="btn btn-default btn-flat">Profile</a>
-                      </div>
-                      <div class="pull-right">
-                        <a href="<?php echo BASE_URL; ?>login/logout" class="btn btn-default btn-flat">Sign out</a>
-                      </div>
-                    </li>
-                  </ul>
+                <li>
+                  <a href="#" data-toggle="control-sidebar"><i class="fa fa-gears"></i></a>
                 </li>
 
               </ul>
@@ -179,19 +146,13 @@
               <ul class="nav navbar-nav">
 
 
-                <!-- User Account Menu -->
                 <li class="dropdown user user-menu">
-                  <!-- Menu Toggle Button -->
                   <a href="<?php echo BASE_URL; ?>login/logout">
-                    <!-- The user image in the navbar-->
-                    <!-- <img src="../../dist/img/user2-160x160.jpg" class="user-image" alt="User Image"> -->
-                    <!-- hidden-xs hides the username on small devices so only the image appears. -->
+
                     <span class="hidden-xs"> <?php echo ucfirst($this->userInfo['userName']['login']); ?></span>
                   </a>
                   <ul class="dropdown-menu">
-                    <!-- The user image in the menu -->
                     <li class="user-header">
-                      <!-- <img src="../../dist/img/user2-160x160.jpg" class="img-circle" alt="User Image"> -->
 
                       <p>
                         <?php echo $this->userInfo['userName']['login']; ?>
@@ -210,9 +171,7 @@
                           <a href="#">Friends</a>
                         </div>
                       </div>
-                      <!-- /.row -->
                     </li>
-                    <!-- Menu Footer-->
                     <li class="user-footer">
                       <div class="pull-left">
                         <a href="#" class="btn btn-default btn-flat">Profile</a>
@@ -232,10 +191,8 @@
         </div>
       </nav>
     </header>
-    <!-- Full Width Column -->
     <div class="content-wrapper">
       <div class="container<?php echo (($viewData['titlePage'] == 'financeiro' || isset($viewData['fluid'])) ? '-fluid' : '') ?>">
-        <!-- Content Header (Page header) -->
         <section class="content-header">
           <h1 style="text-align: center;">
 
@@ -244,7 +201,6 @@
           </h1>
         </section>
 
-        <!-- Main content -->
         <section class="content">
 
 
@@ -256,7 +212,7 @@
 
 
 
-      <aside class="control-sidebar control-sidebar-light control-sidebar-open" style="margin-top: 10px;display:none;right: 18px !important;">
+      <aside class="control-sidebar control-sidebar-light control-sidebar-open" id="side_meu" style="margin-top: 10px;display:none;right: 18px !important;">
         <div class="goaway" id="goaway">
           <div class="center">
             <div class="alert alert-<?php echo $_SESSION['alert']['tipo']; ?> alert-dismissible">
@@ -267,6 +223,7 @@
           </div>
         </div>
       </aside>
+
     <?php endif; ?>
     <footer class="main-footer">
       <div class="container">
@@ -278,11 +235,31 @@
     </footer>
   </div>
 
+  <aside class="control-sidebar control-sidebar-dark" id="notepad" style="background: #f1f1f1;">
+
+    <div class="tab-content">
+
+      <h3 style="color:#000">Bloco de notas</h3>
+      <?php $notepad = $this->userInfo['user']->getNotepad($this->userInfo['user']->getId(), $this->userInfo['user']->getCompany()); ?>
+      <?php if($notepad): ?>
+        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"><?php echo $notepad['notepad']; ?></textarea>
+      <?php else: ?>
+        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"></textarea>
+      <?php endif;?>
+
+      <div>
+        <span id="saveding" style="color:#000; display: none;"> salvando...</span>
+        <span id="saved" style="color:#000; display: none;"> salvo</span>
+
+      </div>
+
+  </aside>
+
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
       setTimeout(function() {
 
-        $(".control-sidebar").slideToggle("slow");
+        $("#control-side_meu").slideToggle("slow");
         $("#goaway").fadeOut().empty();
       }, 3000);
 
@@ -332,7 +309,7 @@
 
 
       <?php if (isset($_SESSION['alert'])) : ?>
-        $(".control-sidebar").slideToggle("slow");
+        $("#side_meu").slideToggle("slow");
         <?php unset($_SESSION['alert']); ?>
       <?php endif; ?>
 
@@ -366,6 +343,33 @@
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/moment/min/moment.min.js"></script>
   <script type="text/javascript">
     var BASE_URL = '<?php echo BASE_URL; ?>';
+    var temporiza;
+    $("#story").on("input", function() {
+      
+      $("#saveding").show();
+      $("#saved").hide();
+
+      clearTimeout(temporiza);
+
+      var text = $("#story").val();
+
+      temporiza = setTimeout(function() {
+        $.ajax({
+          url: BASE_URL + 'ajax/saveNotepad',
+          type: 'POST',
+          data: {
+            text: text,
+            
+          },
+          dataType: 'json',
+          success: function(json) {
+            $("#saveding").hide();
+            $("#saved").show();
+          }
+        });
+
+      }, 2500);
+    });
   </script>
 
   <?php if (isset($_SESSION['form'])) : ?>
@@ -398,19 +402,62 @@
           if (willDelete) {
             swal("Ainda não disponivel!");
             //window.location.href = BASE_URL+'financeiro/add/'+id_obra;
-            
+
           } else {
             <?php unset($_SESSION['form']); ?>
             /*window.location.href = BASE_URL+pageController;*/
           }
         });
- 
     </script>
 
   <?php endif; ?>
 
 
+  <script type="text/javascript">
+    var save_method; //for save method string
+    var table;
 
+    $(function() {
+
+      $(document).ready(function() {
+
+        var myTable = $('#table').DataTable({
+          "processing": true,
+          "serverSide": true,
+          "autoWidth": false,
+          "language": {
+            "sEmptyTable": "Nenhum registro encontrado",
+            "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registro(s)",
+            "sInfoEmpty": "Mostrando 0 até 0 de 0 registros",
+            "sInfoFiltered": "(Filtrados de _MAX_ registros)",
+            "sInfoPostFix": "",
+            "sInfoThousands": ".",
+            "sLengthMenu": "_MENU_",
+            "sLoadingRecords": "Carregando...",
+            "sProcessing": "Processando...",
+            "sZeroRecords": "Nenhum registro encontrado",
+            "sSearch": "Pesquisa Rapida",
+          },
+          "oPaginate": {
+            "sNext": "Próximo",
+            "sPrevious": "Anterior",
+            "sFirst": "Primeiro",
+            "sLast": "Último"
+          },
+          paginate: true,
+          filter: true,
+          "ajax": {
+            "url": BASE_URL + "<?php echo $viewData['pageController']; ?>/getAll",
+            "type": "POST",
+            "data": {
+
+            }
+
+          },
+        });
+      });
+    });
+  </script>
 
 
 

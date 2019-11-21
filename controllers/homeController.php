@@ -4,9 +4,13 @@ class homeController extends controller
 
     private $user;
 
+
     public function __construct()
     {
         parent::__construct();
+
+        
+
 
 
         $this->user = new Users();
