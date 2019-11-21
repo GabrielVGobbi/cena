@@ -3,10 +3,6 @@
 class Cliente extends model
 {
 
-	protected $table = 'cliente';
-
-	use Pagination;
-
 	public function __construct()
 	{
 		parent::__construct();

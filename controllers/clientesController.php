@@ -36,12 +36,22 @@ class ClientesController extends controller
                 $this->filtro = $_GET['filtros'];
             }
 
-            $this->cliente->maxPerPage(10);
-            $this->dataInfo['tableDados'] =  $this->cliente->paginate();
-            $this->dataInfo['links']      =  $this->cliente->createLinks();
+            $this->dataInfo['p'] = 1;
+            if (isset($_GET['p']) && !empty($_GET['p'])) {
+                $this->dataInfo['p'] = intval($_GET['p']);
+                if ($this->dataInfo['p'] == 0) {
+                    $this->dataInfo['p'] = 1;
+                }
+            }
+
+            $offset = (10 * ($this->dataInfo['p'] - 1));
+
+            $this->dataInfo['tableDados'] = $this->cliente->getAll($offset, $this->filtro, $this->user->getCompany());
+            $this->dataInfo['getCount']   = !empty($this->dataInfo['tableDados']) ? $this->cliente->getCount($this->user->getCompany()) : '0';            
+            $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
-
+            
         } else {
             $this->loadViewError();
         }
