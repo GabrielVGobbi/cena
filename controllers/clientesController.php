@@ -16,9 +16,7 @@ class ClientesController extends controller
             header("Location: " . BASE_URL . "login");
             exit();
         }
-
-
-
+        
         $this->filtro = array();
         $this->dataInfo = array(
             'pageController' => 'clientes',
@@ -31,40 +29,51 @@ class ClientesController extends controller
     {
 
         if ($this->user->hasPermission('cliente_view')) {
-
-            if (isset($_GET['filtros'])) {
-                $this->filtro = $_GET['filtros'];
-            }
-
-            $this->dataInfo['p'] = 1;
-            if (isset($_GET['p']) && !empty($_GET['p'])) {
-                $this->dataInfo['p'] = intval($_GET['p']);
-                if ($this->dataInfo['p'] == 0) {
-                    $this->dataInfo['p'] = 1;
-                }
-            }
-
-            $offset = (10 * ($this->dataInfo['p'] - 1));
-
-
-
-            $this->dataInfo['tableDados'] = $this->cliente->getAll($offset, $this->filtro, $this->user->getCompany());
-            $this->dataInfo['getCount']   = $this->cliente->getCount($this->user->getCompany());
-            
-            $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
-
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
         } else {
             $this->loadViewError();
         }
     }
 
+    public function getAll()
+    {
+        $tabela = $this->cliente->getAll($_REQUEST, $this->user->getCompany());
+
+        $data = array();
+
+        if($tabela)
+            foreach ($tabela as $list) {
+
+                $row = array();
+                $row[] = 
+                    '   <a class="btn btn-sm btn-info" href="javascript:void(0)" title="Edit" onclick="edit_person('."'".$list['id']."'".')"><i class="glyphicon glyphicon-pencil"></i></a>
+                        <a type="button" data-toggle="tooltip" title="" data-original-title="Dar Acesso" class="btn btn-sm btn-warning" onclick="darAcessoCliente('."'".$list['id']."'".')"><i class="fa fa-fw fa-wrench"></i></a>
+                        <a class="btn btn-sm btn-danger" href="javascript:void(0)" title="Edit" onclick="edit_person('."'".$list['id']."'".')"><i class="glyphicon glyphicon-trash"></i></a>
+                    ';
+                $row[] = ($list['id']);
+                $row[] = ucfirst($list['cliente_nome']);
+                $row[] = ucfirst($list['cliente_responsavel']);
+                $row[] = ($list['cliente_email']);
+
+                $data[] = $row;
+            }
+
+        $total = $tabela && count($tabela) > 0 ? count($tabela) : '0';
+        
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $total,
+            "recordsFiltered" =>  $total,
+            "data" => $data,
+        );
+       
+        echo json_encode($output);
+    }
+
 
     public function add()
     {
-
         if (isset($_SESSION['formError']) && count($_SESSION['formError']) > 0) {
-
             $this->dataInfo['errorForm'] = $_SESSION['formError'];
             unset($_SESSION['formError']);
         }

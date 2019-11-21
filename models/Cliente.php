@@ -3,6 +3,11 @@
 class Cliente extends model
 {
 
+	var $table = 'cliente'; //nome da tabela
+	var $column = array(0=>'',1=>'cliente_nome',2=>'cliente_nome',3=>'cliente_email'); //ordem das colunas
+	var $column_search = array('cli_nome','cli_sorenome','cli_email'); //colunas para pesquisas
+	var $order = array('id' => 'desc'); // order padrão
+
 	public function __construct()
 	{
 		parent::__construct();
@@ -10,80 +15,56 @@ class Cliente extends model
 		$this->retorno = array();
 	}
 
-	public function getAll($offset,$filtro, $id_company)
+	public function getAll($filtro, $id_company)
 	{
+		$start = isset($filtro['start']) ? $filtro['start'] : '0';
+		$length = isset($filtro['length']) ? $filtro['length'] : '10';
+
+		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY ".$this->column[$filtro['order'][0]['column']]." ".$filtro['order'][0]['dir'] : '';
 
 		$where = $this->buildWhere($filtro, $id_company);
 
-		$sql = "SELECT * FROM  
-			cliente cli
-		LEFT JOIN cliente_endereco cled ON (cli.clend_id = cled.id_endereco)
-		
-		WHERE " . implode(' AND ', $where) . " GROUP BY cli.id ORDER BY cli.cliente_nome ASC LIMIT $offset, 10";
+		$sql = (" SELECT * FROM `$this->table` cli WHERE " . implode(' AND ', $where). $order ." LIMIT ".$start." ,".$length);
 
 		$sql = $this->db->prepare($sql);
-
+	        
 		$this->bindWhere($filtro, $sql);
+		
+        $sql->execute();
 
-		$sql->execute();
-
-		if ($sql->rowCount() > 0) {
-			$this->array = $sql->fetchAll();
-		}
-
-		return $this->array;
+		$this->retorno = ($sql->rowCount() > 0) ? $sql->fetchAll() : '';
+		
+        return $this->retorno;
+		
 	}
 
-	private function buildWhere($filtro, $id)
+	private function buildWhere($filtro, $id_company)
 	{
 
 
 		$where = array(
-			'id_company=' . $id
+			'id_company='.$id_company
 		);
 
 
-		if (!empty($filtro['cliente_nome'])) {
+		if (!empty($filtro['search']['value'])) {
 
-			if ($filtro['cliente_nome'] != '') {
+			if ($filtro['search']['value'] != '') {
 
-				$where[] = "cli.cliente_nome LIKE :cliente_nome";
+				$where[] = "(cli.cliente_nome LIKE :cliente_nome) OR (cli.cliente_email LIKE :cliente_nome)";
 			}
 		}
 
-		if (!empty($filtro['cliente_responsavel'])) {
-
-			if ($filtro['cliente_responsavel'] != '') {
-
-				$where[] = "cli.cliente_responsavel LIKE :cliente_responsavel";
-			}
-		}
-
-		if (!empty($filtro['id'])) {
-
-			if ($filtro['id'] != '') {
-
-				$where[] = "cli.id = :id";
-			}
-		}
 		return $where;
 	}
 
 	private function bindWhere($filtro, &$sql)
 	{
-		if (!empty($filtro['id'])) {
-			if ($filtro['id'] != '') {
-				$sql->bindValue(":id", $filtro['id']);
-			}
-		}
-		if (!empty($filtro['cliente_nome'])) {
-			if ($filtro['cliente_nome'] != '') {
-				$sql->bindValue(":cliente_nome", '%' . $filtro['cliente_nome'] . '%');
-			}
-		}
-		if (!empty($filtro['cliente_responsavel'])) {
-			if ($filtro['cliente_responsavel'] != '') {
-				$sql->bindValue(":cliente_responsavel", '%' . $filtro['cliente_responsavel'] . '%');
+
+
+		if (!empty($filtro['search']['value'])) {
+			if ($filtro['search']['value'] != '') {
+				$sql->bindValue(":cliente_nome", '%' . $filtro['search']['value'] . '%');
 			}
 		}
 	}
