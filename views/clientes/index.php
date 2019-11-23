@@ -1,4 +1,3 @@
-<?php require_once("cadastrar.php"); ?>
 <div class="col-xs-12">
 	<div class="box box-primary">
 		<div class="box-header with-border">
@@ -19,7 +18,7 @@
 		</div>
 
 		<div class="box-body no-padding">
-			<?php include_once("filtro.php"); ?>
+			<?php include_once("include/filtro.php"); ?>
 			<div class="table-responsive mailbox-messages">
 				<table class="table table-hover table-striped table-bordered">
 					<?php if (count($tableDados) > 0) : ?>
@@ -66,7 +65,7 @@
 													<td><?php echo $inf['cliente_responsavel'] ?></td>
 													<td><?php echo $inf['cliente_email'] ?></td>
 												</tr>
-												<?php include("acessoUsuario.php"); ?>
+												<?php include("include/acessoUsuario.php"); ?>
 											<?php endforeach; ?>
 										</tbody>
 									</table>
@@ -90,8 +89,8 @@
 					<?php for ($q = 1; $q <= $p_count; $q++) : ?>
 						<li class="<?php echo ($q == $p) ? 'active' : '' ?> ">
 							<a href="<?php echo BASE_URL; ?>clientes?p=<?php $w = $_GET;
-																					$w['p'] = $q;
-																					echo http_build_query($w); ?>"><?php echo $q; ?></a>
+																			$w['p'] = $q;
+																			echo http_build_query($w); ?>"><?php echo $q; ?></a>
 						</li>
 					<?php endfor; ?>
 				</ul>
@@ -99,3 +98,4 @@
 		</div>
 	</div>
 </div>
+<?php require_once("include/cadastrar.php"); ?>

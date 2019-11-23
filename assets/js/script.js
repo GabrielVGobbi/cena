@@ -186,6 +186,62 @@ $(function () {
 
     });
 
+    $('#addDepartamento').on('click', function (e) {
+
+        e.preventDefault();
+        
+        html = '<input type="hidden" class="form-control" name="dep[id_departamento][]" id="dep[id_departamento][]">';
+
+        html += '<div class="col-md-3">';
+        html += '    <div class="form-group">';
+        html += '        <label>Responsavel</label>';
+        html += '        <div class="input-group">';
+        html += '            <div class="input-group-addon">';
+        html += '                <i class="fa fa-fw fa-user-plus"></i>';
+        html += '            </div>';
+        html += '            <input type="text" class="form-control" name="dep[dep_responsavel][]" id="dep[dep_responsavel][]">';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+        html += '<div class="col-md-3">';
+        html += '    <div class="form-group">';
+        html += '        <label>Email</label>';
+        html += '        <div class="input-group">';
+        html += '            <div class="input-group-addon">';
+        html += '                <i class="fa fa-envelope"></i>';
+        html += '            </div>';
+        html += '            <input type="text" class="form-control" name="dep[dep_email][]" id="dep[dep_email][]">';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+        html += '<div class="col-md-3">';
+        html += '    <div class="form-group">';
+        html += '        <label>Telefone Fixo</label>';
+        html += '        <div class="input-group">';
+        html += '            <div class="input-group-addon">';
+        html += '                <i class="fa fa-phone"></i>';
+        html += '            </div>';
+        html += '            <input type="text" class="form-control" name="dep[dep_telefone_fixo][]" id="dep[dep_telefone_fixo][]">';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+        html += '<div class="col-md-3">';
+        html += '    <div class="form-group">';
+        html += '        <label>Telefone Celular</label>';
+        html += '        <div class="input-group">';
+        html += '            <div class="input-group-addon">';
+        html += '                <i class="fa fa-phone"></i>';
+        html += '            </div>';
+        html += '            <input type="text" class="form-control" name="dep[dep_telefone_celular][]" id="dep[dep_telefone_celular][]"> ';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+
+
+        $('.addDepartamento').append(html);
+
+    });
+
     $('.new_documento').on('click', function (e) {
 
         e.preventDefault();

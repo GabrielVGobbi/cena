@@ -310,7 +310,6 @@
 
 
     function updateSubTotal(obj) {
-        console.log(obj);
 
         var quantidade = $(obj).val();
         if (quantidade <= 0) {

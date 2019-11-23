@@ -53,7 +53,7 @@ class controller
 		$_SESSION['alert']['mensagem'] = $mensagem;
 		$_SESSION['alert']['tipo'] = $tipo;
 
-		return $_SESSION['alert'];
+		return $_SESSION;
 	}
 
 	public static function ReturnValor($valor)

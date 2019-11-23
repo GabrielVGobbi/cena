@@ -208,23 +208,7 @@
         </section>
       </div>
     </div>
-    <?php if (isset($_SESSION['alert'])) : ?>
 
-
-
-      <aside class="control-sidebar control-sidebar-light control-sidebar-open" id="side_meu" style="margin-top: 10px;display:none;right: 18px !important;">
-        <div class="goaway" id="goaway">
-          <div class="center">
-            <div class="alert alert-<?php echo $_SESSION['alert']['tipo']; ?> alert-dismissible">
-              <button type="button" class="close" data-dismiss="alert" aria-hidden="true">×</button>
-              <h4><i class="icon fa fa-check"></i> Alert!</h4>
-              <?php echo $_SESSION['alert']['mensagem']; ?>
-            </div>
-          </div>
-        </div>
-      </aside>
-
-    <?php endif; ?>
     <footer class="main-footer">
       <div class="container">
         <div class="pull-right hidden-xs">
@@ -242,9 +226,9 @@
       <h3 style="color:#000">Bloco de notas</h3>
       <?php $notepad = $this->userInfo['user']->getNotepad($this->userInfo['user']->getId(), $this->userInfo['user']->getCompany()); ?>
       <?php if($notepad): ?>
-        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"><?php echo $notepad['notepad']; ?></textarea>
+        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="30" cols="93"><?php echo $notepad['notepad']; ?></textarea>
       <?php else: ?>
-        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="10" cols="53"></textarea>
+        <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="30" cols="93"></textarea>
       <?php endif;?>
 
       <div>
@@ -254,6 +238,15 @@
       </div>
 
   </aside>
+
+  <?php if (isset($_SESSION['alert']) && !empty($_SESSION['alert'])) : ?>
+    <script>
+        $(function() {  
+            toastr.<?php echo $_SESSION['alert']['tipo'];?>('<?php echo $_SESSION['alert']['mensagem'] ?>');
+        });
+    </script>
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
 
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -307,22 +300,13 @@
         });
       });
 
-
-      <?php if (isset($_SESSION['alert'])) : ?>
-        $("#side_meu").slideToggle("slow");
-        <?php unset($_SESSION['alert']); ?>
-      <?php endif; ?>
-
-
-
-
-
-
     });
   </script>
 
 
+<link href="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.css" rel="stylesheet" type="text/css" />
 
+    <script src="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.js"></script>
   <script src="<?php echo BASE_URL; ?>node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables/jquery.dataTables.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
@@ -372,6 +356,8 @@
     });
   </script>
 
+
+
   <?php if (isset($_SESSION['form'])) : ?>
     <script type="text/javascript">
       var title = '<?php echo $_SESSION['form']['success']; ?>';
@@ -411,6 +397,8 @@
     </script>
 
   <?php endif; ?>
+
+  <script src="<?php echo BASE_URL;?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
 
   <script type="text/javascript">

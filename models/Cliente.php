@@ -6,16 +6,17 @@ class Cliente extends model
 	public function __construct()
 	{
 		parent::__construct();
+
 		$this->array = array();
 		$this->retorno = array();
 	}
 
-	public function getAll($offset,$filtro, $id_company)
+	public function getAll($offset, $filtro, $id_company)
 	{
 
 		$where = $this->buildWhere($filtro, $id_company);
 
-		$sql = "SELECT * FROM  
+		$sql = "SELECT *, cli.id as id_cliente  FROM  
 			cliente cli
 		LEFT JOIN cliente_endereco cled ON (cli.clend_id = cled.id_endereco)
 		
@@ -37,11 +38,9 @@ class Cliente extends model
 	private function buildWhere($filtro, $id)
 	{
 
-
 		$where = array(
 			'id_company=' . $id
 		);
-
 
 		if (!empty($filtro['cliente_nome'])) {
 
@@ -66,6 +65,7 @@ class Cliente extends model
 				$where[] = "cli.id = :id";
 			}
 		}
+
 		return $where;
 	}
 
@@ -89,131 +89,215 @@ class Cliente extends model
 	}
 
 
-	public function add($Parametros,$id_company)
+	public function add($Parametros, $id_company)
 	{
 
+		$id_endereco = $this->setEnderecoCliente($Parametros, $id_company);
+
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
-		$cliente_email = mb_strtolower($Parametros['email']);
-		$cliente_rg = controller::ReturnFormatLimpo($Parametros['rg']);
-		$cliente_cpf = controller::ReturnFormatLimpo($Parametros['cpf']);
+		$cliente_cnpj = !empty($Parametros['cliente_cnpj']) ? controller::ReturnFormatLimpo($Parametros['cliente_cnpj']) : '';
 
-		$cliente_telefone = $Parametros['cliente_telefone'];
-
-
-		if (isset($Parametros['cep']) && $Parametros['cep'] != '') {
-			try {
-				$sql = $this->db->prepare("INSERT INTO cliente_endereco SET 
-            		rua = :rua, 
-            		numero = :numero,
-            		cidade = :cidade,
-            		bairro = :bairro,
-            		estado = :estado,
-					cep = :cep
-				");
-
-				$sql->bindValue(":rua", $Parametros['rua']);
-				$sql->bindValue(":numero", $Parametros['numero']);
-				$sql->bindValue(":cidade", $Parametros['cidade']);
-				$sql->bindValue(":bairro", $Parametros['bairro']);
-				$sql->bindValue(":estado", $Parametros['estado']);
-				$sql->bindValue(":cep", $Parametros['cep']);
-				$sql->execute();
-
-				$id_endereco = $this->db->lastInsertId();
-
-				if ($id_endereco != 0) {
-					$sql = $this->db->prepare("INSERT INTO cliente SET 
-            			cliente_nome = :cliente_nome, 
-            			cliente_email = :cliente_email,
-            			id_company = :id_company,
-            			cliente_rg = :cliente_rg,
-            			cliente_cpf = :cliente_cpf,
-						clend_id = :id_endereco,
-						cliente_telefone = :cliente_telefone
-					");
-
-					$sql->bindValue(":cliente_nome", $cliente_nome);
-					$sql->bindValue(":cliente_rg", $cliente_rg);
-					$sql->bindValue(":cliente_cpf", $cliente_cpf);
-					$sql->bindValue(":cliente_email", $cliente_email);
-					$sql->bindValue(":id_company", $id_company);
-					$sql->bindValue(":id_endereco", $id_endereco);
-					$sql->bindValue(":cliente_telefone", $cliente_telefone);
-
-
-					if ($sql->execute()) {
-						$this->retorno['cliente_add']['mensagem']['sucess'] = 'sucesso';
-					} else {
-						$this->retorno['cliente_add']['mensagem']['error'] = 'erro ao cadastrar';
-					}
-				}
-			} catch (PDOExecption $e) {
-				$sql->rollback();
-				error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
-			}
-		} else {
+		$sql = $this->db->prepare("INSERT INTO cliente SET 
 			
-			$sql = $this->db->prepare("INSERT INTO cliente SET 
-            			cliente_nome = :cliente_nome, 
-            			cliente_email = :cliente_email,
-            			id_company = :id_company,
-            			cliente_rg = :cliente_rg,
-            			cliente_cpf = :cliente_cpf,
-						cliente_telefone = :cliente_telefone
-        			");
+			cliente_nome = :cliente_nome, 
+			cliente_cnpj = :cliente_cnpj,
+			created_at = NOW(),
+			clend_id = :id_endereco,
+			id_company = :id_company
+		
+		");
 
-			$sql->bindValue(":cliente_nome", $cliente_nome);
-			$sql->bindValue(":cliente_rg", $cliente_rg);
-			$sql->bindValue(":cliente_cpf", $cliente_cpf);
-			$sql->bindValue(":cliente_email", $cliente_email);
-			$sql->bindValue(":id_company", $id_company);
-			$sql->bindValue(":cliente_telefone", $cliente_telefone);
+		$sql->bindValue(":cliente_nome", $cliente_nome);
+		$sql->bindValue(":id_company", $id_company);
+		$sql->bindValue(":id_endereco", $id_endereco);
+		$sql->bindValue(":cliente_cnpj", $cliente_cnpj);
 
-			$sql->execute();
+		if ($sql->execute()) {
+
+			$id_cliente = $this->db->lastInsertId();
+
+			if (!empty($Parametros['dep_responsavel']))
+				$this->setDepartamentoCliente($Parametros, $id_company, $id_cliente);
 
 			controller::setLog($Parametros, 'cliente', 'add');
 
+			controller::alert('success', 'Cadastrado com sucesso');
+
+			return $id_cliente;
 		}
 
-		
-
-		return $this->db->lastInsertId();
+		controller::alert('warning', 'Não foi possivel cadastrar o cliente, contate o administrador da empresa');
 	}
 
 	public function edit($Parametros, $id_company)
 	{
 
+		$id_endereco = isset($Parametros['id_endereco'])
+			? $this->setEnderecoCliente($Parametros, $id_company, $Parametros['id_endereco'])
+			: $this->setEnderecoCliente($Parametros, $id_company);
+
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
-		$cliente_email = mb_strtolower($Parametros['cliente_email']);
-		$cliente_responsavel = $Parametros['cliente_responsavel'];
-
-		$cliente_telefone = $Parametros['cliente_telefone'];
-
+		$cliente_cnpj = !empty($Parametros['cliente_cnpj']) ? controller::ReturnFormatLimpo($Parametros['cliente_cnpj']) : '';
 
 		if (isset($Parametros['id_cliente']) && $Parametros['id_cliente'] != '') {
 
 			$sql = $this->db->prepare("UPDATE cliente SET 
+				
 				cliente_nome = :cliente_nome, 
-				cliente_email = :cliente_email, 
-				cliente_responsavel = :cliente_responsavel,
-				cliente_telefone = :cliente_telefone
+				cliente_cnpj = :cliente_cnpj,
+				created_at = NOW(),
+				id_company = :id_company,
+				clend_id = :id_endereco
 
 				WHERE id = :id_cliente AND id_company = :id_company;
         	");
 
 			$sql->bindValue(":cliente_nome", $cliente_nome);
-			$sql->bindValue(":cliente_email", $cliente_email);
-			$sql->bindValue(":cliente_responsavel", $cliente_responsavel);
-			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
 			$sql->bindValue(":id_company", $id_company);
-			$sql->bindValue(":cliente_telefone", $cliente_telefone);
+			$sql->bindValue(":cliente_cnpj", $cliente_cnpj);
+			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
+			$sql->bindValue(":id_endereco", $id_endereco);
 
+			$sql->execute()
+				? controller::alert('success', 'Editado com sucesso')
+				: controller::alert('error', 'Ops!! deu algum erro');
+
+			#if (!empty($Parametros['dep_responsavel']))
+				$this->setDepartamentoCliente($Parametros, $id_company, $Parametros['id_cliente'], $id_departamento);
+
+			controller::setLog($Parametros, 'cliente', 'edit');
+		}
+	}
+
+	public function setEnderecoCliente($Parametros, $id_company, $id_endereco = false)
+	{
+
+		if ($id_endereco == false && !empty($Parametros['cep'])) {
+
+			$sql = $this->db->prepare("INSERT INTO cliente_endereco SET 
+				rua = :rua, 
+				numero = :numero,
+				cidade = :cidade,
+				bairro = :bairro,
+				estado = :estado,
+				complemento = :complemento,
+				inscEstado = :inscEstado,
+				cep = :cep
+			");
+
+			$sql->bindValue(":rua", $Parametros['rua']);
+			$sql->bindValue(":numero", $Parametros['numero']);
+			$sql->bindValue(":cidade", $Parametros['cidade']);
+			$sql->bindValue(":bairro", $Parametros['bairro']);
+			$sql->bindValue(":inscEstado", $Parametros['inscEstado']);
+			$sql->bindValue(":complemento", $Parametros['complemento']);
+			$sql->bindValue(":estado", $Parametros['estado']);
+
+			$sql->bindValue(":cep", $Parametros['cep']);
 
 			$sql->execute();
 
-			controller::setLog($Parametros, 'cliente', 'edit');
+			$id_endereco = $this->db->lastInsertId();
+			
+		} else {
 
+			$sql = $this->db->prepare("UPDATE `cliente_endereco` SET  
+				rua = :rua, 
+				numero = :numero,
+				cidade = :cidade,
+				bairro = :bairro,
+				estado = :estado,
+				complemento = :complemento,
+				inscEstado = :inscEstado,
+				cep = :cep
+
+				WHERE id_endereco = :id_endereco
+			");
+
+			$sql->bindValue(":rua", $Parametros['rua']);
+			$sql->bindValue(":numero", $Parametros['numero']);
+			$sql->bindValue(":cidade", $Parametros['cidade']);
+			$sql->bindValue(":bairro", $Parametros['bairro']);
+			$sql->bindValue(":inscEstado", $Parametros['inscEstado']);
+			$sql->bindValue(":complemento", $Parametros['complemento']);
+			$sql->bindValue(":estado", $Parametros['estado']);
+			$sql->bindValue(":id_endereco", $id_endereco);
+
+			$sql->bindValue(":cep", $Parametros['cep']);
+
+
+			$sql->execute()
+				? controller::alert('success', 'Editado com sucesso')
+				: controller::alert('error', 'Ops!! deu algum erro');
 		}
+
+		return $id_endereco;
+	}
+
+	public function setDepartamentoCliente($Parametros, $id_company, $id_cliente, $id_departamento = false)
+	{
+
+
+		if (isset($Parametros['dep'])) {
+			if (count($Parametros['dep']['id_departamento']) > 0) {
+				for ($q = 0; $q < count($Parametros['dep']['id_departamento']); $q++) {
+
+					if ($Parametros['dep']['id_departamento'][$q] != '') {
+
+						$sql = $this->db->prepare("UPDATE `departamento` SET
+							
+							dep_responsavel = :dep_responsavel,
+							dep_telefone_celular = :dep_telefone_celular,
+							dep_telefone_fixo = :dep_telefone_fixo,
+							dep_email = :dep_email
+                            
+							WHERE id_departamento = :id_departamento
+                        ");
+
+						$sql->bindValue(":dep_responsavel", 	 $Parametros['dep']['dep_responsavel'][$q]);
+						$sql->bindValue(":dep_telefone_celular", $Parametros['dep']['dep_telefone_celular'][$q]);
+						$sql->bindValue(":dep_email", 	 		 $Parametros['dep']['dep_email'][$q] );
+						$sql->bindValue(":dep_telefone_fixo", 	 $Parametros['dep']['dep_telefone_fixo'][$q] );
+						$sql->bindValue(":id_departamento", 	 $Parametros['dep']['id_departamento'][$q] );
+
+						$sql->execute();
+
+					} else {
+
+						$sql = $this->db->prepare("INSERT `departamento` SET
+							
+							dep_responsavel = :dep_responsavel,
+							dep_telefone_celular = :dep_telefone_celular,
+							dep_telefone_fixo = :dep_telefone_fixo,
+							dep_email = :dep_email
+                        ");
+
+						$sql->bindValue(":dep_responsavel", 	 $Parametros['dep']['dep_responsavel'][$q]);
+						$sql->bindValue(":dep_telefone_celular", $Parametros['dep']['dep_telefone_celular'][$q]);
+						$sql->bindValue(":dep_email", 	 		 $Parametros['dep']['dep_email'][$q] );
+						$sql->bindValue(":dep_telefone_fixo", 	 $Parametros['dep']['dep_telefone_fixo'][$q] );
+
+						if($sql->execute())
+							$id_departamento = $this->db->lastInsertId();
+							
+							$sql = $this->db->prepare("INSERT `departamento_cliente` SET
+							
+								id_cliente = :id_cliente,
+								id_departamento = :id_departamento,
+								id_company = :id_company
+
+                        	");
+							$sql->bindValue(":id_cliente", 	 		 $id_cliente);
+							$sql->bindValue(":id_departamento", 	 $id_departamento);
+							$sql->bindValue(":id_company", 	 		 $id_company);
+							$sql->execute();
+
+					}
+				}
+			}
+		} else { }
+
+		return $id_departamento;
 	}
 
 	public function addAcessoCliente($Parametros, $id_company)
@@ -237,8 +321,6 @@ class Cliente extends model
 		$sql->bindValue(":cliente", 'cliente');
 		$sql->bindValue(":id_cliente", $Parametros['id']);
 
-
-
 		$sql->execute();
 
 		$sql = $this->db->prepare("UPDATE cliente SET 
@@ -256,9 +338,9 @@ class Cliente extends model
 
 		controller::setLog($Parametros, 'acesso_usuario', 'add');
 
+		$id = $this->db->lastInsertId();
 
-
-		return $id = $this->db->lastInsertId();
+		return $id;
 	}
 
 	public function desativar($id_cliente, $id_company)
@@ -347,7 +429,6 @@ class Cliente extends model
 		if ($sql->execute()) {
 			return true;
 			controller::setLog($Parametros, 'cliente', 'delete');
-
 		} else {
 			return false;
 		}
@@ -371,7 +452,8 @@ class Cliente extends model
 	public function getClienteById($id, $id_company)
 	{
 		$sql = $this->db->prepare("
-			SELECT * FROM cliente
+			SELECT * FROM cliente cli
+			LEFT JOIN cliente_endereco cled ON (cli.clend_id = cled.id_endereco)
 			WHERE id_company = :id_company AND id = :id
 		");
 
@@ -405,18 +487,19 @@ class Cliente extends model
 		return $this->array;
 	}
 
-	public function validacao($id_company, $nome)
+	public function validacao($id_company, $nome, $id = '')
 	{
 
 		$nome = controller::ReturnValor($nome);
-		
+
 		$sql = $this->db->prepare("SELECT * FROM cliente
 
-			WHERE id_company = :id_company AND cliente_nome = :cliente_nome
+			WHERE id_company = :id_company AND cliente_nome = :cliente_nome AND id <> :id
 		");
 
 		$sql->bindValue(':cliente_nome', $nome);
 		$sql->bindValue(':id_company', $id_company);
+		$sql->bindValue(':id', $id);
 
 		$sql->execute();
 
@@ -425,5 +508,19 @@ class Cliente extends model
 		} else {
 			return false;
 		}
+	}
+
+	public function getDepartamentoClienteById($id_cliente)
+	{
+
+		$sql = $this->db->prepare("SELECT * FROM departamento_cliente depcli
+			INNER JOIN departamento dep ON (dep.id_departamento = depcli.id_departamento)
+
+			WHERE depcli.id_cliente = :id_cliente
+		");
+		$sql->bindValue(':id_cliente', $id_cliente);
+		$sql->execute();
+
+		return $array = ($sql->rowCount() > 0) ? $sql->fetchAll() : array();
 	}
 }

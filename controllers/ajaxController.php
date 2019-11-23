@@ -508,4 +508,20 @@ class ajaxController extends controller
 
     }
 
+    public function ValidateClienteDouble(){
+
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $a = new Cliente();
+
+        $id = !empty($_POST['id']) ? $_POST['id'] : '';
+
+        $data = $a->validacao($this->user->getCompany(), $_POST['nome'], $id  );
+
+        echo json_encode($data);
+            
+    }
+
 }
