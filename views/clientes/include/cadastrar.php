@@ -10,7 +10,7 @@
                 </div>
                 <div class="modal-body">
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div id="formnome" class="form-group">
                                 <label>Razão Social</label>
                                 <div class="input-group">
@@ -21,8 +21,19 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-4">
+                            <div id="" class="form-group">
+                                <label>Apelido</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-fw fa-user"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="cliente_apelido" id="cliente_apelido">
+                                </div>
+                            </div>
+                        </div>
 
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div id="formcpnj" class="form-group">
                                 <label>CNPJ</label>
                                 <div class="input-group">
@@ -171,12 +182,11 @@
 
 
                 <div class="modal-footer">
-                    <div  id="submit" class="btn btn-primary">Salvar</div>
+                    <div id="submit" class="btn btn-primary">Salvar</div>
                 </div>
             </div>
         </div>
     </form>
 </div>
 
-<script src="<?php BASE_URL?>/views/<?php echo $viewData['pageController'];?>/parametros/<?php echo $viewData['pageController'];?>.js"></script>
-
+<script src="<?php BASE_URL ?>/views/<?php echo $viewData['pageController']; ?>/parametros/<?php echo $viewData['pageController']; ?>.js"></script>

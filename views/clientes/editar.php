@@ -17,7 +17,7 @@
 								<h3 class="box-title">Dados</h3>
 							</div>
 							<div class="box-body" style="">
-								<div class="col-md-6">
+								<div class="col-md-4">
 									<div id="formnome" class="form-group">
 										<label>Razão Social</label>
 										<div class="input-group">
@@ -29,14 +29,26 @@
 									</div>
 								</div>
 
-								<div class="col-md-6">
+								<div class="col-md-4">
+									<div id="" class="form-group">
+										<label>Apelido</label>
+										<div class="input-group">
+											<div class="input-group-addon">
+												<i class="fa fa-fw fa-user"></i>
+											</div>
+											<input type="text" class="form-control" name="cliente_apelido" id="cliente_apelido" value="<?php echo $tableInfo['cliente_apelido']; ?>">
+										</div>
+									</div>
+								</div>
+
+								<div class="col-md-4">
 									<div id="formcpnj" class="form-group">
 										<label>CNPJ</label>
 										<div class="input-group">
 											<div class="input-group-addon">
 												<i class="fa fa-fw fa-cc"></i>
 											</div>
-											<input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj" id="cliente_cnpj"  value="<?php echo $tableInfo['cliente_cnpj']; ?>">
+											<input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj" id="cliente_cnpj" value="<?php echo $tableInfo['cliente_cnpj']; ?>">
 										</div>
 									</div>
 								</div>
@@ -49,14 +61,12 @@
 				<?php include_once("include/departamento.php"); ?>
 
 				<div class="modal-footer">
-					<div  id="submit" class="btn btn-primary">Salvar</div>
-					<a href="<?php echo BASE_URL; ?><?php echo $viewData['pageController'];?>" class="btn btn-danger">Voltar</a>
+					<div id="submit" class="btn btn-primary">Salvar</div>
+					<a href="<?php echo BASE_URL; ?><?php echo $viewData['pageController']; ?>" class="btn btn-danger">Voltar</a>
 				</div>
 			</div>
 		</form>
 	</div>
 </div>
 
-<script src="<?php BASE_URL?>/views/<?php echo $viewData['pageController'];?>/parametros/<?php echo $viewData['pageController'];?>.js"></script>
-
-
+<script src="<?php BASE_URL ?>/views/<?php echo $viewData['pageController']; ?>/parametros/<?php echo $viewData['pageController']; ?>.js"></script>

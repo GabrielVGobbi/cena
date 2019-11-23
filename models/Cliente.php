@@ -95,12 +95,15 @@ class Cliente extends model
 		$id_endereco = $this->setEnderecoCliente($Parametros, $id_company);
 
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
+		$cliente_apelido = controller::ReturnValor($Parametros['cliente_apelido']);
+
 		$cliente_cnpj = !empty($Parametros['cliente_cnpj']) ? controller::ReturnFormatLimpo($Parametros['cliente_cnpj']) : '';
 
 		$sql = $this->db->prepare("INSERT INTO cliente SET 
 			
 			cliente_nome = :cliente_nome, 
 			cliente_cnpj = :cliente_cnpj,
+			cliente_apelido = :cliente_apelido,
 			created_at = NOW(),
 			clend_id = :id_endereco,
 			id_company = :id_company
@@ -111,6 +114,8 @@ class Cliente extends model
 		$sql->bindValue(":id_company", $id_company);
 		$sql->bindValue(":id_endereco", $id_endereco);
 		$sql->bindValue(":cliente_cnpj", $cliente_cnpj);
+		$sql->bindValue(":cliente_apelido", $cliente_apelido);
+
 
 		if ($sql->execute()) {
 
@@ -137,6 +142,7 @@ class Cliente extends model
 			: $this->setEnderecoCliente($Parametros, $id_company);
 
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
+		$cliente_apelido = controller::ReturnValor($Parametros['cliente_apelido']);
 		$cliente_cnpj = !empty($Parametros['cliente_cnpj']) ? controller::ReturnFormatLimpo($Parametros['cliente_cnpj']) : '';
 
 		if (isset($Parametros['id_cliente']) && $Parametros['id_cliente'] != '') {
@@ -144,15 +150,18 @@ class Cliente extends model
 			$sql = $this->db->prepare("UPDATE cliente SET 
 				
 				cliente_nome = :cliente_nome, 
+				cliente_apelido = :cliente_apelido,
 				cliente_cnpj = :cliente_cnpj,
 				created_at = NOW(),
 				id_company = :id_company,
 				clend_id = :id_endereco
 
+
 				WHERE id = :id_cliente AND id_company = :id_company;
         	");
 
 			$sql->bindValue(":cliente_nome", $cliente_nome);
+			$sql->bindValue(":cliente_apelido", $cliente_apelido);
 			$sql->bindValue(":id_company", $id_company);
 			$sql->bindValue(":cliente_cnpj", $cliente_cnpj);
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
