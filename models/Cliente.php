@@ -145,6 +145,8 @@ class Cliente extends model
 		$cliente_apelido = controller::ReturnValor($Parametros['cliente_apelido']);
 		$cliente_cnpj = !empty($Parametros['cliente_cnpj']) ? controller::ReturnFormatLimpo($Parametros['cliente_cnpj']) : '';
 
+		$id_departamento = !empty($Parametros['id_departamento']) ? $Parametros['id_departamento'] : '';
+
 		if (isset($Parametros['id_cliente']) && $Parametros['id_cliente'] != '') {
 
 			$sql = $this->db->prepare("UPDATE cliente SET 

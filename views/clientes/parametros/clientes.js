@@ -77,59 +77,74 @@ function pesquisacep(valor) {
     }
 };
 
-$(function(){
-    $( "#submit" ).click(function() {
+$(function () {
+   
+    $("#submit").click(function () {
         var cnpj = $('#cpfcnpj').val();
         var nome = $('#cliente_nome').val();
-        var id   = $('#id_cliente').val();
+        var id = $('#id_cliente').val();
 
 
-        cnpj.length == 18 
-            ? $( "#formcpnj" ).removeClass("has-error")
-            : $( "#formcpnj" ).addClass( "has-error" )+toastr.error('cpnj invalido')
-        
-        nome.length != '' 
-            ? $( "#formnome" ).removeClass("has-error")+(validateClienteDouble(nome, id))
-            : $( "#formnome" ).addClass( "has-error" )+toastr.error('nome invalido')
-            
-            
-            
+        cnpj.length == 18
+            ? $("#formcpnj").removeClass("has-error")
+            : $("#formcpnj").addClass("has-error") + toastr.error('cpnj invalido')
+
+        nome.length != ''
+            ? $("#formnome").removeClass("has-error") + (validateClienteDouble(nome, id))
+            : $("#formnome").addClass("has-error") + toastr.error('nome invalido')
+
     });
 
     //verifica se ja existe um cliente com esse nome
-    function validateClienteDouble(nome, id){
+    function validateClienteDouble(nome, id) {
         var verificar = $('#cliente_nome').attr('data-name');
-        
+
         $.ajax({
             url: BASE_URL + 'ajax/ValidateClienteDouble',
             type: 'POST',
             data: {
-                nome:nome,
-                id:id
+                nome: nome,
+                id: id
             },
             dataType: 'json',
-            success: function(json) {
-                $( document ).ready( reload(json) );
-            }, 
-        });  
+            success: function (json) {
+                $(document).ready(reload(json));
+            },
+        });
     }
 
-    function reload(data){
-        if(data == true){
-            $( "#formnome" ).addClass( "has-warning" );
-            $( "#validate" ).val( "false" );   
+    function reload(data) {
+        if (data == true) {
+            $("#formnome").addClass("has-warning");
+            $("#validate").val("false");
             toastr.warning('Ja existe um cliente com esse nome');
         } else {
-            $( "#formnome" ).removeClass("has-error");
-            $( "#formnome" ).removeClass("has-warning");
-            $( document ).ready( submit );
+            $("#formnome").removeClass("has-error");
+            $("#formnome").removeClass("has-warning");
+            $(document).ready(submit);
         }
 
     }
 
-    function submit(){
+    function submit() {
         if (!$(".form-group").hasClass("has-warning") && !$(".form-group").hasClass("has-error"))
-            $( "#cliete_edit" ).submit();   
+            $("#cliete_edit").submit();
     }
+
+    $("#copyEmail").on('click', function (e) {
+      
+
+        var text = document.querySelector("#dep_email");
+        text.select();
+
+        try {
+            var text = document.execCommand('copy');
+            if (text) { toastr.success('email copiado'); }
+        } catch (e) {
+            toastr.success(e);
+        }
+
+    });
+
 
 });

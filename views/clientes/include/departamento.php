@@ -27,7 +27,7 @@
                             <div class="form-group">
                                 <label>Email</label>
                                 <div class="input-group">
-                                    <div class="input-group-addon">
+                                    <div id="copyEmail" class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
                                     </div>
                                     <input type="text" class="form-control" name="dep[dep_email][]" id="dep_email" value="<?php echo $dep['dep_email']; ?>">
@@ -75,9 +75,9 @@
                         </div>
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label>Email</label>
-                                <div class="input-group">
-                                    <div class="input-group-addon">
+                                <label >Email</label>
+                                <div  class="input-group">
+                                    <div  class="input-group-addon">
                                         <i class="fa fa-envelope"></i>
                                     </div>
                                     <input type="text" class="form-control" name="dep[dep_email][]" id="dep_email">
