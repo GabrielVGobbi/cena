@@ -84,10 +84,10 @@ $(function () {
         var nome = $('#cliente_nome').val();
         var id = $('#id_cliente').val();
 
-
-        cnpj.length == 18
-            ? $("#formcpnj").removeClass("has-error")
-            : $("#formcpnj").addClass("has-error") + toastr.error('cpnj invalido')
+        if(cnpj.length > 0)
+            (cnpj.length == 18)
+                ? $("#formcpnj").removeClass("has-error")
+                : $("#formcpnj").addClass("has-error") + toastr.error('cpnj invalido')
 
         nome.length != ''
             ? $("#formnome").removeClass("has-error") + (validateClienteDouble(nome, id))
@@ -133,7 +133,6 @@ $(function () {
 
     $("#copyEmail").on('click', function (e) {
       
-
         var text = document.querySelector("#dep_email");
         text.select();
 

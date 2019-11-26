@@ -30,9 +30,9 @@
 											<tr>
 												<th style="width: 22%;">Ações</th>
 												<th>ID</th>
-												<th>Nome</th>
-												<th>Responsável</th>
-												<th>Email</th>
+												<th>Razão Social</th>
+												<th>Apelido</th>
+											
 											</tr>
 											<?php foreach ($tableDados as $inf) : ?>
 												<tr>
@@ -62,8 +62,7 @@
 													</td>
 													<td><?php echo $inf['id'] ?></td>
 													<td><?php echo $inf['cliente_nome'] ?></td>
-													<td><?php echo $inf['cliente_responsavel'] ?></td>
-													<td><?php echo $inf['cliente_email'] ?></td>
+													<td><?php echo $inf['cliente_apelido'] ?></td>
 												</tr>
 												<?php include("include/acessoUsuario.php"); ?>
 											<?php endforeach; ?>

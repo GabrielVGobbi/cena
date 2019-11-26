@@ -121,7 +121,7 @@ class Cliente extends model
 
 			$id_cliente = $this->db->lastInsertId();
 
-			if (!empty($Parametros['dep_responsavel']))
+			#if (!empty($Parametros['dep_responsavel']))
 				$this->setDepartamentoCliente($Parametros, $id_company, $id_cliente);
 
 			controller::setLog($Parametros, 'cliente', 'add');
@@ -260,7 +260,8 @@ class Cliente extends model
 							dep_responsavel = :dep_responsavel,
 							dep_telefone_celular = :dep_telefone_celular,
 							dep_telefone_fixo = :dep_telefone_fixo,
-							dep_email = :dep_email
+							dep_email = :dep_email,
+							dep_funcao = :dep_funcao
                             
 							WHERE id_departamento = :id_departamento
                         ");
@@ -270,6 +271,8 @@ class Cliente extends model
 						$sql->bindValue(":dep_email", 	 		 $Parametros['dep']['dep_email'][$q] );
 						$sql->bindValue(":dep_telefone_fixo", 	 $Parametros['dep']['dep_telefone_fixo'][$q] );
 						$sql->bindValue(":id_departamento", 	 $Parametros['dep']['id_departamento'][$q] );
+						$sql->bindValue(":dep_funcao", 	 		 $Parametros['dep']['dep_funcao'][$q] );
+
 
 						$sql->execute();
 
@@ -280,14 +283,16 @@ class Cliente extends model
 							dep_responsavel = :dep_responsavel,
 							dep_telefone_celular = :dep_telefone_celular,
 							dep_telefone_fixo = :dep_telefone_fixo,
-							dep_email = :dep_email
+							dep_email = :dep_email,
+							dep_funcao = :dep_funcao
                         ");
 
 						$sql->bindValue(":dep_responsavel", 	 $Parametros['dep']['dep_responsavel'][$q]);
 						$sql->bindValue(":dep_telefone_celular", $Parametros['dep']['dep_telefone_celular'][$q]);
 						$sql->bindValue(":dep_email", 	 		 $Parametros['dep']['dep_email'][$q] );
 						$sql->bindValue(":dep_telefone_fixo", 	 $Parametros['dep']['dep_telefone_fixo'][$q] );
-
+						$sql->bindValue(":dep_funcao", 	 		 $Parametros['dep']['dep_funcao'][$q] );
+						
 						if($sql->execute())
 							$id_departamento = $this->db->lastInsertId();
 							
@@ -445,14 +450,18 @@ class Cliente extends model
 		}
 	}
 
-	public function getCount($id_company)
+	public function getCount($filtro,$id_company)
 	{
-
 		$r = 0;
 
-		$sql = $this->db->prepare("SELECT COUNT(*) AS c FROM cliente WHERE id_company = :id_company");
-		$sql->bindValue(':id_company', $id_company);
+		$where = $this->buildWhere($filtro, $id_company);
+		
+		$sql = $this->db->prepare("SELECT COUNT(*) AS c FROM cliente cli WHERE " . implode(' AND ', $where));
+		
+		$this->bindWhere($filtro, $sql);
+		
 		$sql->execute();
+		
 		$row = $sql->fetch();
 
 		$r = $row['c'];

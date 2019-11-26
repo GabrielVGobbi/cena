@@ -45,9 +45,8 @@ class ClientesController extends controller
 
             $offset = (10 * ($this->dataInfo['p'] - 1));
 
-
             $this->dataInfo['tableDados'] = $this->cliente->getAll($offset, $this->filtro, $this->user->getCompany());
-            $this->dataInfo['getCount']   = !empty($this->dataInfo['tableDados']) ? $this->cliente->getCount($this->user->getCompany()) : '0';            
+            $this->dataInfo['getCount']   = !empty($this->dataInfo['tableDados']) ? $this->cliente->getCount($this->filtro,$this->user->getCompany()) : '0';            
             $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);

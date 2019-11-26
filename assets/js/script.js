@@ -214,7 +214,7 @@ $(function () {
         html += '        </div>';
         html += '    </div>';
         html += '</div>';
-        html += '<div class="col-md-3">';
+        html += '<div class="col-md-2">';
         html += '    <div class="form-group">';
         html += '        <label>Telefone Fixo</label>';
         html += '        <div class="input-group">';
@@ -225,7 +225,7 @@ $(function () {
         html += '        </div>';
         html += '    </div>';
         html += '</div>';
-        html += '<div class="col-md-3">';
+        html += '<div class="col-md-2">';
         html += '    <div class="form-group">';
         html += '        <label>Telefone Celular</label>';
         html += '        <div class="input-group">';
@@ -233,6 +233,17 @@ $(function () {
         html += '                <i class="fa fa-phone"></i>';
         html += '            </div>';
         html += '            <input type="text" class="form-control" name="dep[dep_telefone_celular][]" id="dep[dep_telefone_celular][]"> ';
+        html += '        </div>';
+        html += '    </div>';
+        html += '</div>';
+        html += '<div class="col-md-2">';
+        html += '    <div class="form-group">';
+        html += '        <label>Função</label>';
+        html += '        <div class="input-group">';
+        html += '            <div class="input-group-addon">';
+        html += '                <i class="fa fa-fw fa-suitcase"></i>';
+        html += '            </div>';
+        html += '            <input type="text" class="form-control" name="dep[dep_funcao][]" id="dep[dep_funcao][]"> ';
         html += '        </div>';
         html += '    </div>';
         html += '</div>';

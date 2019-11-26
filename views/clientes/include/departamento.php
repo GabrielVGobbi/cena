@@ -34,7 +34,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Telefone Fixo</label>
                                 <div class="input-group">
@@ -45,7 +45,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Telefone Celular</label>
                                 <div class="input-group">
@@ -53,6 +53,17 @@
                                         <i class="fa fa-phone"></i>
                                     </div>
                                     <input type="text" class="form-control" name="dep[dep_telefone_celular][]" id="dep_telefone_celular" value="<?php echo $dep['dep_telefone_celular']; ?>" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Função</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-fw fa-suitcase"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="dep[dep_funcao][]" id="dep_funcao" value="<?php echo $dep['dep_funcao']; ?>">
                                 </div>
                             </div>
                         </div>
@@ -84,7 +95,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Telefone Fixo</label>
                                 <div class="input-group">
@@ -95,7 +106,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
+                        <div class="col-md-2">
                             <div class="form-group">
                                 <label>Telefone Celular</label>
                                 <div class="input-group">
@@ -103,6 +114,17 @@
                                         <i class="fa fa-phone"></i>
                                     </div>
                                     <input type="text" class="form-control" name="dep[dep_telefone_celular][]" id="dep_telefone_celular" data-inputmask='"mask": "(99) 9 9999-9999"' data-mask>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label>Função</label>
+                                <div class="input-group">
+                                    <div class="input-group-addon">
+                                        <i class="fa fa-fw fa-suitcase"></i>
+                                    </div>
+                                    <input type="text" class="form-control" name="dep[dep_funcao][]" id="dep_funcao">
                                 </div>
                             </div>
                         </div>
