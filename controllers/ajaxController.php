@@ -91,6 +91,8 @@ class ajaxController extends controller
 
             if (isset($citem['variavel'])) {
                 $variavel = $citem['variavel'];
+            } else { 
+                $variavel = array();
             }
 
             $data[] = array(

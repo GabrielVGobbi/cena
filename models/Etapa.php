@@ -1096,4 +1096,24 @@ class Etapa extends model
         return $arrayTipo;
 
     }
+
+    public function getEtapasByTipoByObra($id_obra){
+
+        $sql = $this->db->prepare("
+            SELECT * FROM etapa_compra_comercial etcc 
+            INNER JOIN obra_etapa obrt ON (etcc.id_etapa = obrt.id_etapa)
+            WHERE etcc.id_obra = :id_obra AND obrt.id_obra = :id_obra GROUP BY etcc.etcc_id
+        ");
+
+        $sql->bindValue(':id_obra', $id_obra);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $this->array = $sql->fetchAll();
+        }
+
+        return $this->array;
+
+    }
 }

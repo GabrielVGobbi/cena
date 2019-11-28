@@ -2,28 +2,30 @@
     $(function() {
 
 
-        $('#totalProposta').keyup(function() {
+        var temporiza;
+        $("#totalProposta").on("input", function() {
 
             var valor = $('#totalProposta').val();
 
+            valor = valor.replace('R$ ', '');
             valor = valor.replace('R$', '');
             valor = valor.replace(',00', '');
             valor = valor.replace('.', '');
+            valor = valor.trim();
+
+            clearTimeout(temporiza);
             
-            
-            if (valor == '') {
-                $('#Totalnegociado').val('R$ 1');
+            if (valor == '' || valor == 'NaN') {
+                $('#Totalnegociado').val('R$ 0');
                 $('#totalProposta').val('');
                 $('#valor_desconto').val('');
             } else {
                 $('#valor_desconto').val('');
                 
-                setTimeout(function() {
-                    $('#Totalnegociado').val('R$ ' + formata(valor));
-                    $('#totalProposta').val('R$ ' + formata(valor));
-                    
-                }, 2000);
-
+                temporiza = setTimeout(function() {
+                    $('#totalProposta').val(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(valor));
+                    $('#Totalnegociado').val(new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'}).format(valor));
+                }, 1500);
                 updateDesconto();
             }
 
@@ -41,7 +43,7 @@
             negociado = negociado.replace('.', '');
 
             if (parseInt(negociado) < parseInt(total)) {
-                alert('valor para receber é maior que valor negociado');
+                toastr.error('valor para receber é maior que valor negociado');
                 $('#input_valor').val('');
                 $('#valor_etapa_receber').val('');
 
@@ -129,6 +131,8 @@
 
                     if (j.length != 0) {
                         for (var i = 0; i < j.length; i++) {
+
+                            console.log(j);
 
                             
 
@@ -312,9 +316,9 @@
     function updateSubTotal(obj) {
 
         var quantidade = $(obj).val();
-        if (quantidade <= 0) {
-            $(obj).val(1);
-            quantidade = 1;
+        if (quantidade < 0) {
+            $(obj).val(0);
+            quantidade = 0;
         }
         var price = $(obj).attr('data-price');
         var subtotal = quantidade * price;
@@ -346,6 +350,7 @@
         $("#preco_variavel").attr('data-price', itemSelecionado.val());
 
         $(obj).closest('tr').find('.unitario').html('R$ ' + formata(itemSelecionado.val()));
+        
         updateTotal();
 
         total = itemSelecionado.val() * parseInt(quantidade);
@@ -366,8 +371,11 @@
         proposto = proposto.replace(',00', '');
         proposto = proposto.replace('.', '');
 
+        console.log(proposto);
+
+
         if ($('input[id=valor_desconto]').val() == '') {
-            proposto = $('input[id=totalProposta]').val();
+            proposto.trim() = $('input[id=totalProposta]').val();
             $('input[id=Totalnegociado]').val('R$ ' + formata(proposto));
         } else {
             total = parseInt(proposto) - parseInt(desconto);
@@ -551,6 +559,8 @@ $(function () {
                
             } else {
                 $("#id_sub_etapas_todas").empty();
+                $("#addHistorico").css("display","none");
+
             }
         });
 
@@ -563,6 +573,8 @@ $(function () {
         var metodo_selecionado = $('.metodo_etapa').select2('data');
         var etapa_selecionado = $('.etapa_selecionado').select2('data');
 
+  
+
         var metodo = metodo_selecionado[0].id;
 
         if(metodo == 1){
@@ -571,40 +583,47 @@ $(function () {
             var metodo_valor = $('#input_valor').val();
 
         }
+        if(etapa_selecionado != ''){
+            var id_etapa = etapa_selecionado[0].id;
+            var valor_receber = $('#valor_etapa_receber').val();
 
-        var id_etapa = etapa_selecionado[0].id;
-        var valor_receber = $('#valor_etapa_receber').val();
+            if(id_etapa != 0){
+            
+                var id_obra =  $('#id_obra').val();
 
+                if (metodo_valor != '') {
+                    $("#formporcent").removeClass("has-error");
+                    $.ajax({
 
-        if(id_etapa != 0){
-           
-            var id_obra =  $('#id_obra').val();
+                        url: BASE_URL + 'ajax/addHistoricoComercial',
+                        type: 'POST',
+                        data: {
+                            metodo_valor: metodo_valor,
+                            metodo: metodo,
+                            id_etapa: id_etapa,
+                            id_obra: id_obra,
+                            valor_receber: valor_receber
+                        },
+                        dataType: 'json',
+                        success: function (json) {
+                            readyFn();
+                            gethistorico();
+                        },
+                    });
 
-            if (metodo_valor != '') {
-
-                $.ajax({
-
-                    url: BASE_URL + 'ajax/addHistoricoComercial',
-                    type: 'POST',
-                    data: {
-                        metodo_valor: metodo_valor,
-                        metodo: metodo,
-                        id_etapa: id_etapa,
-                        id_obra: id_obra,
-                        valor_receber: valor_receber
-                    },
-                    dataType: 'json',
-                    success: function (json) {
-                        readyFn();
-                        gethistorico();
-                    },
-                });
-
+                } else {
+                    toastr.error('preencha todos os campos');
+                    $("#formporcent").addClass("has-error");
+                }
             } else {
-                alert('preencha todos os campos');
+                toastr.error('selecione a etapa');
+
             }
         } else {
-            alert('selecione a etapa')
+            $("#addHistorico").css("display","none");
+
+            toastr.error('selecione a etapa');
+            
         }
 
         
@@ -632,7 +651,8 @@ $(function () {
         var porcentagem = $('#input_porcentagem').val();
 
         if (porcentagem > 100) {
-            alert('Maximo 100');
+            toastr.error('Maximo 100');
+            $("#formporcent").addClass("has-error");
             $('#input_porcentagem').val('');
             $('#valor_etapa_receber').val('');
 
@@ -645,6 +665,7 @@ $(function () {
             var total = negociado * (porcentagem / 100);
 
             $('#valor_etapa_receber').val('R$ ' + formata(total));
+            $("#formporcent").removeClass("has-error");
         }
 
     });
