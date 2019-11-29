@@ -23,7 +23,7 @@
                         </div>
                         <div class="col-md-4">
                             <div id="" class="form-group">
-                                <label>Apelido</label>
+                                <label>Nome Fantasia</label>
                                 <div class="input-group">
                                     <div class="input-group-addon">
                                         <i class="fa fa-fw fa-user"></i>
@@ -40,7 +40,7 @@
                                     <div class="input-group-addon">
                                         <i class="fa fa-fw fa-cc"></i>
                                     </div>
-                                    <input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj" id="cliente_cnpj">
+                                    <input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj">
                                 </div>
                             </div>
                         </div>
@@ -119,7 +119,7 @@
                         </div>
                     </div>
 
-                    <div class="box box-default collapsed-box">
+                   <!-- <div class="box box-default collapsed-box">
                         <div class="box-header with-border">
                             <h3 class="box-title">Endereço</h3>
                             <div class="box-tools pull-right">
@@ -187,9 +187,9 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </div>
+                    </div>-->
 
+                </div>
 
                 <div class="modal-footer">
                     <div id="submit" class="btn btn-primary">Salvar</div>

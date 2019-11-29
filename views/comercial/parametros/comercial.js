@@ -371,9 +371,6 @@
         proposto = proposto.replace(',00', '');
         proposto = proposto.replace('.', '');
 
-        console.log(proposto);
-
-
         if ($('input[id=valor_desconto]').val() == '') {
             proposto.trim() = $('input[id=totalProposta]').val();
             $('input[id=Totalnegociado]').val('R$ ' + formata(proposto));
@@ -381,9 +378,6 @@
             total = parseInt(proposto) - parseInt(desconto);
             $('input[id=Totalnegociado]').val('R$ ' + formata(total));
         }
-
-
-
     }
 
     function formataNumbero() {
@@ -572,9 +566,7 @@ $(function () {
 
         var metodo_selecionado = $('.metodo_etapa').select2('data');
         var etapa_selecionado = $('.etapa_selecionado').select2('data');
-
-  
-
+        
         var metodo = metodo_selecionado[0].id;
 
         if(metodo == 1){

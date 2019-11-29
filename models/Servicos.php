@@ -239,14 +239,13 @@ class Servicos extends model
 
 	public function updateEtapa($Parametros, $id_company, $id_user)
 	{
-
+		
 		if ($Parametros['checked'] == 1) {
 
 			$check = 1;
 			$status = 6;
 		} else {
 			$status = 5;
-
 			$check = 0;
 		}
 
@@ -270,6 +269,21 @@ class Servicos extends model
 		if ($check == 1) {
 
 			$array = array();
+
+			$sql = $this->db->prepare("UPDATE historico_financeiro  SET
+
+				histf_id_status 		= :id_status
+
+			WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+
+		");
+
+		$sql->bindValue(':id',   $Parametros['id_etapa']);
+		$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+		$sql->bindValue(':id_status',   $status);
+
+
+		$sql->execute();
 
 			$sql = $this->db->prepare("SELECT * FROM 
 				obra_etapa obrt 

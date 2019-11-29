@@ -31,7 +31,7 @@
 
 								<div class="col-md-4">
 									<div id="" class="form-group">
-										<label>Apelido</label>
+										<label>Nome Fantasia</label>
 										<div class="input-group">
 											<div class="input-group-addon">
 												<i class="fa fa-fw fa-user"></i>
@@ -43,12 +43,12 @@
 
 								<div class="col-md-4">
 									<div id="formcpnj" class="form-group">
-										<label>CNPJ</label>
+										<label>CNPJ / CPF</label>
 										<div class="input-group">
 											<div class="input-group-addon">
 												<i class="fa fa-fw fa-cc"></i>
 											</div>
-											<input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj" id="cliente_cnpj" value="<?php echo $tableInfo['cliente_cnpj']; ?>">
+											<input id="cpfcnpj" type="text" class="form-control" name="cliente_cnpj" value="<?php echo $tableInfo['cliente_cnpj']; ?>">
 										</div>
 									</div>
 								</div>
@@ -57,7 +57,7 @@
 					</div>
 				</div>
 
-				<?php include_once("include/endereco.php"); ?>
+				<?php #include_once("include/endereco.php"); ?>
 				<?php include_once("include/departamento.php"); ?>
 
 				<div class="modal-footer">

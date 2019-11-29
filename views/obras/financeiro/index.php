@@ -21,14 +21,14 @@
 				<div class="box-body">
 					<dl class="dl-horizontal">
 						<dt>Descrição</dt>
-						<dd>Descrição da obra</dd>
+						<dd><?php echo $tableInfo['descricao']; ?></dd>
 						<dt>Endereço: </dt>
-						<dd>Endereço obra.</dd>
+						<dd><?php echo $tableInfo['rua']; ?></dd>
 						<dt>CNPJ</dt>
-						<dd>CNPJ.</dd>
+						<dd><?php #echo $tableInfo['cpnj']; ?></dd>
 						<dt>Inscrição Estadual</dt>
 						<dd>
-							dados.
+							<?php echo $tableInfo['inscEstado']; ?>
 						</dd>
 					</dl>
 				</div>
@@ -36,7 +36,6 @@
 		</div>
 	</div>
 
-	<!-- Table row -->
 	<div class="row">
 		<div class="col-xs-12 table-responsive">
 			<table class="table table-striped">
@@ -49,8 +48,8 @@
 					</tr>
 				</thead>
 				<tbody>
-					<?php $etapasFinanceiro = $this->financeiro->getEtapasFinanceiro($tableInfo['id_obra']); ?>
 					<?php foreach ($etapasFinanceiro as $etpF) : ?>
+
 						<tr>
 							<td><?php echo $etpF['etp_nome_etapa_obra']; ?></td>
 							<td><?php echo $etpF['metodo'] == 'porcentagem' ? $etpF['metodo_valor'] . '%' : 'R$ ' . controller::number_format($etpF['metodo_valor']); ?></td>
@@ -59,19 +58,23 @@
 								<?php if ($etpF['id_status'] == PENDENTE) : ?>
 									<span data-toggle="tooltip" title="" data-original-title="Etapa ainda não foi concluida" class="label label-warning">Pendente</span>
 								<?php elseif ($etpF['id_status'] == FATURAR) : ?>
-									<span data-toggle="tooltip" title="" data-original-title="clique para faturar" class="label label-primary">Faturar</span>
-								<?php elseif ($etpF['id_status'] == FATURARADO) : ?>
+									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="clique para faturar" class="label label-primary">Faturar</span></a>
+
+									<!--<a id="faturarEtapaObra" data-name="<?php #echo $etpF['histf_id']; 
+																					?> " href="#"></a> -->
+								<?php elseif ($etpF['id_status'] == FATURADO ) : ?>
 									<span data-toggle="tooltip" title="" data-original-title="Etapa Faturada" class="label label-success">Faturado</span>
 								<?php endif; ?>
+								<?php include('historico.php'); ?>
 							</td>
+
 						</tr>
+
 					<?php endforeach; ?>
 				</tbody>
 			</table>
 			<h2 class="page-header"></h2>
-
 		</div>
-
 	</div>
 	<div class="row">
 		<!-- accepted payments column -->
@@ -87,15 +90,19 @@
 				<table class="table">
 					<tbody>
 						<tr>
-							<th style="width:50%">Faturamento:</th>
+							<th style="width:50%">Total a Receber: </th>
 							<td>R$ <?php echo controller::number_format($tableInfo['valor_negociado']); ?></td>
 						</tr>
 						<tr>
-							<th>A Faturar:</th>
-							<td></td>
+							<th>A Faturar: </th>
+							<td>R$ <?php echo $totalFaturar != '' ? controller::number_format($totalFaturar) : '0,00'; ?> </td>
 						</tr>
 						<tr>
-							<th>Total a receber:</th>
+							<th>Faturado: </th>
+							<td>R$ <?php echo $totalFaturado != '' ? controller::number_format($totalFaturado) : '0,00'; ?></td>
+						</tr>
+						<tr>
+							<th>Recebido: </th>
 							<td></td>
 						</tr>
 
@@ -103,11 +110,8 @@
 				</table>
 			</div>
 		</div>
-		<!-- /.col -->
 	</div>
-	<!-- /.row -->
 
-	<!-- this row will not appear when printing -->
 	<div class="row no-print">
 		<div class="col-xs-12">
 			<a href="invoice-print.html" target="_blank" class="btn btn-default"><i class="fa fa-print"></i> Imprimir</a>
@@ -119,3 +123,40 @@
 		</div>
 	</div>
 </section>
+
+<script>
+	$(function() {
+
+
+		$('#faturarEtapaObra').on('click', function() {
+
+			var id_obra = <?php echo $tableInfo['id_obra']; ?>;
+			var id_etapa = $('#faturarEtapaObra').attr('data-name');
+			var id_historico = $('#faturarEtapaObra').attr('data-id');
+
+
+			$.ajax({
+				url: BASE_URL + 'ajax/faturarEtapa',
+				type: 'POST',
+				data: {
+					id_etapa: id_etapa,
+					id_obra: id_obra,
+					id_historico: id_historico
+				},
+				dataType: 'JSON',
+				success: function(json) {
+					toastr.success('Etapa Faturada com sucesso');
+
+					window.setTimeout(function() {
+						window.location.reload()
+					}, 1000);
+
+
+				}
+			});
+
+
+		});
+
+	});
+</script>

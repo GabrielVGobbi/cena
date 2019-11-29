@@ -37,10 +37,6 @@ $(function () {
         $('.popover').popover('hide');
     });
 
-    
-
-    
-    
 });
 
 function formata(v) {

@@ -24,6 +24,7 @@ class Obras extends model
 			obra obr
 			INNER JOIN servico sev ON(obr.id_servico = sev.id)
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
+			LEFT JOIN cliente_endereco clie ON (cle.clend_id = clie.id_endereco)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
 			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)		
 		WHERE " . implode(' AND ', $where) . "  GROUP BY obr.id ORDER BY obr.obr_razao_social";

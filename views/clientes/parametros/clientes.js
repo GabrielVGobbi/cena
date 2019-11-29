@@ -83,9 +83,10 @@ $(function () {
         var cnpj = $('#cpfcnpj').val();
         var nome = $('#cliente_nome').val();
         var id = $('#id_cliente').val();
-
+        console.log(cnpj.length)
         if(cnpj.length > 0)
-            (cnpj.length == 18)
+            (cnpj.length >= 14)
+        
                 ? $("#formcpnj").removeClass("has-error")
                 : $("#formcpnj").addClass("has-error") + toastr.error('cpnj invalido')
 

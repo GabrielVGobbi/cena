@@ -181,6 +181,25 @@ class ajaxController extends controller
         echo json_encode($data['id']);
     }
 
+    public function addHistoricoFaturamento()
+    {
+
+        $data = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Financeiro('');
+        $Parametros = array();
+
+        if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
+
+            $data['id'] = $a->addHistoricoFaturamento($_POST, $u->getCompany(), $u->getId());
+        }
+
+        echo json_encode($data['id']);
+    }
+
+    
+
     public function searchServicoByConcessionaria()
     {
 
@@ -201,6 +220,24 @@ class ajaxController extends controller
 
 
         echo json_encode($servicoByConcessionaria);
+    }
+
+    public function valorReceber(){
+
+
+        $data = array();
+        $u = new Users();
+        $a = new Financeiro('');
+        $u->setLoggedUser();
+
+        $etpF = $_REQUEST['q'];
+
+        $receber = $a->getValorReceber($etpF);
+
+
+
+        echo json_encode($receber);
+
     }
 
     public function search_cliente()
@@ -367,6 +404,26 @@ class ajaxController extends controller
         exit;
     }
 
+    public function faturarEtapa()
+    {
+        $return = false;
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Financeiro('');
+        $Parametros = array();
+
+        
+
+
+        if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
+
+            $return = $a->faturar($_POST['id_etapa'], $_POST['id_obra'], $_POST['id_historico']);
+        }
+
+        echo json_encode($return);
+        exit;
+    }
+
     public function searchEtapaByName()
     {
         $array = array();
@@ -524,6 +581,38 @@ class ajaxController extends controller
 
         echo json_encode($data);
             
+    }
+
+    public function getHistoricoFaturamento(){
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $id_obra = $_REQUEST['id_obra'];
+
+        $a = new Financeiro('');
+
+        $hist = $a->getHistoricoFaturamento($id_obra, $u->getCompany());
+
+        foreach ($hist as $citem) {
+
+
+            $data[] = array(
+                'id_historico'      => $citem['histf_id'],
+                'coluna_faturamento'        => $citem['coluna_faturamento'],
+                'nf_n'            => $citem['nf_n'],
+                'data_emissao'      => $citem['data_emissao'],
+                'data_vencimento'     => $citem['data_vencimento'],
+                'valor'     => $citem['valor'],
+                'etp_nome'     => $citem['etp_nome'],
+
+
+
+
+            );
+        }
+
+        echo json_encode($data);
     }
 
 }
