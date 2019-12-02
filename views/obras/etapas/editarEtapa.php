@@ -57,6 +57,13 @@ $msg = 'prazo';
                           </div>
                         </div>
 
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
                         <div class="col-md-4">
                           <div class="form-group">
                             <label>Cliente Responsável</label>
@@ -110,7 +117,12 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-
+                        <div class="col-md-3">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
 
                         <div class="col-md-12">
                           <div class="form-group">
@@ -143,8 +155,15 @@ $msg = 'prazo';
                           </div>
                         </div>
 
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
 
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
                           <label>Prazo de Atendimento</label>
                           <div class="input-group">
                             <input type="text" class="form-control" value="<?php echo $array[0]['prazo_atendimento']; ?>" name="prazo_atendimento_concessionaria" id="prazo_atendimento_concessionaria" autocomplete="off">
@@ -195,7 +214,7 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label>Responsável</label>
                             <input type="text" class="form-control" name="responsavel_obra" id="cliente_nome" value="<?php echo $array[0]['responsavel']; ?>" autocomplete="off">
@@ -216,7 +235,14 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label>Tempo de Atividade</label>
                             <input type="text" class="form-control" name="tempo_atividade_obra" id="tempo_atividade_obra" value="<?php echo $array[0]['tempo_atividade']; ?>" autocomplete="off">

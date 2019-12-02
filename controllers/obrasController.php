@@ -90,38 +90,37 @@ class obrasController extends controller
 
                         if ($this->user->hasPermission('financeiro_view')) {
                             $buttom = '
-                                <a class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/concluir/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-share-alt"></i></a>
-                                <a data-toggle="modal" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
-                                <a class="btn btn-warning btn-sm" href="' . BASE_URL . 'financeiro/obra/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-bitcoin"></i></a>
-                                <a class="btn btn-danger btn-sm" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
+                                <a class="btn btn-info btn-sm" data-toggle="tooltip" title="" data-original-title="Concluir Obra" href="' . BASE_URL . 'obras/alertSwal/' . $list['id_obra'] . '/concluir"><i class="glyphicon glyphicon-ok"></i></a>
+                                <a data-toggle="modal" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
+                                <a class="btn btn-warning btn-sm" data-toggle="tooltip" title="" data-original-title="Financeiro" href="' . BASE_URL . 'financeiro/obra/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-bitcoin"></i></a>
+                                <a class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Excluir" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
                             ';
                         } else {
                             $buttom = '
-                            <a class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/concluir/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-ok"></i></a>
-                            <a data-toggle="modal" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn btn-info btn-sm" data-toggle="tooltip" title="" data-original-title="Concluir Obra" href="' . BASE_URL . 'obras/alertSwal/' . $list['id_obra'] . '/concluir"><i class="glyphicon glyphicon-ok"></i></a>
+                            <a data-toggle="modal" class="btn btn-info btn-sm" data-toggle="tooltip" title="" data-original-title="Editar" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Excluir" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
 
                         ';
                         }
                     } else {
                         if ($this->user->hasPermission('financeiro_view')) {
                             $buttom = '
-                                <a class="btn bg-navy  btn-sm" href="' . BASE_URL . 'obras/desconcluir/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-share-alt"></i></a>
-                                <a data-toggle="modal" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
-                                <a class="btn btn-warning btn-sm" href="' . BASE_URL . 'financeiro/obra/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-bitcoin"></i></a>
-                                <a class="btn btn-danger btn-sm" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
+                            <a class="btn bg-navy  btn-sm" data-toggle="tooltip" title="" data-original-title="Desconcluir Obra" href="' . BASE_URL . 'obras/alertSwal/' . $list['id_obra'] . '/desconcluir"><i class="glyphicon glyphicon-share-alt"></i></a>
+                            <a data-toggle="modal" data-toggle="tooltip" title="" data-original-title="Editar" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
+                            <a class="btn btn-warning btn-sm" data-toggle="tooltip" title="" data-original-title="Financeiro" href="' . BASE_URL . 'financeiro/obra/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-bitcoin"></i></a>
+                            <a class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Excluir" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
                             ';
                         } else {
                             $buttom = '
-                            <a class="btn bg-navy  btn-sm" href="' . BASE_URL . 'obras/desconcluir/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-share-alt"></i></a>
-                            <a data-toggle="modal" class="btn btn-info btn-sm" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
-                            <a class="btn btn-danger btn-sm" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
+                      
+
+                            <a class="btn bg-navy  btn-sm" data-toggle="tooltip" title="" data-original-title="Desconcluir Obra" href="' . BASE_URL . 'obras/alertSwal/' . $list['id_obra'] . '/desconcluir"><i class="glyphicon glyphicon-ok"></i></a>
+                            <a data-toggle="modal" class="btn btn-info btn-sm" data-toggle="tooltip" title="" data-original-title="Editar" href="' . BASE_URL . 'obras/edit/' . $list['id_obra'] . '"><i class="fa fa-fw fa-edit"></i></a>
+                            <a class="btn btn-danger btn-sm" data-toggle="tooltip" title="" data-original-title="Excluir" href="' . BASE_URL . 'obras/deleteAlert/' . $list['id_obra'] . '"><i class="glyphicon glyphicon-trash"></i></a>
                         ';
                         }
                     }
-
-
-
 
                     $row = array();
                     $row[] = $buttom;
@@ -358,16 +357,32 @@ class obrasController extends controller
     {
 
 
-        $_SESSION['form']['delete'] = 'Tem certeza?';
+        $_SESSION['form']['info'] = 'Tem certeza?';
         $_SESSION['form']['type'] = 'warning';
         $_SESSION['form']['mensagem'] = "Deseja deletar essa obra?";
         $_SESSION['form']['id_obra'] = $id_obra;
-
+        $_SESSION['form']['buttom'] = 'delete';
 
         header("Location: " . BASE_URL . $this->location);
         exit();
 
         return $_SESSION;
+    }
+
+    public function alertSwal($id_obra, $type){
+        
+        $_SESSION['form']['info'] = 'Tem certeza?';
+        $_SESSION['form']['type'] = 'warning';
+        $_SESSION['form']['mensagem'] = "Deseja ".$type." essa obra?";
+        $_SESSION['form']['id_obra'] = $id_obra;
+        $_SESSION['form']['buttom'] = $type;
+
+        header("Location: " . BASE_URL . $this->location);
+        exit();
+
+        return $_SESSION;
+
+
     }
 
     public function gerar($id)

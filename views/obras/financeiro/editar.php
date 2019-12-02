@@ -86,9 +86,9 @@
 				<button type="submit" class="btn btn-primary">Salvar</button>
 				<a href="<?php echo BASE_URL; ?>concessionarias" class="btn btn-danger">Voltar</a>
 			</div>
-
+		</form>
 	</div>
-	</form>
+
 
 
 </div>

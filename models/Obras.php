@@ -637,7 +637,7 @@ class Obras extends model
 				inscEstado = :inscEstado,
 				cep = :cep
 
-				WHERE id_endereco = :id_endereco
+				WHERE id_obra_endereco = :id_endereco
 			");
 
 			$sql->bindValue(":rua", $Parametros['rua']);

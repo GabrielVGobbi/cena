@@ -357,15 +357,16 @@
     });
   </script>
 
-<?php if (isset($_SESSION['form']['delete'])) : ?>
+<?php if (isset( $_SESSION['form']['info'])) : ?>
     <script type="text/javascript">
-      var title = '<?php echo $_SESSION['form']['delete']; ?>';
+      var title = '<?php echo  $_SESSION['form']['info']; ?>';
       var text = '<?php echo $_SESSION['form']['mensagem']; ?>';
       var icon = '<?php echo $_SESSION['form']['type']; ?>';
       var pageController = '<?php echo $viewData['pageController']; ?>';
       var id_obra = '<?php echo isset($_SESSION['form']['id_obra']) ? $_SESSION['form']['id_obra'] : ''; ?>';
       var buttons = true;
-
+      
+      var type = '<?php echo  $_SESSION['form']['buttom'];?>'
 
       <?php if (isset($_SESSION['form']['buttons'])) : ?>
         var buttons = {
@@ -386,7 +387,7 @@
         .then((willDelete) => {
           if (willDelete) {
             
-            window.location.href = BASE_URL+'obras/delete/'+id_obra;
+            window.location.href = BASE_URL+'obras/'+type+'/'+id_obra;
             <?php unset($_SESSION['form']); ?>
 
           } else {

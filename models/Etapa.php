@@ -665,6 +665,8 @@ class Etapa extends model
                 $adm['cliente_responsavel_administrativo'] = $Parametros['cliente_responsavel_administrativo'];
                 $adm['observacao'] = $Parametros['observacao'];
                 $adm['observacao_sistema'] = $Parametros['observacao_sistema'];
+                $adm['meta_etapa'] = $Parametros['meta_etapa'];
+
 
                 $this->etapaAdministrativo($id_etapa, $adm, $id_company, $id_user);
             } elseif ($Parametros['tipo'] === 'CONCESSIONARIA') {
@@ -684,6 +686,8 @@ class Etapa extends model
                 $com['prazo_atendimento_concessionaria'] = $Parametros['prazo_atendimento_concessionaria'];
                 $com['observacao'] = $Parametros['observacao'];
                 $com['observacao_sistema'] = $Parametros['observacao_sistema'];
+                $com['meta_etapa'] = $Parametros['meta_etapa'];
+
 
                 $com['nova_data'] = controller::SomarData(controller::returnDate($com['data_abertura_concessionaria']), $com['prazo_atendimento_concessionaria']);
 
@@ -705,6 +709,8 @@ class Etapa extends model
                 $obr['tempo_atividade_obra'] = $Parametros['tempo_atividade_obra'];
                 $obr['observacao'] = $Parametros['observacao'];
                 $obr['observacao_sistema'] = $Parametros['observacao_sistema'];
+                $obr['meta_etapa'] = $Parametros['meta_etapa'];
+
 
 
                 $this->etapaObra($id_etapa, $obr, $id_company, $id_user);
@@ -720,6 +726,8 @@ class Etapa extends model
                 $comp['quantidade'] = $Parametros['quantidade'];
                 $comp['preco'] = (isset($Parametros['preco'])  && !empty($Parametros['preco']) ? controller::PriceSituation($Parametros['preco'])      : '');
                 $comp['tipo_compra'] = $Parametros['tipo_compra'];
+                $comp['meta_etapa'] = $Parametros['meta_etapa'];
+
 
                 
 
@@ -760,7 +768,8 @@ class Etapa extends model
                 cliente_responsavel = :cliente_responsavel,
                 observacao = :observacao, 
                 observacao_sistema = :observacao_sistema, 
-                etp_nome_etapa_obra = :etp_nome_etapa_obra
+                etp_nome_etapa_obra = :etp_nome_etapa_obra,
+                meta_etapa = :meta_etapa
                 
 
                 WHERE id_etapa_obra = :id
@@ -772,6 +781,8 @@ class Etapa extends model
             $sql->bindValue(":observacao", $Parametros['observacao']);
             $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
+            $sql->bindValue(":meta_etapa", $Parametros['meta_etapa']);
+
 
 
             $sql->bindValue(":id", $id_etapa);
@@ -818,7 +829,9 @@ class Etapa extends model
                 data_prazo_total = :data_prazo_total,
                 observacao = :observacao, 
                 observacao_sistema = :observacao_sistema, 
-                etp_nome_etapa_obra = :etp_nome_etapa_obra
+                etp_nome_etapa_obra = :etp_nome_etapa_obra,
+                meta_etapa = :meta_etapa
+
                 
 
                 WHERE id_etapa_obra = :id
@@ -831,6 +844,8 @@ class Etapa extends model
             $sql->bindValue(":observacao", $Parametros['observacao']);
             $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
+            $sql->bindValue(":meta_etapa", $Parametros['meta_etapa']);
+
 
 
 
@@ -892,7 +907,9 @@ class Etapa extends model
                 tempo_atividade = :tempo_atividade,
                 observacao = :observacao, 
                 observacao_sistema = :observacao_sistema, 
-                etp_nome_etapa_obra = :etp_nome_etapa_obra
+                etp_nome_etapa_obra = :etp_nome_etapa_obra,
+                meta_etapa = :meta_etapa
+
 
                 WHERE id_etapa_obra = :id
             ");
@@ -903,6 +920,8 @@ class Etapa extends model
             $sql->bindValue(":tempo_atividade", $Parametros['tempo_atividade_obra']);
             $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
             $sql->bindValue(":observacao", $Parametros['observacao']);
+            $sql->bindValue(":meta_etapa", $Parametros['meta_etapa']);
+
 
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
 
@@ -947,8 +966,9 @@ class Etapa extends model
                 quantidade = :quantidade,
                 preco = :preco,
                 tipo_compra = :tipo_compra,
-                
-                etp_nome_etapa_obra = :etp_nome_etapa_obra
+                etp_nome_etapa_obra = :etp_nome_etapa_obra,
+                meta_etapa = :meta_etapa
+
 
                 WHERE id_etapa_obra = :id
             ");
@@ -956,8 +976,9 @@ class Etapa extends model
             $sql->bindValue(":quantidade", $Parametros['quantidade']);
             $sql->bindValue(":preco", $Parametros['preco']);
             $sql->bindValue(":tipo_compra", $Parametros['tipo_compra']);
-  
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
+            $sql->bindValue(":meta_etapa", $Parametros['meta_etapa']);
+
 
             $sql->bindValue(":id", $id_etapa);
 
