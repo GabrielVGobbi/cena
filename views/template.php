@@ -70,7 +70,9 @@
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('obra_view')) : ?>
-                <li class=""><a href="<?php echo BASE_URL; ?>obras">Obras <span class="sr-only">(current)</span></a></li>
+                <?php  $location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';  ?>
+
+                <li class=""><a href="<?php echo BASE_URL; ?><?php echo $location;?>">Obras <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
 
@@ -355,7 +357,46 @@
     });
   </script>
 
+<?php if (isset($_SESSION['form']['delete'])) : ?>
+    <script type="text/javascript">
+      var title = '<?php echo $_SESSION['form']['delete']; ?>';
+      var text = '<?php echo $_SESSION['form']['mensagem']; ?>';
+      var icon = '<?php echo $_SESSION['form']['type']; ?>';
+      var pageController = '<?php echo $viewData['pageController']; ?>';
+      var id_obra = '<?php echo isset($_SESSION['form']['id_obra']) ? $_SESSION['form']['id_obra'] : ''; ?>';
+      var buttons = true;
 
+
+      <?php if (isset($_SESSION['form']['buttons'])) : ?>
+        var buttons = {
+          cancel: 'Cancelar',
+          criar: 'Criar',
+        }
+      <?php endif; ?>
+
+
+      swal({
+          title: title,
+          text: text,
+          icon: icon,
+          buttons: buttons,
+          dangerMode: true,
+
+        })
+        .then((willDelete) => {
+          if (willDelete) {
+            
+            window.location.href = BASE_URL+'obras/delete/'+id_obra;
+            <?php unset($_SESSION['form']); ?>
+
+          } else {
+            <?php unset($_SESSION['form']); ?>
+            /*window.location.href = BASE_URL+pageController;*/
+          }
+        });
+    </script>
+
+  <?php endif; ?>
 
   <?php if (isset($_SESSION['form'])) : ?>
     <script type="text/javascript">
@@ -408,10 +449,13 @@
 
       $(document).ready(function() {
 
+        var filtro = <?php echo json_encode($_GET); ?>;
+
         var myTable = $('#table').DataTable({
           "processing": true,
           "serverSide": true,
           "autoWidth": false,
+          "displayLength": 10,
           "language": {
             "sEmptyTable": "Nenhum registro encontrado",
             "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registro(s)",
@@ -437,7 +481,8 @@
             "url": BASE_URL + "<?php echo $viewData['pageController']; ?>/getAll",
             "type": "POST",
             "data": {
-
+              filtro,
+              
             }
 
           },

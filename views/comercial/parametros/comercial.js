@@ -154,6 +154,7 @@
                             if(j[i].variavel != ''){
                                 options += '<td>' + '<select class="form-control select2" onchange="updatePriceVariavel(this)" id="select-variavel" style="width: 80%;" name="select-variavel" </td>'; 
                                 options += '<option> selecione </option>'
+                                
                                 for (var l = 0; l < j[i].variavel.length; l++) {
                                     
                                     options += '<option data-id="' + j[i].quantidade + '"  value="' + j[i].variavel[l].preco_variavel +'">' + j[i].variavel[l].nome_variavel +'  </option>';
@@ -168,12 +169,8 @@
                                 }
 
                                 options += '<td>' + '<input type="number" id="preco_variavel" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
-
-
                                 options += '</select>';   
-                                
-                                
-                                
+                                          
 
                             }else {
                                 options += '<td></td>'; 
