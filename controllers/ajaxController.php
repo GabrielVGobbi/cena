@@ -258,7 +258,8 @@ class ajaxController extends controller
             foreach ($cliente as $citem) {
                 $data[] = array(
                     'name' => $citem['cliente_nome'],
-                    'id'   => $citem['id']
+                    'id'   => $citem['id'],
+                    'apelido' => $citem['cliente_apelido']
                 );
             }
         }

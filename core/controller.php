@@ -316,4 +316,15 @@ class controller
 		return $valor != '' ? number_format($valor, 2, ',', '.') : '';
 
 	}
+
+	public function getVariavelByEtapa($id_etapa, $id_obra){
+
+		$etp = new Etapa('');
+		$array = array();
+
+		$array = $etp->getVariavelByEtapa($id_etapa, $id_obra);
+
+		return $array;
+
+	}
 }

@@ -112,7 +112,7 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                                     <div class="col-md-2">
                                         <div class="input-group">
                                             <label for="">Quantidade</label>
-                                            <input class="form-control" name="quantidade" value="" placeholder="Nome da Etapa">
+                                            <input class="form-control" name="quantidade" value="0" placeholder="Nome da Etapa">
                                         </div>
                                     </div>
 

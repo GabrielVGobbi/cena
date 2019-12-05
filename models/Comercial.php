@@ -84,7 +84,7 @@ class Comercial extends model
 	{
 		$tipo = "Inserido";
 
-
+		
 		$obra_nome 				= $Parametros['obra_nome'];
 		$comercial_descricao 	= $Parametros['comercial_descricao'];
 		$id_concessionaria 		= $Parametros['concessionaria'];
@@ -169,6 +169,10 @@ class Comercial extends model
 				}
 			}
 
+			if(isset($Parametros['variavel'])){
+				$this->setVariavelQuantidadeEtapa($id_obra,$Parametros['variavel']);
+			}
+
 
 			$sql->bindValue(":razao_social", $Parametros['obra_nome']);
 
@@ -204,6 +208,28 @@ class Comercial extends model
 		}
 
 		return $id_obra;
+	}
+
+	public function setVariavelQuantidadeEtapa($id_obra, $Parametros){
+
+		if (isset($Parametros)) {
+			if (count($Parametros) > 0) {
+				for ($q = 0; $q < count($Parametros['id_variavel']); $q++) {
+
+					$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial (id_obra, id_variavel_etapa, id_etapa, etcc_quantidade)
+						VALUES (:id_obra, :id_variavel_etapa, :id_etapa, :quantidade)
+					");
+
+					$sql->bindValue(":id_variavel_etapa", $Parametros['id_variavel'][$q]);
+					$sql->bindValue(":id_obra", $id_obra);
+					$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
+					$sql->bindValue(":id_etapa", $Parametros['id_etapa'][$q]);
+					
+					$sql->execute();
+				}
+			}
+		} else { }
+
 	}
 
 	public function getEtapasComercial($id_concessionaria, $id_servico, $id_obra)

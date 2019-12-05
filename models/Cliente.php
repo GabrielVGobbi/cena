@@ -493,10 +493,10 @@ class Cliente extends model
 
 		$sql = $this->db->prepare("
 			SELECT * FROM cliente
-			WHERE id_company = :id_company AND cliente_nome like :cliente_nome
+			WHERE id_company = :id_company AND cliente_apelido like :cliente_apelido
 		");
 
-		$sql->bindValue(':cliente_nome', '%' . $var . '%');
+		$sql->bindValue(':cliente_apelido', '%' . $var . '%');
 		$sql->bindValue(':id_company', $id_company);
 		$sql->execute();
 

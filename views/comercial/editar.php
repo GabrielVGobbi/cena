@@ -235,15 +235,33 @@
 										</tr>
 									</thead>
 									<?php foreach ($compras as $list) : ?>
-										<?php if($list['etcc_quantidade'] != 0) : ?>
+										<?php if ($list['etcc_quantidade'] != 0) : ?>
 											<tbody id="id_sub_etapas">
 												<tr>
-													<td class="text-center"> <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL;?>comercial/deleteEtapa/<?php echo $tableInfo['id_obra'];?>/<?php echo $list['id_etapa_obra'];?>"><i class="ion ion-trash-a"></i></a></td>
-													<td ><?php echo $list['etp_nome_etapa_obra']; ?> </td>
-													<td  class="text-center"><?php echo $list['etcc_quantidade']; ?> </td>
+													<td class="text-center"> <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL; ?>comercial/deleteEtapa/<?php echo $tableInfo['id_obra']; ?>/<?php echo $list['id_etapa_obra']; ?>"><i class="ion ion-trash-a"></i></a></td>
+													<td><?php echo $list['etp_nome_etapa_obra']; ?> </td>
+													<td class="text-center"><?php echo $list['etcc_quantidade']; ?> </td>
 													<td class="text-center"><?php echo controller::number_format($list['preco']); ?> </td>
 													<td class="text-center"><?php echo $list['tipo_compra']; ?> </td>
 												</tr>
+												<?php $variavel = controller::getVariavelByEtapa($list['id_etapa'], $list['id_obra']); ?>
+												<?php if ($variavel) : ?>
+													<?php foreach ($variavel as $var) : ?>
+														<tr>
+															<td class="text-center"> <?php echo $list['etp_nome_etapa_obra']; ?> </td>
+															<td><?php echo $var['nome_variavel']; ?> </td>
+															<td class="text-center"><?php echo $var['etcc_quantidade']; ?> </td>
+															<td class="text-center"><?php echo controller::number_format($var['preco_variavel']); ?> </td>
+															<td class="text-center"></td>
+														</tr>
+													<?php endforeach; ?>
+
+												<?php else : ?>
+
+
+
+												<?php endif; ?>
+
 											</tbody>
 										<?php endif; ?>
 									<?php endforeach; ?>

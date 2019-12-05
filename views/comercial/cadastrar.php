@@ -87,8 +87,7 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Variavel</th>
-                                    <th>Quantidade</th>
+                                    <th >Quantidade</th>
                                     <th>Tipo</th>
                                     <th>Preço Uni.</th>
                                     <th>Sub-Total</th>
@@ -97,7 +96,7 @@
                             <tbody id="id_sub_etapas">
                             </tbody>
                             <tr>
-                                <td colspan="4">Total </td>
+                                <td colspan="3">Total </td>
                                 <td colspan="1" id="total"> </td>
                                 <td id="totalSub"> </td>
                             </tr>

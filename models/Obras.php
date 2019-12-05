@@ -23,7 +23,7 @@ class Obras extends model
 		$start = isset($filtro['start']) ? $filtro['start'] : '0';
 		$length = isset($filtro['length']) ? $filtro['length'] : '10';
 
-		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : '';
+		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : ' ORDER BY obr.obr_razao_social';
 
 		$where = $this->buildWhere($filtro, $id_company);
 
@@ -367,6 +367,7 @@ class Obras extends model
 			$sql->bindValue(":data_obra", $data);
 			$sql->bindValue(":id_concessionaria", $Parametros['concessionaria']);
 
+
 			$sql->bindValue(":id_company", $id_company);
 
 
@@ -533,17 +534,6 @@ class Obras extends model
 	public function edit($Parametros, $id_company, $arquivos)
 	{
 
-		#[obra_nome] => 12
-		#[data_obra] => 28/11/2019
-		#[cep] => 
-		#[rua] => 
-		#[numero] => 
-		#[bairro] => 
-		#[cidade] => 
-		#[estado] => 
-		#[complemento] => 
-		#[inscEstado] => 
-
 		$data_obra = controller::returnDate($Parametros['data_obra']);
 
 		if (isset($Parametros['id']) && $Parametros['id'] != '') {
@@ -555,7 +545,8 @@ class Obras extends model
 			$sql = $this->db->prepare("UPDATE obra SET 
 				obr_razao_social = :obra_nome,
 				data_obra = :data_obra, 
-				id_endereco_obra = :id_endereco_obra
+				id_endereco_obra = :id_endereco_obra,
+				cnpj_obra = :obra_cnpj
 				
 				WHERE id = :id_obra
         	");
@@ -564,6 +555,7 @@ class Obras extends model
 			$sql->bindValue(":id_obra", $Parametros['id']);
 			$sql->bindValue(":data_obra", $data_obra);
 			$sql->bindValue(":id_endereco_obra", $id_endereco);
+			$sql->bindValue(":obra_cnpj", $Parametros['obra_cnpj']);
 
 			$sql->execute();
 

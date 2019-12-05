@@ -1,4 +1,4 @@
-<?php if ($array[0]['quantidade_obra'] == 0 && $array[0]['tipo'] == COMPRA) : ?>
+<?php if ($array[0]['quantidade'] == 0 && $array[0]['tipo'] == COMPRA) :  ?>
 
 <?php else : ?>
     <form id="compras" action="<?php echo BASE_URL; ?>obras/editEtapaObra/<?php echo $array[0]['id_etapa_obra']; ?>" method="post">
