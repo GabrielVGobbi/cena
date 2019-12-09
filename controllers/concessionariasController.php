@@ -244,4 +244,19 @@ class concessionariasController extends controller
             $this->loadViewError();
         }
     }
+
+    public function duplicarEtapa(){
+
+		$etp = new Etapa('');
+        $array = array();
+        
+        if(isset($_POST)){
+            $Parametros = $_POST;
+        }
+
+        $etp->duplicarEtapaByServicoxConcessionaria($Parametros);
+        
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $Parametros['id_concessionaria'] . '/' . $Parametros['id_servico']);
+        exit();
+	}
 }

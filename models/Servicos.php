@@ -224,9 +224,9 @@ class Servicos extends model
 
 
 			if ($sql->execute()) {
-				controller::alert('success', 'Excel Foi importado!!');
+				controller::alert('success', 'ok');
 			} else {
-				controller::alert('error', 'Não foi possivel fazer o cadastro da obra, Contate o administrador do sistema!!');
+				controller::alert('error', 'erro');
 			}
 		} catch (PDOExecption $e) {
 			$sql->rollback();

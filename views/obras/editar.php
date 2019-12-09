@@ -41,7 +41,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 
 								<div class="col-md-10" style="margin-bottom:6px;">
 									<label>Cliente</label>
-									<input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $obr['cliente_nome']; ?>" autocomplete="off">
+									<input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $obr['cliente_apelido']; ?>" autocomplete="off">
 								</div>
 
 								<div class="col-md-2" style="margin-bottom:6px;">

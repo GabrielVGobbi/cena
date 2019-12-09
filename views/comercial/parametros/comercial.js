@@ -314,7 +314,7 @@ $(function () {
                     var html = '';
 
                     for (var i in json) {
-                        html += '<li class="select2-results__option"  role="treeitem" aria-selected="true" href="javascript:;" onclick="selectcliente(this)" data-id="' + json[i].id + '">' + json[i].name + ' ( ' + json[i].apelido + ' )</li>';
+                        html += '<li class="select2-results__option"  role="treeitem" aria-selected="true" href="javascript:;" onclick="selectcliente(this)" data-id="' + json[i].id + '">' + json[i].apelido + '</li>';
                     }
 
                     $('.searchresultscliente').html(html);

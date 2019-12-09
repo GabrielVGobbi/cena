@@ -83,7 +83,6 @@ $(function () {
         var cnpj = $('#cpfcnpj').val();
         var nome = $('#cliente_nome').val();
         var id = $('#id_cliente').val();
-        console.log(cnpj.length)
         if(cnpj.length > 0)
             (cnpj.length >= 14)
         
