@@ -33,8 +33,10 @@ class Users extends model
 	}
 
 	//Verifica os dados do POST corretamente
-	public function doLogin($login, $password, $lembrar)
+	public function doLogin($login, $password, $lembrar = false)
 	{
+
+
 		$sql = $this->db->prepare("SELECT * FROM users WHERE login = :login AND password = :password AND usu_ativo = '1'");
 		$sql->bindValue(':login', lcfirst($login));
 		$sql->bindValue(':password', md5($password));
@@ -45,12 +47,14 @@ class Users extends model
 
 			$_SESSION['ccUser'] = $row['id'];
 
-			if (isset($lembrar)) {
+			if (isset($lembrar) && !empty($lembrar)) {
+
 
 				setcookie('lembrar', $_SESSION['ccUser'], time() + (60 * 60 * 3600), '/');
 				setcookie('user', $login, time() + (60 * 60 * 24), '/');
 				setcookie('pass', md5($password), time() + (60 * 60 * 24), '/');
 			}
+
 			return true;
 		} else {
 			return false;
@@ -61,9 +65,10 @@ class Users extends model
 	public function setLoggedUser()
 	{
 
-		if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser']) || isset($_COOKIE['lembrar'])) {
-
+		if (isset($_COOKIE['lembrar'])) {
+			
 			$id = (isset($_SESSION['ccUser']) ? $_SESSION['ccUser'] : $_COOKIE['lembrar']);
+	
 			$sql = $this->db->prepare("SELECT * FROM users WHERE id = :id");
 			$sql->bindValue(':id', $id);
 			$sql->execute();
@@ -74,7 +79,21 @@ class Users extends model
 				$this->permissions->setGroup($id, $this->userInfo['id_company']);
 			}
 		} else {
-			return false;
+			if (isset($_SESSION['ccUser']) && !empty($_SESSION['ccUser'])) {
+
+				$id = (isset($_SESSION['ccUser']) ? $_SESSION['ccUser'] : $_COOKIE['lembrar']);
+				$sql = $this->db->prepare("SELECT * FROM users WHERE id = :id");
+				$sql->bindValue(':id', $id);
+				$sql->execute();
+
+				if ($sql->rowCount() > 0) {
+					$this->permissions = new Permissions();
+					$this->userInfo = $sql->fetch();
+					$this->permissions->setGroup($id, $this->userInfo['id_company']);
+				}
+			} else {
+				return false;
+			}
 		}
 	}
 
@@ -401,10 +420,11 @@ class Users extends model
 		}
 	}
 
-	public function getNotepad($id_usuario, $id_company){
-		
+	public function getNotepad($id_usuario, $id_company)
+	{
+
 		$array = array();
-		
+
 
 		$sql = $this->db->prepare("SELECT * FROM notepad WHERE id_user = :id_user AND id_company = :id_company LIMIT 1");
 		$sql->bindValue(":id_user", $id_usuario);
@@ -439,7 +459,6 @@ class Users extends model
 			} else {
 				return false;
 			}
-
 		} else {
 
 			$sql = $this->db->prepare("INSERT INTO notepad SET 

@@ -1163,4 +1163,26 @@ class Etapa extends model
         return $array;
 
     }
+
+    public function getEtapaByServiceByConcessionaria($id_concessionaria, $id_servico){
+
+
+        $array = array();
+
+        $sql = $this->db->prepare("
+            SELECT *, etpsc.id as id_ord_m FROM etapas_servico_concessionaria etpsc 
+            WHERE etpsc.id_concessionaria = :id_concessionaria AND etpsc.id_servico = :id_servico
+        ");
+
+        $sql->bindValue(':id_concessionaria', $id_concessionaria);
+        $sql->bindValue(':id_servico', $id_servico);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchAll();
+        }
+
+        return $array;
+
+    }
 }

@@ -26,7 +26,7 @@ class loginController extends controller {
 
 			$login = addslashes(lcfirst($_POST['login']));
 			$pass = addslashes($_POST['password']);
-			$lembrar = ($_POST['lembrar']);
+			$lembrar = (isset($_POST['lembrar']) && !empty($_POST['lembrar']) ? $_POST['lembrar'] : '');
 
 			$u = new Users();
 

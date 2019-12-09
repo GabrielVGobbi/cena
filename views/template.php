@@ -33,7 +33,7 @@
 
 </head>
 
-<body class="fixed skin-blue layout-top-nav" style="background-color:##ededed">
+<body class="fixed skin-blue layout-top-nav" style="background-color:#ededed">
   <div class="wrapper">
 
     <header class="main-header">
@@ -106,7 +106,7 @@
 
                             ?>
                           <li>
-                            <a onclick="lerMensagem(<?php echo $not['id_not_user']; ?>,'<?php echo $not['link']; ?>')" style="cursor: pointer">
+                            <a onclick="lerMensagem('<?php echo $not['id_not_user']; ?>','<?php echo $not['link']; ?>')" style="cursor: pointer">
                               <h4>
                                 <?php echo $not['notificacao_tipo']; ?>
                                 <small><i class="fa fa-clock-o"></i> <?php echo $tempo; ?></small>
@@ -243,7 +243,7 @@
   <?php if (isset($_SESSION['alert']) && !empty($_SESSION['alert'])) : ?>
     <script>
         $(function() {  
-            toastr.<?php echo $_SESSION['alert']['tipo'];?>('<?php echo $_SESSION['alert']['mensagem'] ?>');
+            toastr.<?php echo $_SESSION['alert']['tipo'];?> ('<?php echo $_SESSION['alert']['mensagem'] ?>');
         });
     </script>
     <?php unset($_SESSION['alert']); ?>

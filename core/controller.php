@@ -209,8 +209,8 @@ class controller
 				
 			}else {
 			
-				$check = 'warning';
-				$msg = 'não foi definido prazo';
+				$check = '';
+				$msg = '';
 				
 			}
 			
@@ -327,4 +327,6 @@ class controller
 		return $array;
 
 	}
+
+	
 }
