@@ -256,7 +256,7 @@ class concessionariasController extends controller
 
         $etp->duplicarEtapaByServicoxConcessionaria($Parametros);
         
-        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $Parametros['id_concessionaria'] . '/' . $Parametros['id_servico']);
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit' . '/' . $Parametros['id_concessionaria']);
         exit();
 	}
 }
