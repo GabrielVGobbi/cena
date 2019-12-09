@@ -209,7 +209,7 @@ class controller
 				
 			}else {
 			
-				$check = '';
+				$check = 'none';
 				$msg = '';
 				
 			}

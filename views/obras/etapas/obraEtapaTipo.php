@@ -57,7 +57,7 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
                             <?php controller::loadTempo($etp['prazo_atendimento'], $etp['data_abertura'], $etp['check']);  ?>
                         <?php endif; ?>
 
-                        <span class="text pull-right"> <?php echo ($etp['observacao'] != '' ? 'Obs: ' . $etp['observacao'] : ''); ?></span>
+                        <span class="text pull-right"> <?php echo ($etp['observacao'] != '' ? 'Obs: ' . mb_strimwidth($etp['observacao'], 0, 60, "...") : ''); ?></span>
                         <?php controller::qntDocumentoEtapa($etp['id_etapa_obra'], $obr[0]); ?>
 
                         <!-- se dados não estiverem vazio aparece o info -->

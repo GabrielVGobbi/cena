@@ -368,6 +368,7 @@ class Obras extends model
 			$sql->bindValue(":id_concessionaria", $Parametros['concessionaria']);
 
 
+
 			$sql->bindValue(":id_company", $id_company);
 
 
@@ -546,7 +547,9 @@ class Obras extends model
 				obr_razao_social = :obra_nome,
 				data_obra = :data_obra, 
 				id_endereco_obra = :id_endereco_obra,
-				cnpj_obra = :obra_cnpj
+				cnpj_obra = :obra_cnpj,
+				razao_social_obra_cliente = :razao_social_obra_cliente
+				
 				
 				WHERE id = :id_obra
         	");
@@ -556,6 +559,8 @@ class Obras extends model
 			$sql->bindValue(":data_obra", $data_obra);
 			$sql->bindValue(":id_endereco_obra", $id_endereco);
 			$sql->bindValue(":obra_cnpj", $Parametros['obra_cnpj']);
+			$sql->bindValue(":razao_social_obra_cliente", $Parametros['razao_social_obra_cliente']);
+
 
 			$sql->execute();
 
