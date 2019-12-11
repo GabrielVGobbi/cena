@@ -285,8 +285,34 @@ $(function () {
                                         
         html += '</div> </div><div class="col-md-2"><div class="form-group"> <label>Preço</label><input value="R$ " type="text" class="form-control" name="variavel[preco_variavel][]" id="preco_variavel" autocomplete="off"></div></div>';
         html += '</div>';
+
         
         $('#new_variavel').append(html);
+
+
+    });
+
+    $('.new_variavel_edit').on('click', function (e) {
+
+        e.preventDefault();
+
+        html = '    <div class="row" style="    left: 10px;position: relative;">'
+        html += '    <div class="col-md-4">'
+        html += '        <div class="form-group" style="margin-right: 26px;margin-left: -10px;">'
+        html += '            <label>Nome da Variavel</label>'
+        html += '            <input type="text" class="form-control" value="" name="variavel[nome_variavel][]" id="nome_variavel" autocomplete="off">'
+        html += '        </div>'
+        html += '    </div>'
+
+        html += '    <div class="col-md-2">'
+        html += '        <div class="form-group"  style="margin-right: 26px;margin-left: -10px;">'
+        html += '            <label>Preço</label>'
+        html += '            <input type="text" class="form-control" name="variavel[preco_variavel][]" value="" id="preco_variavel" autocomplete="off">'
+        html += '        </div>'
+        html += '    </div>'
+        html += '    </div>'
+
+        $('#new_variavel_edit').append(html);
 
 
     });

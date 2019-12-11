@@ -35,8 +35,8 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
 
                                 <thead>
                                     <tr role="row">
-                                        <th style="width: 20%;"> Ação </th>
-                                        
+                                        <th style="width: 30%;"> Ação </th>
+
 
                                         <th> Nome</th>
 
@@ -88,11 +88,13 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h2 class="modal-title fc-center" align="center">/h2>
+                <h2 class="modal-title fc-center" align="center"></h2>
+
             </div>
-            <div class="modal-body form">
-                <form action="#" id="form" class="form-horizontal">
-                    <input type="hidden" value="" name="id" />
+            <form id="form_update" method="POST" class="form-horizontal">
+                <div class="modal-body form">
+
+                    <input type="hidden" value="" name="id_etapa" />
                     <div class="box box-default box-solid">
                         <div class="row">
                             <div class="col-md-12">
@@ -133,22 +135,40 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                             </div>
                         </div>
                     </div>
-                  
-                   
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" id="btnSave" onclick="save()" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
-            </div>
+                    <div class="box box-primary">
+                        <div class="box-header with-border">
+                            <h3 class="box-title">Variaveis</h3>
+
+                            <div class="box-tools pull-right">
+                                <a class="btn btn-sm btn-info btn-flat new_variavel_edit"> <i class="fa fa-fw fa-plus-circle"></i></a>
+
+                            </div>
+                        </div>
+                        <div class="box-body">
+                            <div id="new_variavel_edit"> </div>
+
+                            <div id="variavel_etapa">
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-primary">Salvar</button>
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Cancel</button>
+                    <a type="button" data-toggle="tooltip" title="" data-original-title="Duplicar" class="btn btn-warning pull-right" id="duplicar">Duplicar</a>
+
+                </div>
+            </form>
         </div>
     </div>
 </div>
 
+
+
 <script>
     $(function() {
-
-
 
         $("#form_etapa_compra").on("submit", function(event) {
             event.preventDefault();
@@ -162,6 +182,30 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                 url: BASE_URL + 'ajax/add_etapa',
                 type: 'POST',
                 data: data,
+                dataType: 'json',
+                success: function(json) {
+
+                    window.location.href = BASE_URL + "concessionarias/editService/" + id_concessionaria + '/' + id_servico + '?tipo=compra';
+                },
+            });
+        });
+
+        $("#duplicar").on("click", function() {
+
+            var id_concessionaria = <?php echo $tableInfo['id_concessionaria']; ?>;
+            var id_servico = <?php echo $tableInfo['id_servico']; ?>;
+            var id_etapa = $('[name="id_etapa"]').val();
+
+
+            $.ajax({
+
+                url: BASE_URL + 'ajax/duplicarEtapa',
+                type: 'POST',
+                data: {
+                    id_etapa: id_etapa,
+                    id_concessionaria: id_concessionaria,
+                    id_servico: id_servico
+                },
                 dataType: 'json',
                 success: function(json) {
 
@@ -218,7 +262,7 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
 
     function edit_person(id) {
         save_method = 'update';
-        $('#form')[0].reset();
+        $('#form_update')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
 
@@ -229,11 +273,11 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
             dataType: "JSON",
             success: function(data) {
 
-                $('[name="id"]').val(data.id);
+                $('[name="id_etapa"]').val(data.id);
                 $('[name="nome_etapa"]').val(data.etp_nome);
                 $('[name="quantidade"]').val(data.quantidade);
                 $('[name="tipo_compra"]').val(data.tipo_compra);
-                $('[name="preco"]').val('R$ '+formata(data.preco));
+                $('[name="preco"]').val('R$ ' + formata(data.preco));
                 $('#modal_form').modal('show');
                 $('.modal-title').text('Editar Etapa "' + data.etp_nome + '"');
 
@@ -249,31 +293,32 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
             dataType: "JSON",
             success: function(data) {
                 options = '';
-                
+
 
                 for (var i = 0; i < data.length; i++) {
 
-                    options += '<input type="hidden" class="form-control" value="" name="variavel['+data[i].id_variavel_etapa+'][id]" id="id_variavel" autocomplete="off">'
+                    options += '<input type="hidden" class="form-control" value="' + data[i].id_variavel_etapa + '" name="variavel[id][]" id="id_variavel" autocomplete="off">'
                     options += '<div class="row" style="    left: 10px;position: relative;">'
                     options += '    <div class="col-md-4">'
                     options += '        <div class="form-group" style="margin-right: 26px;margin-left: -10px;">'
                     options += '            <label>Nome da Variavel</label>'
-                    options += '            <input type="text" class="form-control" value="'+data[i].nome_variavel+'" name="variavel['+data[i].id_variavel_etapa+'][nome_variavel]" id="nome_variavel" autocomplete="off">'
+                    options += '            <input type="text" class="form-control" value="' + data[i].nome_variavel + '" name="variavel[nome_variavel][]" id="nome_variavel" autocomplete="off">'
                     options += '        </div>'
                     options += '    </div>'
-                    
+
                     options += '    <div class="col-md-2">'
                     options += '        <div class="form-group"  style="margin-right: 26px;margin-left: -10px;">'
                     options += '            <label>Preço</label>'
-                    options += '            <input type="text" class="form-control" name="variavel['+data[i].nome_variavel+'][preco_variavel]" value="R$ '+data[i].preco_variavel+'" id="preco_variavel" autocomplete="off">'
+                    options += '            <input type="text" class="form-control" name="variavel[preco_variavel][]" value="R$ ' + data[i].preco_variavel + '" id="preco_variavel" autocomplete="off">'
                     options += '        </div>'
                     options += '    </div>'
                     options += '    <div class="col-md-2">'
-                    options += '        <button type="button" style="position: relative;top: 25px;" data-toggle="tooltip" title="" onclick="deleteVariavelEtapa('+data[i].id_variavel_etapa+')" data-original-title="Deletar" class="btn btn-danger"><i class="ion ion-trash-a"></i></button>'
+                    options += '        <button type="button" style="position: relative;top: 25px;" data-toggle="tooltip" title="" onclick="deleteVariavelEtapa(' + data[i].id_variavel_etapa + ')" data-original-title="Deletar" class="btn btn-danger"><i class="ion ion-trash-a"></i></button>'
                     options += '    </div>'
                     options += '</div>'
 
                 }
+
                 $('#variavel_etapa').html(options).show();
 
             },
@@ -281,7 +326,7 @@ $etapasConcessionaria = $this->etapa->getEtapasByTipo($ffset = 0, 'COMPRA', $tab
                 alert('Error get data from ajax');
             },
         });
-
-
     }
+
+    
 </script>

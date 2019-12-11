@@ -112,13 +112,17 @@ class Etapa extends model
 
             controller::setLog($Parametros, 'etapa', 'add');
 
-            $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo);
+            if(!isset($Parametros['validate_etapa'])){
+                $this->addEtapaConcessionariaByService($id_concessionaria, $id_servico, $id_etapa, $tipo);
+
+            }
+        
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
         }
 
-        return $this->db->lastInsertId();
+        return $id_etapa;
     }
 
     public function addEtapaCompra($id_company, $Parametros)
@@ -178,16 +182,37 @@ class Etapa extends model
 
                     if ($Parametros['variavel']['nome_variavel'][$q] != '') {
 
-                        $sql = $this->db->prepare("INSERT INTO variavel_etapa (id_etapa, nome_variavel, preco_variavel)
-                            VALUES (:id_etapa, :nome_variavel, :preco_variavel)
-                        ");
+                        if(!isset($Parametros['variavel']['id'][$q]) && empty($Parametros['variavel']['id'][$q])){
 
-                        $sql->bindValue(":id_etapa", $id_etapa);
-                        $sql->bindValue(":nome_variavel", $Parametros['variavel']['nome_variavel'][$q]);
-                        $sql->bindValue(":preco_variavel", controller::PriceSituation($Parametros['variavel']['preco_variavel'][$q]));
+                            $sql = $this->db->prepare("INSERT INTO variavel_etapa (id_etapa, nome_variavel, preco_variavel)
+                                VALUES (:id_etapa, :nome_variavel, :preco_variavel)
+                            ");
 
+                            $sql->bindValue(":id_etapa", $id_etapa);
+                            $sql->bindValue(":nome_variavel", $Parametros['variavel']['nome_variavel'][$q]);
+                            $sql->bindValue(":preco_variavel", controller::PriceSituation($Parametros['variavel']['preco_variavel'][$q]));
+                            $sql->execute();
 
-                        $sql->execute();
+                        } else {
+
+                            $sql = $this->db->prepare("UPDATE variavel_etapa SET 
+                                         
+                                        id_etapa = :id_etapa,
+                                        nome_variavel  = :nome_variavel,
+                                        preco_variavel = :preco_variavel
+                                
+                                
+                                WHERE id_variavel_etapa = :id_variavel_etapa
+                            ");
+
+                            $sql->bindValue(":id_etapa", $id_etapa);
+                            $sql->bindValue(":id_variavel_etapa", $Parametros['variavel']['id'][$q]);
+                            $sql->bindValue(":nome_variavel", $Parametros['variavel']['nome_variavel'][$q]);
+                            $sql->bindValue(":preco_variavel", controller::PriceSituation($Parametros['variavel']['preco_variavel'][$q]));
+                            $sql->execute();
+
+                        }
+                        
                     }
                 }
             }
@@ -196,6 +221,7 @@ class Etapa extends model
 
     public function getVariavelEtapa($id_etapa)
     {
+       
 
         $variavel_array = array();
 
@@ -206,20 +232,23 @@ class Etapa extends model
 
         if ($sql->rowCount() > 0) {
             $variavel_array = $sql->fetchAll();
-        }
 
+        }
+        
         return $variavel_array;
     }
+
+    
 
     public function edit($id_company, $Parametros)
     {
         $tipo = 'Editado';
 
 
-
         $etp_nome  = $Parametros['nome_etapa'];
         $id_etapa  = $Parametros['id_etapa'];
-        $descricao  = $Parametros['descricao'];
+        $descricao  = (isset($Parametros['descricao'])  ? $Parametros['descricao'] : '');
+        
 
 
         $quantidade         = (isset($Parametros['quantidade'])  ? $Parametros['quantidade'] : '');
@@ -251,26 +280,22 @@ class Etapa extends model
                 if ($sql->execute()) {
 
                     if (isset($Parametros['variavel']) && $Parametros['variavel'] != '') {
-                        foreach ($Parametros['variavel'] as $var) {
+                        #foreach ($Parametros as $var) {
+                            #$nome_variavel = $var['nome_variavel'];
+                            #$preco_variavel = $var['preco_variavel'];
+                            #$id = $var['id'];
+                            #$sql = $this->db->prepare("UPDATE variavel_etapa SET 
+                                #nome_variavel = :nome_variavel,
+                                #preco_variavel  = :preco_variavel
+                                #WHERE id_variavel_etapa = :id
+                            #");
+                            #$sql->bindValue(":nome_variavel", $nome_variavel);
+                            #$sql->bindValue(":preco_variavel", controller::PriceSituation($preco_variavel));
+                            #$sql->bindValue(":id", $id);
+                            #$sql->execute();
 
-                            $nome_variavel = $var['nome_variavel'];
-                            $preco_variavel = $var['preco_variavel'];
-                            $id = $var['id'];
-
-
-                            $sql = $this->db->prepare("UPDATE variavel_etapa SET 
-                        
-                                nome_variavel = :nome_variavel,
-                                preco_variavel  = :preco_variavel
-
-                                WHERE id_variavel_etapa = :id
-                            ");
-
-                            $sql->bindValue(":nome_variavel", $nome_variavel);
-                            $sql->bindValue(":preco_variavel", controller::PriceSituation($preco_variavel));
-                            $sql->bindValue(":id", $id);
-                            $sql->execute();
-                        }
+                            $this->addVariavelEtapa($Parametros,$id_etapa);
+                        #}
                     }
 
 
@@ -1248,6 +1273,54 @@ class Etapa extends model
 
                         if($sql->execute()){
                             controller::alert('success', 'Serviço Duplicado');
+
+                        }
+                    }
+                }
+            } else { }
+        } else { 
+            controller::alert('danger', 'Não Existe...');
+
+        }
+    }
+
+    public function duplicarEtapa($id_company, $Parametros)
+    {
+        $id_servico = $Parametros['id_servico'];
+        $id_concessionaria = $Parametros['id_concessionaria'];
+        $id_etapa = $Parametros['id_etapa'];
+
+        $Etapa = $this->getEtapasById($id_etapa);
+        $ParametrosAdd = array();
+        $ParametrosAdd['id_servico'] =$id_servico;
+        $ParametrosAdd['id_concessionaria'] =$id_concessionaria;
+        $ParametrosAdd['nome'] = $Etapa['etp_nome'].'(1)';
+        $ParametrosAdd['tipo'] = $Etapa['tipo'];
+        $ParametrosAdd['quantidade'] = $Etapa['quantidade'];
+        $ParametrosAdd['preco'] = $Etapa['preco'];
+        $ParametrosAdd['tipo_compra'] = $Etapa['tipo_compra'];
+        $ParametrosAdd['validate_etapa'] = false;
+
+        $id_etapa_new = $this->add($id_company, $ParametrosAdd);
+
+        $arrayVariavel = $this->getVariavelEtapa($id_etapa);
+
+        if ($arrayVariavel) {
+            if (isset($arrayVariavel)) {
+                if (count($arrayVariavel) > 0) {
+                    for ($q = 0; $q < count($arrayVariavel); $q++) {
+
+                        $sql = $this->db->prepare("INSERT INTO 
+                            variavel_etapa (nome_variavel, id_etapa, preco_variavel)
+						    VALUES         (:nome_variavel, :id_etapa, :preco_variavel)
+						");
+
+                        $sql->bindValue(":id_etapa", $id_etapa_new);
+                        $sql->bindValue(":nome_variavel", $arrayVariavel[$q]['nome_variavel']);
+                        $sql->bindValue(":preco_variavel", $arrayVariavel[$q]['preco_variavel']);
+
+                        if($sql->execute()){
+                            controller::alert('success', 'Etapa Duplicado');
 
                         }
                     }

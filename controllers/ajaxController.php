@@ -181,6 +181,24 @@ class ajaxController extends controller
         echo json_encode($data['id']);
     }
 
+    public function duplicarEtapa()
+    {
+
+        $data = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Etapa('');
+        $Parametros = array();
+
+
+        if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
+
+            $data['id'] = $a->duplicarEtapa($u->getCompany(), $_POST);
+        }
+
+        echo json_encode($data['id']);
+    }
+
     public function addHistoricoFaturamento()
     {
 
