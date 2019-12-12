@@ -1,3 +1,10 @@
+<section class="content-header">
+
+	<ol class="breadcrumb" style="    top: -17px;    right: 22px;">
+		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $tableInfo['id_obra']; ?> ">Comercial</a></li>
+		<li><a href="<?php echo BASE_URL; ?>obras/edit/<?php echo $tableInfo['id_obra']; ?> ">Obra</a></li>
+	</ol>
+</section>
 <section class="invoice">
 	<!-- title row 
 	<div class="row">

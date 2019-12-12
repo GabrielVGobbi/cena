@@ -1,3 +1,10 @@
+<section class="content-header">
+
+	<ol class="breadcrumb" style="    top: -17px;">
+		<li><a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $tableInfo['id_obra']; ?> ">Financeiro</a></li>
+		<li><a href="<?php echo BASE_URL; ?>obras/edit/<?php echo $tableInfo['id_obra']; ?> ">Obra</a></li>
+	</ol>
+</section>
 <div class="box box-default ">
 	<div class="box-header with-border">
 		<h3 class="box-title">Editar</h3>

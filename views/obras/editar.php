@@ -3,13 +3,24 @@
 $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 
 ?>
+<section class="content-header">
+
+	<ol class="breadcrumb" style="    top: -17px;">
+		<li><a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr[0]; ?> ">Financeiro</a></li>
+		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr[0]; ?> ">Comercial</a></li>
+	</ol>
+</section>
 
 <div class="col-md-12">
+
 	<div class="nav-tabs-custom">
 
 		<div class="tab-content">
+
 			<div class="box box-default box-solid">
+
 				<div class="row">
+
 					<form id="obra" method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>obras/edit_action/<?php echo $obr[0]; ?>">
 						<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr[0]; ?>">
 
