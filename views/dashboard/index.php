@@ -116,11 +116,11 @@
 
                 <div class="product-info">
                   <a href="<?php echo BASE_URL ?>financeiro/obra/<?php echo $etpf['id_obra']; ?>?hist=<?php echo $etpf['histf_id']; ?> " class="product-title"><?php echo $etpf['etp_nome']; ?>
-                    
+
                   </a>
                   <span class="product-description">
                     Obra: <?php echo $etpf['obr_razao_social']; ?><br>
-                    Valor a Receber: <?php echo 'R$ '. controller::number_format($etpf['valor_receber']); ?>
+                    Valor a Receber: <?php echo 'R$ ' . controller::number_format($etpf['valor_receber']); ?>
                   </span>
                 </div>
               </li>
@@ -129,7 +129,11 @@
         </div>
 
       </div>
+      <div class="box-footer text-center">
+        <div>Total: <?php echo controller::number_format($total_etapas_financeiro); ?></div>
+      </div>
     </div>
   <?php endif; ?>
+
   </div>
   </div>

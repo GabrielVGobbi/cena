@@ -329,4 +329,20 @@ class Financeiro extends model
         return $this->retorno;
 
     }
+
+    public function getTotalFinanceiroAll()
+    {
+
+        $r = 0;
+
+        $sql = $this->db->prepare("SELECT SUM(valor_receber) AS count FROM historico_financeiro WHERE histf_id_status = :histf_id_status");
+        $sql->bindValue(':histf_id_status', FATURAR);
+        $sql->execute();
+
+        $row = $sql->fetch();
+        $r = $row['count'];
+
+        return $r;
+
+    }
 }
