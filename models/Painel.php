@@ -110,8 +110,10 @@ class Painel extends model
 
 
             if($sql->execute()){
+                $sql = null;
                 return true;
             }else { 
+                $sql = null;
                 return false;
             }
         

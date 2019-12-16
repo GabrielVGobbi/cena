@@ -37,7 +37,6 @@ class Financeiro extends model
         if ($sql->rowCount() == 1) {
             $this->array = $sql->fetch();
         }
-
         return $this->array;
     }
 
@@ -69,6 +68,7 @@ class Financeiro extends model
             } catch (PDOExecption $e) {
 
                 $sql->rollback();
+                die();
                 error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
             }
         } else {
@@ -110,7 +110,6 @@ class Financeiro extends model
 		}
 
 		$r = $row['c'];
-
 		return $r;
 
     }
@@ -129,7 +128,6 @@ class Financeiro extends model
 		}
 
 		$r = $row['c'];
-
 		return $r;
 
     }
@@ -166,8 +164,11 @@ class Financeiro extends model
 
 		$sql->bindValue(':id',   $id_etapa);
 		$sql->bindValue(':id_obra',   $id_obra);
-		$sql->bindValue(':id_status',   $status);
+        $sql->bindValue(':id_status',   $status);
+        
         return $sql->execute() ? true : false;
+
+        
         
         
 
@@ -230,7 +231,7 @@ class Financeiro extends model
             }
 
             #return $sql->execute() ? true : false;
-
+            $this->db = null;
 
             
         } catch (PDOExecption $e) {
@@ -259,7 +260,6 @@ class Financeiro extends model
         if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
 		}
-
 		return $this->array;
 
     }
@@ -304,7 +304,6 @@ class Financeiro extends model
         }
         
        
-
 		return $r;
 
     }
@@ -325,7 +324,6 @@ class Financeiro extends model
         if($sql->rowCount() > 0){
             $this->retorno = $sql->fetchAll();
         }
-
         return $this->retorno;
 
     }
@@ -339,10 +337,34 @@ class Financeiro extends model
         $sql->bindValue(':histf_id_status', FATURAR);
         $sql->execute();
 
+        
+
         $row = $sql->fetch();
         $r = $row['count'];
 
         return $r;
+
+    }
+
+    public function receberFaturamento($valor, $histfa_id){
+
+
+        $valor = $valor == 1 ? '0' : '1';
+
+        $sql = $this->db->prepare("
+            
+            UPDATE historico_faturamento  SET
+
+			recebido_status = :recebido_status
+
+			WHERE (histfa_id = :histfa_id)
+
+		");
+
+		$sql->bindValue(':histfa_id',   $histfa_id);
+        $sql->bindValue(':recebido_status',   $valor);
+        
+        return $sql->execute() ? $valor : false;
 
     }
 }

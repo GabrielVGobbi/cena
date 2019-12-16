@@ -1,4 +1,4 @@
-<div class="box box-default box-solid collapsed" id="filtro_<?php echo $viewData['pageController']; ?>" style="display:none;">
+<div class="box box-default box-solid collapsed" id="filtro_<?php echo $viewData['pageController']; ?>" style="display:;">
     <div class="box-body" style="">
         <form method="GET">
             <div class="box-body">

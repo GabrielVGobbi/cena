@@ -331,7 +331,6 @@ class controller
 
 	public function getVariavelByIdEtapa($id_etapa){
 
-		error_log(print_r($id_etapa,1));
 
 	}
 

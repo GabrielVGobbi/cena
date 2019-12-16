@@ -130,7 +130,7 @@
 
       </div>
       <div class="box-footer text-center">
-        <div>Total: <?php echo controller::number_format($total_etapas_financeiro); ?></div>
+        <div>Total: <?php echo 'R$ '.controller::number_format($total_etapas_financeiro); ?></div>
       </div>
     </div>
   <?php endif; ?>

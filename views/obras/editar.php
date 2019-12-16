@@ -73,16 +73,16 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 									<i class="ion ion-clipboard"></i>
 									<h3 class="box-title title-tipo">Etapas
 										<?php if (isset($_GET['tipo'])) {
-											if ($_GET['tipo'] == CONCESSIONARIA) {
-												echo 'Concessionaria';
-											} else if ($_GET['tipo'] == ADMINISTRATIVA) {
-												echo 'Administativo';
-											} else if ($_GET['tipo'] == OBRA) {
-												echo 'Obra';
-											} else if ($_GET['tipo'] == COMPRA) {
-												echo ' de Compra';
-											}
-										}
+																																											if ($_GET['tipo'] == CONCESSIONARIA) {
+																																												echo 'Concessionaria';
+																																											} else if ($_GET['tipo'] == ADMINISTRATIVA) {
+																																												echo 'Administativo';
+																																											} else if ($_GET['tipo'] == OBRA) {
+																																												echo 'Obra';
+																																											} else if ($_GET['tipo'] == COMPRA) {
+																																												echo ' de Compra';
+																																											}
+																																										}
 
 										?> </h3>
 									<div class="box-tools pull-right select_obras">

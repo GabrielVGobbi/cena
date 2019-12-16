@@ -96,6 +96,7 @@ class Documentos extends model
 	public function add($arquivos, $id_company, $id_obra = 0, $nome_documento = '')
 	{
 
+
 		$nome_documento = strtolower($nome_documento);
 		
 		if (is_dir("assets/documentos/")) {
@@ -217,9 +218,11 @@ class Documentos extends model
 
 		if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
+			$this->db = null;
 		}
 
 		return $this->array;
+		exit();
 	}
 
 	public function addDocumentoObra($id_obra, $id)

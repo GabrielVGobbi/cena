@@ -136,7 +136,6 @@ class concessionariasController extends controller
             $this->dataInfo['fluid'] = true;
 
             if(isset($_POST['nome_etapa'])){
-                #error_log(print_r($_POST,1));
                 $this->etapa->edit($this->user->getCompany(), $_POST);
 
                 header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $_POST['id_concessionaria'] . '/' . $_POST['id_servico'] . '?tipo=' . 'compra');

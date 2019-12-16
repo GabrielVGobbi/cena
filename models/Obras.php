@@ -539,6 +539,10 @@ class Obras extends model
 
 		if (isset($Parametros['id']) && $Parametros['id'] != '') {
 
+
+			$razao_social = isset($Parametros['razao_social_obra_cliente']) ? $Parametros['razao_social_obra_cliente'] : '';
+
+
 			$id_endereco = isset($Parametros['id_endereco'])
 				? $this->setEnderecoObra($Parametros, $id_company, $Parametros['id_endereco'])
 				: $this->setEnderecoObra($Parametros, $id_company);
@@ -559,7 +563,7 @@ class Obras extends model
 			$sql->bindValue(":data_obra", $data_obra);
 			$sql->bindValue(":id_endereco_obra", $id_endereco);
 			$sql->bindValue(":obra_cnpj", $Parametros['obra_cnpj']);
-			$sql->bindValue(":razao_social_obra_cliente", $Parametros['razao_social_obra_cliente']);
+			$sql->bindValue(":razao_social_obra_cliente", $razao_social);
 
 
 			$sql->execute();
@@ -584,6 +588,8 @@ class Obras extends model
 					}
 				}
 			} else { }
+
+
 
 			if (isset($Parametros['documento_nome']) && isset($arquivos)) {
 

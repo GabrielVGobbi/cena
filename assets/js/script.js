@@ -97,10 +97,14 @@ $(function () {
         radioClass: 'iradio_minimal-red'
     })
     //Flat red color scheme for iCheck
-    $('input[type="checkbox"].flat-red, input[type="radio"].flat-red').iCheck({
-        checkboxClass: 'icheckbox_flat-yellow',
-        radioClass: 'iradio_flat-green'
+    $('#checkRecebido').iCheck({
+        checkboxClass: 'icheckbox_flat-blue',
+        radioClass: 'iradio_flat-blue'
     })
+
+    
+
+   
 
     //Colorpicker
     $('.my-colorpicker1').colorpicker()

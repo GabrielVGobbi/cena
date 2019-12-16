@@ -431,9 +431,7 @@ class ajaxController extends controller
         $a = new Financeiro('');
         $Parametros = array();
 
-        
-
-
+    
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $return = $a->faturar($_POST['id_etapa'], $_POST['id_obra'], $_POST['id_historico']);
@@ -616,6 +614,7 @@ class ajaxController extends controller
         foreach ($hist as $citem) {
 
 
+
             $data[] = array(
                 'id_historico'      => $citem['histf_id'],
                 'coluna_faturamento'        => $citem['coluna_faturamento'],
@@ -624,14 +623,44 @@ class ajaxController extends controller
                 'data_vencimento'     => $citem['data_vencimento'],
                 'valor'     => $citem['valor'],
                 'etp_nome'     => $citem['etp_nome'],
-
-
-
+                'recebido_status'     => $citem['recebido_status'],
+                'histfa_id' => $citem['histfa_id']
 
             );
         }
 
         echo json_encode($data);
+    }
+
+    public function receberFaturamento(){
+        
+        $return = false;
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Financeiro('');
+        $Parametros = array();
+
+    
+        if (isset($_POST['histfa_id']) && !empty($_POST['histfa_id'])) {
+
+            $return = $a->receberFaturamento($_POST['q'], $_POST['histfa_id']);
+        }
+
+        $Parametros = [
+            'historico_faturamento' => $_POST['histfa_id'],
+            'valor_recebimento' => $return,
+            'edit_by' => $this->user->getId(),
+            'edit_date' => date('d-m-Y'),
+            'valor' => $return,
+        ];
+
+        controller::setLog($Parametros, 'historico_faturamento', 'alteracao');
+
+
+        echo json_encode($return);
+        exit;
+
+
     }
 
 }

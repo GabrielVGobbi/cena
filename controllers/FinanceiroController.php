@@ -66,9 +66,6 @@ class financeiroController extends controller
             
                 $this->dataInfo['totalFaturar'] =  intval($faturar) - intval($this->dataInfo['totalFaturado']); 
 
-                error_log(print_r($faturar,1));
-                error_log(print_r($this->dataInfo['totalFaturado'],1));
-
                 
                 $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
             }
