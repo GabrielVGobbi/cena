@@ -209,11 +209,10 @@
                         $('.span_etapa').hide();
 
                         $('#result_null').html(options).show();
-                        $('.result_null').show();
+                        $('.result_null');
                     }
 
 
-                });
             } else {
                 options = 'Selecione o Serviço'
                 $('.span_etapa').hide();

@@ -292,7 +292,7 @@ class Financeiro extends model
 		WHERE histfa.histfa_id = :histfa_id";
 
 		$sql = $this->db->prepare($sql);
-        $sql->bindValue(":histfa_id",               $histfa_id);
+        $sql->bindValue(":histfa_id", $histfa_id);
 
 
         $sql->execute();
@@ -306,6 +306,27 @@ class Financeiro extends model
        
 
 		return $r;
+
+    }
+
+    public function getPendentesFinanceiroALL()
+    {
+     
+        $sql = $this->db->prepare("
+            SELECT hist.*, etp.etp_nome, obr.obr_razao_social,obr.id as id_obra FROM historico_financeiro hist 
+            INNER JOIN etapa etp ON (etp.id = hist.id_etapa)
+            INNER JOIN obra obr ON(obr.id = hist.id_obra)
+            WHERE histf_id_status = :histfa_id
+        ");
+
+        $sql->bindValue(":histfa_id", FATURAR);
+        $sql->execute();
+
+        if($sql->rowCount() > 0){
+            $this->retorno = $sql->fetchAll();
+        }
+
+        return $this->retorno;
 
     }
 }

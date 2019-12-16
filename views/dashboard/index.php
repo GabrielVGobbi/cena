@@ -44,7 +44,7 @@
     <!-- fix for small devices only -->
     <div class="clearfix visible-sm-block"></div>
 
-    
+
     <!-- /.col -->
     <div class="col-md-3 col-sm-6 col-xs-12">
       <div class="info-box">
@@ -96,5 +96,40 @@
 
     </div>
   </div>
+
+  <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
+    <div class="col-md-6 col-sm-6 col-xs-12">
+      <div class="box box-primary">
+        <div class="box-header with-border">
+          <h3 class="box-title">Etapas Pendentes Financeiro</h3>
+
+          <div class="box-tools pull-right">
+            <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+            </button>
+          </div>
+
+        </div>
+        <div class="box-body">
+          <ul class="products-list product-list-in-box">
+            <?php foreach ($etapas_pendentes_financeiro as $etpf) : ?>
+              <li class="item">
+
+                <div class="product-info">
+                  <a href="<?php echo BASE_URL ?>financeiro/obra/<?php echo $etpf['id_obra']; ?>?hist=<?php echo $etpf['histf_id']; ?> " class="product-title"><?php echo $etpf['etp_nome']; ?>
+                    
+                  </a>
+                  <span class="product-description">
+                    Obra: <?php echo $etpf['obr_razao_social']; ?><br>
+                    Valor a Receber: <?php echo 'R$ '. controller::number_format($etpf['valor_receber']); ?>
+                  </span>
+                </div>
+              </li>
+            <?php endforeach; ?>
+          </ul>
+        </div>
+
+      </div>
+    </div>
+  <?php endif; ?>
   </div>
   </div>

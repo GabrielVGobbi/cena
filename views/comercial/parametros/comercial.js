@@ -23,8 +23,8 @@ $(function () {
             $('#valor_desconto').val('');
 
             temporiza = setTimeout(function () {
-                $('#totalProposta').val(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor));
-                $('#Totalnegociado').val(new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(valor));
+                $('#totalProposta').val('R$ '+formata(valor));
+                $('#Totalnegociado').val('R$ '+formata(valor));
             }, 1500);
             updateDesconto();
         }
@@ -424,6 +424,7 @@ function updateDesconto() {
         proposto = proposto.replace('.', '');
         proposto = proposto.trim();
         $('input[id=Totalnegociado]').val('R$ ' + formata(proposto));
+        
     } else {
         total = parseInt(proposto) - parseInt(desconto);
         $('input[id=Totalnegociado]').val('R$ ' + formata(total));

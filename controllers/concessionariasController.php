@@ -73,8 +73,6 @@ class concessionariasController extends controller
                 unset($_SESSION['formError']);
             }
 
-            
-
             $this->dataInfo['servico']    = $this->servico->getAll('0', '', $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = 'Cadastro de Concessionaria';

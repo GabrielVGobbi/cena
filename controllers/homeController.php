@@ -18,6 +18,8 @@ class homeController extends controller
         $this->documento = new Documentos();
         $this->etapa = new Etapa('etapa');
         $this->painel = new Painel;
+        $this->financeiro = new Financeiro('');
+
 
         $this->user->setLoggedUser();
         $this->dataInfo['errorForm'] = array();
@@ -46,6 +48,8 @@ class homeController extends controller
 
         $this->dataInfo['etapas_pendentes'] = $this->etapa->getPendentes();
 
+        $this->dataInfo['etapas_pendentes_financeiro'] = $this->financeiro->getPendentesFinanceiroALL();
+
         if ($this->user->usr_info() === 'cliente') {
 
             $this->dataInfo['titlePage'] = 'Bem-vindo';
@@ -53,7 +57,6 @@ class homeController extends controller
 
             $this->loadTemplate('obrasClientes' . "/index", $this->dataInfo);
         } else {
-
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
         }
