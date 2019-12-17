@@ -227,6 +227,24 @@ class Obras extends model
 		return $r;
 	}
 
+	public function getCountTotalObras($id_company)
+	{
+
+		$r = 0;
+
+		$sql = ("SELECT COUNT(*) as c FROM obra obr ");
+		$sql = $this->db->prepare($sql);
+		$sql->execute();
+		
+		if ($sql->rowCount() > 0) {
+			$row = $sql->fetch();
+		}
+
+		$r = $row['c'];
+
+		return $r;
+	}
+
 	public function getCountAtivas($id_company)
 	{
 

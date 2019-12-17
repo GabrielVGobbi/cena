@@ -24,7 +24,7 @@ class Financeiro extends model
             INNER JOIN obra obr ON (obr.id = fino.id_obra) 
             INNER JOIN servico sev ON(obr.id_servico = sev.id)
             INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
-            LEFT JOIN cliente_endereco clie ON (cle.clend_id = clie.id_endereco)
+            LEFT JOIN obra_endereco obre ON (obr.id_endereco_obra = obre.id_obra_endereco)
             INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
             WHERE fino.id_obra = :id_obra
             AND fino.id_company = :id_company

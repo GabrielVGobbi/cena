@@ -32,7 +32,7 @@
 						<dt>Endereço: </dt>
 						<dd><?php echo $tableInfo['rua']; ?></dd>
 						<dt>CNPJ</dt>
-						<dd><?php #echo $tableInfo['cpnj']; ?></dd>
+						<dd><?php echo $tableInfo['cnpj_obra']; ?></dd>
 						<dt>Inscrição Estadual</dt>
 						<dd>
 							<?php echo $tableInfo['inscEstado']; ?>
@@ -101,21 +101,21 @@
 						</tr>
 						<tr>
 							<th>A Faturar: </th>
-							<td>R$ <?php echo $totalFaturar != '' ? controller::number_format($totalFaturar) : 'R$ 0,00'; ?> </td>
+							<td>R$ <?php echo $totalFaturar != '' ? controller::number_format($totalFaturar) : '0,00'; ?> </td>
 						</tr>
 						<tr>
 							<th>Faturado: </th>
-							<td>R$ <?php echo $totalFaturado != '' ? controller::number_format($totalFaturado) : 'R$ 0,00'; ?></td>
+							<td>R$ <?php echo $totalFaturado != '' ? controller::number_format($totalFaturado) : '0,00'; ?></td>
 						</tr>
 						<tr>
 							<th>Recebido: </th>
-							<td>R$ <?php echo $recebido != '' ? controller::number_format($recebido) : 'R$ 0,00'; ?></td>
+							<td>R$ <?php echo $recebido != '' ? controller::number_format($recebido) : '0,00'; ?></td>
 						</tr>
 						<tr>
 							<th>Saldo: </th>
 							<td>
 								<?php $saldo = intval($tableInfo['valor_negociado']) - intval($totalFaturado); 
-								echo $saldo != '' ? 'R$ '.controller::number_format($saldo) : 'R$ 0,00';;?>
+								echo $saldo != '' ? 'R$ '.controller::number_format($saldo) : '0,00';;?>
 							</td>
 						</tr>
 

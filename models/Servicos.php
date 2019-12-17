@@ -239,15 +239,18 @@ class Servicos extends model
 
 	public function updateEtapa($Parametros, $id_company, $id_user)
 	{
-		
 		if ($Parametros['checked'] == 1) {
 
 			$check = 1;
 			$status = 6;
+		
 		} else {
 			$status = 5;
 			$check = 0;
 		}
+
+		error_log(print_r($check,1));
+
 
 		$sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
@@ -274,16 +277,16 @@ class Servicos extends model
 
 				histf_id_status 		= :id_status
 
-			WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+				WHERE (id_etapa = :id) AND (id_obra = :id_obra)
 
-		");
+			");
 
-		$sql->bindValue(':id',   $Parametros['id_etapa']);
-		$sql->bindValue(':id_obra',   $Parametros['id_obra']);
-		$sql->bindValue(':id_status',   $status);
+			$sql->bindValue(':id',   $Parametros['id_etapa']);
+			$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+			$sql->bindValue(':id_status',   $status);
 
 
-		$sql->execute();
+			$sql->execute();
 
 			$sql = $this->db->prepare("SELECT * FROM 
 				obra_etapa obrt 
@@ -313,6 +316,23 @@ class Servicos extends model
 
 				//$this->notificacao->insert($id_company, $ParametrosNotificacao);
 			}
+		} else {
+
+			$sql = $this->db->prepare("UPDATE historico_financeiro  SET
+
+				histf_id_status 		= :id_status
+
+				WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+
+			");
+
+			$sql->bindValue(':id',   $Parametros['id_etapa']);
+			$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+			$sql->bindValue(':id_status',   $status);
+
+
+			$sql->execute();
+
 		}
 	}
 
