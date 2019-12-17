@@ -75,7 +75,7 @@
 								<div class="col-md-2">
 									<div class="form-group">
 										<label>Valor de Custo</label>
-										<input type="text" class="form-control" readonly name="valor_custo" id="valor_custo" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_custo'], 2, ',', '.'); ?>">
+										<input type="text" class="form-control"  name="valor_custo" id="valor_custo" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_custo'], 2, ',', '.'); ?>">
 									</div>
 								</div>
 

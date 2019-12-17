@@ -70,7 +70,7 @@
 									<!--<a id="faturarEtapaObra" data-name="<?php #echo $etpF['histf_id']; 
 																					?> " href="#"></a> -->
 								<?php elseif ($etpF['id_status'] == FATURADO ) : ?>
-									<span data-toggle="tooltip" title="" data-original-title="Etapa Faturada" class="label label-success">Faturado</span>
+									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="Etapa Faturada" class="label label-success">Faturado</span></a>
 								<?php endif; ?>
 								<?php include('historico.php'); ?>
 							</td>
