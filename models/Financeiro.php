@@ -426,6 +426,7 @@ class Financeiro extends model
             'deleteBy' => $id_user,
             'deleteDate' => date('d-m-Y'),
         ];
+        
         $sql = $this->db->prepare("UPDATE historico_faturamento histf SET histf.status = 1 WHERE histf.id_obra = :id_obra AND histf.histfa_id = :id_historico");
 
         $sql->bindValue(":id_obra", $id_obra);

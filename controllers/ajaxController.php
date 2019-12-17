@@ -624,7 +624,8 @@ class ajaxController extends controller
                 'valor'     => $citem['valor'],
                 'etp_nome'     => $citem['etp_nome'],
                 'recebido_status'     => $citem['recebido_status'],
-                'histfa_id' => $citem['histfa_id']
+                'histfa_id' => $citem['histfa_id'],
+                'id_etapa_historico_faturamento' => $citem['id_etapa']
 
             );
         }
@@ -639,6 +640,8 @@ class ajaxController extends controller
         $u->setLoggedUser();
         $a = new Financeiro('');
         $Parametros = array();
+
+        error_log(print_r($_POST,1));
 
     
         if (isset($_POST['histfa_id']) && !empty($_POST['histfa_id'])) {

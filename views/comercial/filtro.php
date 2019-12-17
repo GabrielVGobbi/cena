@@ -13,16 +13,10 @@
                     <div class="col-md-4">
                         <div class="form-group">
                             <label for="fl_art_nome">Nome da Obra</label>
-                            <input class="form-control" id="filtro_descricao" name="filtros[cliente_nome]" placeholder="" autocomplete="off">
+                            <input class="form-control" id="filtro_descricao" name="filtros[nome_obra]" placeholder="" autocomplete="off">
                         </div>
                     </div>
-            
-                    <div class="col-md-4">
-                        <div class="form-group">
-                            <label for="fl_art_nome">Solicitante</label>
-                            <input class="form-control" id="filtro_descricao" name="filtros[cliente_responsavel]" placeholder="" autocomplete="off">
-                        </div>
-                    </div>
+
 
                     <div class="col-md-2">
                         <label for="fl_art_nome">Situação</label>

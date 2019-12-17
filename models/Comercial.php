@@ -27,6 +27,9 @@ class Comercial extends model
 
 		$this->bindWhere($filtro, $sql);
 
+		error_log(print_r($sql,1));
+
+
 		$sql->execute();
 
 		if ($sql->rowCount() > 0) {
@@ -43,11 +46,9 @@ class Comercial extends model
 			'obr.id_comercial=1'
 		);
 
-
-		if (!empty($filtro['example'])) {
-			if ($filtro['example'] != '') {
-				$where[] = "com
-			INNER JOIN cliente cli ON (cli.id_cliente = com.id_cliente).example LIKE :example";
+		if (!empty($filtro['nome_obra'])) {
+			if ($filtro['nome_obra'] != '') {
+				$where[] = "obr.obr_razao_social LIKE :nome_obra";
 			}
 		}
 
@@ -67,9 +68,9 @@ class Comercial extends model
 
 	private function bindWhere($filtro, &$sql)
 	{
-		if (!empty($filtro['example'])) {
-			if ($filtro['example'] != '') {
-				$sql->bindValue(":example", '%' . $filtro['example'] . '%');
+		if (!empty($filtro['nome_obra'])) {
+			if ($filtro['nome_obra'] != '') {
+				$sql->bindValue(":nome_obra", '%' . $filtro['nome_obra'] . '%');
 			}
 		}
 
