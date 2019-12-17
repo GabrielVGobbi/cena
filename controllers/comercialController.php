@@ -166,7 +166,7 @@ class ComercialController extends controller
 
             $result = $this->comercial->deleteEtapaObra($id_obra,$id_etapa_obra, $this->user->getCompany());
 
-            header("Location: " . BASE_URL . "comercial/edit/".$id_obra);
+            header("Location: " . BASE_URL . "comercial/edit/".$id_obra.'?list');
             exit();
 
         } else {

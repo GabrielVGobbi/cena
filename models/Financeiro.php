@@ -76,67 +76,90 @@ class Financeiro extends model
         }
     }
 
-    public function getEtapasFinanceiro($id_obra){
+    public function getEtapasFinanceiro($id_obra)
+    {
 
-        
+
         $sql = $this->db->prepare("
             SELECT obrt.check, obrt.id_etapa, obrt.etp_nome_etapa_obra, obrt.id_status, hfo.* FROM obra_etapa obrt
                 INNER JOIN historico_financeiro hfo ON (obrt.id_etapa = hfo.id_etapa)
             WHERE hfo.id_obra = :id_obra AND obrt.id_obra = :id_obra GROUP BY obrt.id_etapa
         ");
         $sql->bindValue('id_obra', $id_obra);
-    
+
         $sql->execute();
 
-        if($sql->rowCount() > 0){
+        if ($sql->rowCount() > 0) {
             $this->retorno = $sql->fetchAll();
         }
 
         return $this->retorno;
-
     }
 
-    public function totalFaturamento($id_obra, $id_company, $status){
+    public function totalFaturamento($id_obra, $id_company, $status)
+    {
 
         $r = 0;
         $sql = $this->db->prepare("SELECT SUM(valor_receber) AS c FROM historico_financeiro WHERE id_company = :id_company AND id_obra = :id_obra AND (histf_id_status = {$status} OR histf_id_status = 7)");
         $sql->bindValue(':id_company', $id_company);
-		$sql->bindValue(':id_obra', $id_obra);
-        
-		$sql->execute();
+        $sql->bindValue(':id_obra', $id_obra);
 
-		if ($sql->rowCount() > 0) {
-			$row = $sql->fetch();
-		}
+        $sql->execute();
 
-		$r = $row['c'];
-		return $r;
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+        }
 
+        $r = $row['c'];
+        return $r;
     }
 
-    public function totalFaturado($id_obra, $id_company, $status){
+    public function totalFaturado($id_obra, $id_company, $status)
+    {
 
         $r = 0;
-        $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento WHERE id_company = :id_company AND id_obra = :id_obra ");
-        $sql->bindValue(':id_company', $id_company);
-		$sql->bindValue(':id_obra', $id_obra);
+
+        if ($status == RECEBIDO) {
+            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND recebido_status = :recebido_status ");
+            $sql->bindValue(':id_company', $id_company);
+            $sql->bindValue(':id_obra', $id_obra);
+            $sql->bindValue(':recebido_status', 1);
+
+
+            $sql->execute();
+
+            if ($sql->rowCount() > 0) {
+                $row = $sql->fetch();
+            }
+
+            $r = $row['c'];
+
+            return $r;
+        }else {
+            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND histf.status <> 1");
+            $sql->bindValue(':id_company', $id_company);
+            $sql->bindValue(':id_obra', $id_obra);
+    
+            $sql->execute();
+    
+            if ($sql->rowCount() > 0) {
+                $row = $sql->fetch();
+            }
+    
+            $r = $row['c'];
+    
+            return $r;
+        }
+
         
-		$sql->execute();
-
-		if ($sql->rowCount() > 0) {
-			$row = $sql->fetch();
-		}
-
-		$r = $row['c'];
-		return $r;
-
     }
 
-    public function faturar($id_etapa, $id_obra, $id_historico){
+    public function faturar($id_etapa, $id_obra, $id_historico)
+    {
 
         $status = FATURADO;
 
-    
+
         $sql = $this->db->prepare("UPDATE historico_financeiro histf SET
 
                 histf.histf_id_status 		= :id_status
@@ -145,13 +168,13 @@ class Financeiro extends model
 
 		");
 
-		$sql->bindValue(':id',   $id_etapa);
+        $sql->bindValue(':id',   $id_etapa);
         $sql->bindValue(':id_obra',   $id_obra);
-		$sql->bindValue(':id_historico',   $id_historico);
-		$sql->bindValue(':id_status',   $status);
+        $sql->bindValue(':id_historico',   $id_historico);
+        $sql->bindValue(':id_status',   $status);
         $sql->execute();
 
-        
+
         $sql = $this->db->prepare("
             
             UPDATE obra_etapa obr SET
@@ -162,19 +185,15 @@ class Financeiro extends model
 
 		");
 
-		$sql->bindValue(':id',   $id_etapa);
-		$sql->bindValue(':id_obra',   $id_obra);
+        $sql->bindValue(':id',   $id_etapa);
+        $sql->bindValue(':id_obra',   $id_obra);
         $sql->bindValue(':id_status',   $status);
-        
+
         return $sql->execute() ? true : false;
-
-        
-        
-        
-
     }
 
-    public function addHistoricoFaturamento($Parametros, $id_company, $id_usuario){
+    public function addHistoricoFaturamento($Parametros, $id_company, $id_usuario)
+    {
 
         $histfa_id_status = FATURADO;
 
@@ -221,96 +240,103 @@ class Financeiro extends model
 
             $sql->execute();
 
-            
+
             $histfa_id = $this->db->lastInsertId();
 
             $atualizar = $this->verify($histfa_id);
 
-            if($atualizar == '0'){
+            if ($atualizar == '0') {
                 $this->faturar($id_etapa, $id_obra, $id_historico_financeiro);
             }
 
             #return $sql->execute() ? true : false;
             $this->db = null;
-
-            
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
         }
-
     }
 
-    public function getHistoricoFaturamento($id_obra, $id_company){
-        
+    public function getHistoricoFaturamento($id_obra, $id_company)
+    {
+
         $sql = "
 		SELECT * FROM  
             historico_faturamento histfa
         INNER JOIN historico_financeiro histf ON (histf.histf_id = histfa.histf_id)
         INNER JOIN etapa etp ON (etp.id = histf.id_etapa)
 			
-		WHERE histfa.id_obra = :id_obra AND histfa.id_company = :id_company";
+		WHERE histfa.id_obra = :id_obra AND histfa.id_company = :id_company AND histfa.status <> 1";
 
-		$sql = $this->db->prepare($sql);
+        $sql = $this->db->prepare($sql);
         $sql->bindValue(":id_obra",               $id_obra);
         $sql->bindValue(":id_company",            $id_company);
 
         $sql->execute();
-        
-        if ($sql->rowCount() > 0) {
-			$this->array = $sql->fetchAll();
-		}
-		return $this->array;
 
+        if ($sql->rowCount() > 0) {
+            $this->array = $sql->fetchAll();
+        }
+        return $this->array;
     }
 
-    public function getValorReceber($histf_id){
+    public function getValorReceber($histf_id)
+    {
 
         $r = 0;
-		$sql = $this->db->prepare("SELECT valor_receber AS c FROM historico_faturamento WHERE histf_id = :histf_id ORDER BY histfa_id DESC LIMIT 1");
-		$sql->bindValue(':histf_id', $histf_id);
-		$sql->execute();
+        $sql = $this->db->prepare("SELECT valor_receber AS c FROM historico_faturamento histf WHERE histf_id = :histf_id AND histf.status <> 1 ORDER BY histfa_id DESC LIMIT 1");
+        $sql->bindValue(':histf_id', $histf_id);
+        $sql->execute();
 
-		if ($sql->rowCount() == 1) {
+        if ($sql->rowCount() == 1) {
             $row = $sql->fetch();
-            
-            $r = $row['c'];
-     	   
-        }
-        return $r;
-     
 
+            $r = $row['c'];
+        } else {
+
+            $sql = $this->db->prepare("SELECT valor_receber AS c FROM historico_financeiro histf WHERE histf_id = :histf_id LIMIT 1");
+            $sql->bindValue(':histf_id', $histf_id);
+            $sql->execute();
+
+            if ($sql->rowCount() == 1) {
+                $row = $sql->fetch();
+
+                $r = $row['c'];
+            }
+        }
+
+        return $r;
     }
 
-    public function verify($histfa_id){
-        
+    public function verify($histfa_id)
+    {
+
         $r = 0;
         $sql = "
 		SELECT valor_receber AS c FROM  
             historico_faturamento histfa
        
-		WHERE histfa.histfa_id = :histfa_id";
+		WHERE histfa.histfa_id = :histfa_id AND histfa.status <> 1 ";
 
-		$sql = $this->db->prepare($sql);
+        $sql = $this->db->prepare($sql);
         $sql->bindValue(":histfa_id", $histfa_id);
 
 
         $sql->execute();
-        
+
         if ($sql->rowCount() == 1) {
-			$row = $sql->fetch();
-            
+            $row = $sql->fetch();
+
             $r = $row['c'];
         }
-        
-       
-		return $r;
 
+
+        return $r;
     }
 
     public function getPendentesFinanceiroALL()
     {
-     
+
         $sql = $this->db->prepare("
             SELECT hist.*, etp.etp_nome, obr.obr_razao_social,obr.id as id_obra FROM historico_financeiro hist 
             INNER JOIN etapa etp ON (etp.id = hist.id_etapa)
@@ -321,11 +347,10 @@ class Financeiro extends model
         $sql->bindValue(":histfa_id", FATURAR);
         $sql->execute();
 
-        if($sql->rowCount() > 0){
+        if ($sql->rowCount() > 0) {
             $this->retorno = $sql->fetchAll();
         }
         return $this->retorno;
-
     }
 
     public function getTotalFinanceiroAll()
@@ -337,17 +362,16 @@ class Financeiro extends model
         $sql->bindValue(':histf_id_status', FATURAR);
         $sql->execute();
 
-        
+
 
         $row = $sql->fetch();
         $r = $row['count'];
 
         return $r;
-
     }
 
-    public function receberFaturamento($valor, $histfa_id){
-
+    public function receberFaturamento($valor, $histfa_id, $id_obra, $id_etapa)
+    {
 
         $valor = $valor == 1 ? '0' : '1';
 
@@ -361,10 +385,61 @@ class Financeiro extends model
 
 		");
 
-		$sql->bindValue(':histfa_id',   $histfa_id);
+        $sql->bindValue(':histfa_id',   $histfa_id);
         $sql->bindValue(':recebido_status',   $valor);
-        
-        return $sql->execute() ? $valor : false;
 
+        $sql->execute() ? $valor : false;
+
+        if ($valor == 1) {
+            $sql = $this->db->prepare("UPDATE obra_etapa obr SET
+
+                obr.id_status 		= :id_status
+
+                WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+            ");
+
+            $sql->bindValue(':id',   $id_etapa);
+            $sql->bindValue(':id_obra',   $id_obra);
+            $sql->bindValue(':id_status',   RECEBIDO);
+
+            return $sql->execute() ? $valor : false;
+        } else {
+            $sql = $this->db->prepare("UPDATE obra_etapa obr SET
+
+            obr.id_status 		= :id_status
+
+            WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+        ");
+
+            $sql->bindValue(':id',   $id_etapa);
+            $sql->bindValue(':id_obra',   $id_obra);
+            $sql->bindValue(':id_status',   FATURADO);
+
+            return $sql->execute() ? $valor : false;
+        }
+    }
+    public function deleteHistoricoFaturamento($id_historico, $id_user, $id_obra)
+    {
+
+        $Parametros = [
+            'id_historico' => $id_historico,
+            'deleteBy' => $id_user,
+            'deleteDate' => date('d-m-Y'),
+        ];
+        $sql = $this->db->prepare("UPDATE historico_faturamento histf SET histf.status = 1 WHERE histf.id_obra = :id_obra AND histf.histfa_id = :id_historico");
+
+        $sql->bindValue(":id_obra", $id_obra);
+        $sql->bindValue(":id_historico", $id_historico);
+
+        if ($sql->execute()) {
+
+            controller::alert('danger', 'Lançamento deletado com sucesso!!');
+            controller::setLog($Parametros, 'historico_lançamento', 'delete');
+            //$this->deleteEtapasObras($id);
+
+            $sql = null;
+        } else {
+            controller::alert('error', 'não foi possivel deletar o lançamento');
+        }
     }
 }

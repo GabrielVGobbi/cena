@@ -643,7 +643,7 @@ class ajaxController extends controller
     
         if (isset($_POST['histfa_id']) && !empty($_POST['histfa_id'])) {
 
-            $return = $a->receberFaturamento($_POST['q'], $_POST['histfa_id']);
+            $return = $a->receberFaturamento($_POST['q'], $_POST['histfa_id'], $_POST['id_obra'], $_POST['id_etapa']);
         }
 
         $Parametros = [
@@ -655,7 +655,6 @@ class ajaxController extends controller
         ];
 
         controller::setLog($Parametros, 'historico_faturamento', 'alteracao');
-
 
         echo json_encode($return);
         exit;

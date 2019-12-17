@@ -213,7 +213,6 @@
 	</div>
 </div>
 
-
 <div class="modal" id="listaCompra" tabindex="-1" role="dialog">
 	<div class="modal-dialog" role="document">
 		<form action="<?php echo BASE_URL ?>servicos/importar" method="POST" enctype="multipart/form-data">
@@ -264,21 +263,13 @@
 														</tr>
 													<?php endif; ?>
 												<?php endforeach; ?>
-
 											<?php else : ?>
-
-
-
 											<?php endif; ?>
-
 										</tbody>
-
 									<?php endforeach; ?>
 								</table>
 							</ul>
-
 						</div>
-
 					</div>
 				</div>
 				<div class="modal-footer">
@@ -288,6 +279,14 @@
 		</form>
 	</div>
 </div>
+<?php if(isset($_GET['list'])): ?>
 
+	<script>
+		$(function(){
+			$('#listaCompra').modal('show');	
+		});
+	</script>
+
+<?php endif; ?>
 
 <script src="<?php BASE_URL ?>/views/<?php echo $viewData['pageController']; ?>/parametros/<?php echo $viewData['pageController']; ?>.js"></script>

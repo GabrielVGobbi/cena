@@ -56,7 +56,6 @@
 				</thead>
 				<tbody>
 					<?php foreach ($etapasFinanceiro as $etpF) : ?>
-
 						<tr>
 							<td><?php echo $etpF['etp_nome_etapa_obra']; ?></td>
 							<td><?php echo $etpF['metodo'] == 'porcentagem' ? $etpF['metodo_valor'] . '%' : 'R$ ' . controller::number_format($etpF['metodo_valor']); ?></td>
@@ -66,17 +65,17 @@
 									<span data-toggle="tooltip" title="" data-original-title="Etapa ainda não foi concluida" class="label label-warning">Pendente</span>
 								<?php elseif ($etpF['id_status'] == FATURAR) : ?>
 									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="clique para faturar" class="label label-primary">Faturar</span></a>
-
 									<!--<a id="faturarEtapaObra" data-name="<?php #echo $etpF['histf_id']; 
 																					?> " href="#"></a> -->
 								<?php elseif ($etpF['id_status'] == FATURADO ) : ?>
 									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="Etapa Faturada" class="label label-success">Faturado</span></a>
+								
+								<?php elseif ($etpF['id_status'] == RECEBIDO ) : ?>
+									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="Recebido" class="label label-success">Recebido</span></a>
 								<?php endif; ?>
 								<?php include('historico.php'); ?>
 							</td>
-
 						</tr>
-
 					<?php endforeach; ?>
 				</tbody>
 			</table>
@@ -97,20 +96,27 @@
 				<table class="table">
 					<tbody>
 						<tr>
-							<th style="width:50%">Total a Receber: </th>
+							<th style="width:50%">Valor Negociado: </th>
 							<td>R$ <?php echo controller::number_format($tableInfo['valor_negociado']); ?></td>
 						</tr>
 						<tr>
 							<th>A Faturar: </th>
-							<td>R$ <?php echo $totalFaturar != '' ? controller::number_format($totalFaturar) : '0,00'; ?> </td>
+							<td>R$ <?php echo $totalFaturar != '' ? controller::number_format($totalFaturar) : 'R$ 0,00'; ?> </td>
 						</tr>
 						<tr>
 							<th>Faturado: </th>
-							<td>R$ <?php echo $totalFaturado != '' ? controller::number_format($totalFaturado) : '0,00'; ?></td>
+							<td>R$ <?php echo $totalFaturado != '' ? controller::number_format($totalFaturado) : 'R$ 0,00'; ?></td>
 						</tr>
 						<tr>
 							<th>Recebido: </th>
-							<td></td>
+							<td>R$ <?php echo $recebido != '' ? controller::number_format($recebido) : 'R$ 0,00'; ?></td>
+						</tr>
+						<tr>
+							<th>Saldo: </th>
+							<td>
+								<?php $saldo = intval($tableInfo['valor_negociado']) - intval($totalFaturado); 
+								echo $saldo != '' ? 'R$ '.controller::number_format($saldo) : 'R$ 0,00';;?>
+							</td>
 						</tr>
 
 					</tbody>
@@ -157,7 +163,6 @@
 					window.setTimeout(function() {
 						window.location.reload()
 					}, 1000);
-
 
 				}
 			});

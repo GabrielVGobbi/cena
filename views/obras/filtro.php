@@ -5,14 +5,14 @@
                 <div class="row">
                     <div class="col-md-2">
                         <div class="form-group">
-                            <label for="fl_art_nome">ID</label>
+                            <label for="fl_art_nome">Numero de nota</label>
                             <input class="form-control" id="filtro_obra_nota_numero" name="filtros[obra_nota_numero]" placeholder="" autocomplete="off">
                         </div>
                     </div>
 
                     <div class="col-md-4">
                         <div class="form-group">
-                            <label for="fl_art_nome">Razão Social</label>
+                            <label for="fl_art_nome">Nome da obra</label>
                             <input class="form-control" id="filtro_descricao" name="filtros[nome_obra]" placeholder="" autocomplete="off">
                         </div>
                     </div>

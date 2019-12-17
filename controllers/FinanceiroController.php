@@ -64,9 +64,11 @@ class financeiroController extends controller
 
                 $this->dataInfo['totalFaturado'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), FATURADO);
             
-                $this->dataInfo['totalFaturar'] =  intval($faturar) - intval($this->dataInfo['totalFaturado']); 
+                $this->dataInfo['totalFaturar'] =  intval($faturar) - intval($this->dataInfo['totalFaturado']);
 
-                
+                $this->dataInfo['recebido'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), RECEBIDO);
+
+
                 $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
             }
             
@@ -74,6 +76,22 @@ class financeiroController extends controller
         } else {
             $this->loadViewError();
         }
+    }
+
+    public function deleteHistoricoFaturamento($id_historico, $id_his, $id_obra){
+
+        if ($this->user->hasPermission('financeiro_view')) {
+
+            
+            $result = $this->financeiro->deleteHistoricoFaturamento($id_historico, $this->user->getId(), $id_obra);
+            
+            header("Location: " . BASE_URL . "financeiro/obra/".$id_obra.'?hist='.$id_his);
+            exit();
+
+        } else {
+            $this->loadViewError();
+        }
+
     }
 
 
