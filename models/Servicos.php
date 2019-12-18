@@ -249,8 +249,6 @@ class Servicos extends model
 			$check = 0;
 		}
 
-		error_log(print_r($check,1));
-
 
 		$sql = $this->db->prepare("UPDATE obra_etapa obr SET
 

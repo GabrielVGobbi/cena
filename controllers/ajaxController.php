@@ -640,11 +640,9 @@ class ajaxController extends controller
         $u->setLoggedUser();
         $a = new Financeiro('');
         $Parametros = array();
-
-        error_log(print_r($_POST,1));
-
     
         if (isset($_POST['histfa_id']) && !empty($_POST['histfa_id'])) {
+
 
             $return = $a->receberFaturamento($_POST['q'], $_POST['histfa_id'], $_POST['id_obra'], $_POST['id_etapa']);
         }

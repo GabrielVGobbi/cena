@@ -196,7 +196,6 @@ class Comercial extends model
 						$sql->bindValue(":preco", $etapas[$q]['preco']);
 						$sql->bindValue(":tipo_compra", $etapas[$q]['tipo_compra']);
 
-
 						$sql->execute();
 					}
 				}

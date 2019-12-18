@@ -246,7 +246,7 @@ class Financeiro extends model
             $atualizar = $this->verify($histfa_id);
 
             if ($atualizar == '0') {
-                $this->faturar($id_etapa, $id_obra, $id_historico_financeiro);
+                #$this->faturar($id_etapa, $id_obra, $id_historico_financeiro);
             }
 
             #return $sql->execute() ? true : false;
@@ -391,18 +391,41 @@ class Financeiro extends model
         $sql->execute() ? $valor : false;
 
         if ($valor == 1) {
-            $sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
-                obr.id_status 		= :id_status
+            $sql = $this->db->prepare("SELECT * FROM historico_faturamento
 
-                WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+                WHERE (histfa_id = :histfa_id) LIMIT 1
             ");
 
-            $sql->bindValue(':id',   $id_etapa);
-            $sql->bindValue(':id_obra',   $id_obra);
-            $sql->bindValue(':id_status',   RECEBIDO);
+            $sql->bindValue(':histfa_id',   $histfa_id);
 
-            return $sql->execute() ? $valor : false;
+            $sql->execute();
+
+            if ($sql->rowCount() == 1) {
+                $row = $sql->fetch();
+
+                error_log(print_r($row['valor_receber'],1));
+                
+                if($row['valor_receber'] == 0){
+                    
+                    $sql = $this->db->prepare("UPDATE obra_etapa obr SET
+
+                        obr.id_status 		= :id_status
+    
+                        WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+                    ");
+    
+                    $sql->bindValue(':id',   $id_etapa);
+                    $sql->bindValue(':id_obra',   $id_obra);
+                    $sql->bindValue(':id_status',   RECEBIDO);
+    
+                    return $sql->execute() ? $valor : false;
+                }
+            }
+
+            return true;
+      
+        
         } else {
             $sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
@@ -413,7 +436,7 @@ class Financeiro extends model
 
             $sql->bindValue(':id',   $id_etapa);
             $sql->bindValue(':id_obra',   $id_obra);
-            $sql->bindValue(':id_status',   FATURADO);
+            $sql->bindValue(':id_status',   FATURAR);
 
             return $sql->execute() ? $valor : false;
         }
@@ -442,5 +465,29 @@ class Financeiro extends model
         } else {
             controller::alert('error', 'não foi possivel deletar o lançamento');
         }
+    }
+
+    public function getPendentesRecebido(){
+
+        $hoje = date('d/m/Y');
+
+        $array_faturamento = array();
+
+        $sql = $this->db->prepare("
+            SELECT * FROM historico_faturamento histf
+            INNER JOIN obra obr ON (obr.id = histf.id_obra)
+            WHERE recebido_status = 0 AND data_vencimento >= :hoje AND status <> 1
+        ");
+
+        $sql->bindValue(":hoje", $hoje);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array_faturamento  = $sql->fetchAll();
+        }
+
+        
+        return $array_faturamento;
+
     }
 }

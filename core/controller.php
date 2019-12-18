@@ -12,6 +12,8 @@ class controller
 		$u = new Users;
 		$u->setLoggedUser();
 		$p = new Painel;
+		$this->financeiro = new Financeiro('');
+
 
 		$this->array = array();
 
@@ -26,6 +28,9 @@ class controller
 	public function loadView($viewName, $viewData = array())
 	{
 		extract($viewData);
+
+
+
 		include 'views/' . $viewName . '.php';
 	}
 
@@ -33,6 +38,17 @@ class controller
 	{
 		extract($viewData);
 
+		$recebido = array();
+
+		$total_recebido = 0;
+
+		$recebido = $this->financeiro->getPendentesRecebido();
+		
+		if($recebido){
+			$total_recebido = count($recebido);
+		}
+
+			
 		include 'views/template.php';
 	}
 

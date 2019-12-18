@@ -28,8 +28,8 @@
   <script src="https://unpkg.com/imask"></script>
   <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
 
-  
-  
+
+
 
 </head>
 
@@ -70,9 +70,9 @@
               <?php endif; ?>
 
               <?php if ($this->userInfo['user']->hasPermission('obra_view')) : ?>
-                <?php  $location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';  ?>
+                <?php $location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';  ?>
 
-                <li class=""><a href="<?php echo BASE_URL; ?><?php echo $location;?>">Obras <span class="sr-only">(current)</span></a></li>
+                <li class=""><a href="<?php echo BASE_URL; ?><?php echo $location; ?>">Obras <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
 
@@ -100,11 +100,11 @@
                     <li>
                       <ul class="menu">
                         <?php
-                          foreach ($this->userInfo['notificacao'] as $not) :
-                            $propriedades = json_decode($not['propriedades']);
-                            $tempo = controller::diferenca($not['data_notificacao']);
+                        foreach ($this->userInfo['notificacao'] as $not) :
+                          $propriedades = json_decode($not['propriedades']);
+                          $tempo = controller::diferenca($not['data_notificacao']);
 
-                            ?>
+                        ?>
                           <li>
                             <a onclick="lerMensagem('<?php echo $not['id_not_user']; ?>','<?php echo $not['link']; ?>')" style="cursor: pointer">
                               <h4>
@@ -122,11 +122,33 @@
                   </ul>
                 </li>
 
-                <li class="dropdown tasks-menu">
-
-
+                <li class="dropdown messages-menu">
+                  <a href="#" class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                    <i class="fa fa-fw fa-dollar"></i>
+                    <span class="label label-success"><?php echo $total_recebido != 0 ? $total_recebido : ''; ?></span>
+                  </a>
+                  <ul class="dropdown-menu">
+                    <li class="header">Total Faturamento Receber: <?php echo $total_recebido != 0 ? $total_recebido : ''; ?></li>
+                    <li>
+                      <ul class="menu">
+                        <?php if(isset($recebido) && count($recebido) > 0 ): ?>
+                          <?php foreach ($recebido as $pdr): ?>
+                            <li>
+                              <a href="<?php echo BASE_URL;?>financeiro/obra/<?php echo $pdr['id_obra']; ?>">
+                                <h4>
+                                <?php echo ($pdr['obr_razao_social']); ?>
+                                  <!--<small><i class="fa fa-clock-o"></i> 5 mins</small>-->
+                                </h4>
+                                <p>R$ <?php echo controller::number_format($pdr['valor']); ?></p>
+                              </a>
+                            </li>
+                          <?php endforeach; ?>
+                        <?php endif; ?>
+                      </ul>
+                    </li>
+                    <li class="footer"><a href="#">See All Messages</a></li>
+                  </ul>
                 </li>
-
                 <li class="dropdown user user-menu">
                   <a href="<?php echo BASE_URL; ?>/login/logout">
                     <span class="hidden-xs"> <?php echo ucfirst($this->userInfo['userName']['login']); ?></span>
@@ -140,9 +162,6 @@
               </ul>
             </div>
           <?php else : ?>
-
-
-
             <div class="navbar-custom-menu">
               <ul class="nav navbar-nav">
 
@@ -226,11 +245,11 @@
 
       <h3 style="color:#000">Bloco de notas</h3>
       <?php $notepad = $this->userInfo['user']->getNotepad($this->userInfo['user']->getId(), $this->userInfo['user']->getCompany()); ?>
-      <?php if($notepad): ?>
+      <?php if ($notepad) : ?>
         <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="30" cols="93"><?php echo $notepad['notepad']; ?></textarea>
-      <?php else: ?>
+      <?php else : ?>
         <textarea id="story" style="color:#000; padding: 18px 9px;resize: none;" name="story" rows="30" cols="93"></textarea>
-      <?php endif;?>
+      <?php endif; ?>
 
       <div>
         <span id="saveding" style="color:#000; display: none;"> salvando...</span>
@@ -242,12 +261,12 @@
 
   <?php if (isset($_SESSION['alert']) && !empty($_SESSION['alert'])) : ?>
     <script>
-        $(function() {  
-            toastr.<?php echo $_SESSION['alert']['tipo'];?> ('<?php echo $_SESSION['alert']['mensagem'] ?>');
-        });
+      $(function() {
+        toastr.<?php echo $_SESSION['alert']['tipo']; ?>('<?php echo $_SESSION['alert']['mensagem'] ?>');
+      });
     </script>
     <?php unset($_SESSION['alert']); ?>
-<?php endif; ?>
+  <?php endif; ?>
 
   <script type="text/javascript">
     document.addEventListener('DOMContentLoaded', function() {
@@ -305,9 +324,9 @@
   </script>
 
 
-<link href="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.css" rel="stylesheet" type="text/css" />
+  <link href="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.css" rel="stylesheet" type="text/css" />
 
-    <script src="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>node_modules/toastr/build/toastr.min.js"></script>
   <script src="<?php echo BASE_URL; ?>node_modules/sweetalert/dist/sweetalert.min.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables/jquery.dataTables.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/js/dataTables.bootstrap4.js"></script>
@@ -330,7 +349,7 @@
     var BASE_URL = '<?php echo BASE_URL; ?>';
     var temporiza;
     $("#story").on("input", function() {
-      
+
       $("#saveding").show();
       $("#saved").hide();
 
@@ -344,7 +363,7 @@
           type: 'POST',
           data: {
             text: text,
-            
+
           },
           dataType: 'json',
           success: function(json) {
@@ -357,7 +376,7 @@
     });
   </script>
 
-<?php if (isset( $_SESSION['form']['info'])) : ?>
+  <?php if (isset($_SESSION['form']['info'])) : ?>
     <script type="text/javascript">
       var title = '<?php echo  $_SESSION['form']['info']; ?>';
       var text = '<?php echo $_SESSION['form']['mensagem']; ?>';
@@ -365,8 +384,8 @@
       var pageController = '<?php echo $viewData['pageController']; ?>';
       var id_obra = '<?php echo isset($_SESSION['form']['id_obra']) ? $_SESSION['form']['id_obra'] : ''; ?>';
       var buttons = true;
-      
-      var type = '<?php echo  $_SESSION['form']['buttom'];?>'
+
+      var type = '<?php echo  $_SESSION['form']['buttom']; ?>'
 
       <?php if (isset($_SESSION['form']['buttons'])) : ?>
         var buttons = {
@@ -386,8 +405,8 @@
         })
         .then((willDelete) => {
           if (willDelete) {
-            
-            window.location.href = BASE_URL+'obras/'+type+'/'+id_obra;
+
+            window.location.href = BASE_URL + 'obras/' + type + '/' + id_obra;
             <?php unset($_SESSION['form']); ?>
 
           } else {
@@ -439,7 +458,7 @@
 
   <?php endif; ?>
 
-  <script src="<?php echo BASE_URL;?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
 
   <script type="text/javascript">
@@ -483,7 +502,7 @@
             "type": "POST",
             "data": {
               filtro,
-              
+
             }
 
           },
