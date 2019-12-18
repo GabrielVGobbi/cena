@@ -146,7 +146,6 @@ class controller
 	public function loadEtapaCheck($id_etapa,$ordem, $id_obra, $tipo, $etp)
 	{
 
-
 		$check = $this->etapa->check($ordem, $id_obra, $tipo);
 
 		include ('views/obras/etapas/check.php');

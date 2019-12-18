@@ -1085,7 +1085,7 @@ class Etapa extends model
                 INNER JOIN etapa etp ON (etp.id = obtp.id_etapa)
                 INNER JOIN cliente cli ON (cli.id = obr.id_cliente)
             
-                WHERE data_prazo_total between :prazo_atrasado AND :prazo_cinco_dias AND `check` = 0 ORDER BY data_prazo_total LIMIT 10; 
+                WHERE data_prazo_total between :prazo_atrasado AND :prazo_cinco_dias AND `check` = 0 ORDER BY data_prazo_total; 
 
             ");
 

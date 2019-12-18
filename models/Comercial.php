@@ -112,7 +112,7 @@ class Comercial extends model
 				id_company 					=	:id_company, 	
 				descricao 					=	:comercial_descricao,
 				id_status 					= 	1,
-				id_comercial 				= 1
+				id_comercial 				=   1
         		
 			");
 
@@ -155,7 +155,6 @@ class Comercial extends model
 
 			if (isset($Parametros['compra_quantidade'])) {
 				foreach ($Parametros['compra_quantidade'] as $id_etapa => $quantidade) {
-
 					$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial SET 
 						id_etapa 			=	:id_etapa,
 						id_obra 			=	:id_obra,
@@ -184,6 +183,7 @@ class Comercial extends model
 			if (isset($etapas)) {
 				if (count($etapas) > 0) {
 					for ($q = 0; $q < count($etapas); $q++) {
+
 
 						$sql = $this->db->prepare("INSERT INTO obra_etapa (id_obra, id_etapa, etp_nome_etapa_obra, ordem, preco, tipo_compra)
 							VALUES (:id_obra, :id_etapa, :etp_nome_etapa_obra, :ordem, :preco, :tipo_compra)

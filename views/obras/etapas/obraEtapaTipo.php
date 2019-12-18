@@ -34,20 +34,22 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
                         <span class="text"><?php echo $etp['etp_nome_etapa_obra']; ?></span>
 
-                        <?php $meta = 'warning'; 
-					        $data_hoje = date('d-m-Y');
-                            $data_meta = $etp['meta_etapa'];
+                        <?php if($etp['check'] != 1): ?>
+                            <?php $meta = 'warning'; 
+                                $data_hoje = date('d-m-Y');
+                                $data_meta = $etp['meta_etapa'];
 
-                            if($etp['meta_etapa'] !=''):
-                                $data_meta = str_replace('/', '-', $data_meta);
+                                if($etp['meta_etapa'] !=''):
+                                    $data_meta = str_replace('/', '-', $data_meta);
 
-                                if(strtotime(date('d-m-Y')) > strtotime($data_meta)){
-                                    $meta = 'danger';
-                                }
+                                    if(strtotime(date('d-m-Y')) > strtotime($data_meta)){
+                                        $meta = 'danger';
+                                    }
 
-                                
-                        ?>
-                        <span style="font-size: 12px" class="label label-<?php echo $meta; ?>"><i class="fa fa-clock-o"></i> <?php echo $etp['meta_etapa']; ?></span>
+                                    
+                            ?>
+                            <span style="font-size: 12px" class="label label-<?php echo $meta; ?>"><i class="fa fa-clock-o"></i> <?php echo $etp['meta_etapa']; ?></span>
+                            <?php endif; ?>
                         <?php endif; ?>
 
 

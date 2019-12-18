@@ -45,14 +45,10 @@ class homeController extends controller
         $this->dataInfo['count_servico'] = $this->servico->getCount($this->user->getCompany());
         $this->dataInfo['count_cliente'] = $this->cliente->getCount('',$this->user->getCompany());
         $this->dataInfo['count_concessionaria'] = $this->concessionaria->getCount($this->user->getCompany());
-
         $this->dataInfo['etapas_pendentes'] = $this->etapa->getPendentes();
-
         $this->dataInfo['etapas_pendentes_financeiro'] = $this->financeiro->getPendentesFinanceiroALL();
         $this->dataInfo['total_etapas_financeiro'] = $this->financeiro->getTotalFinanceiroAll();
         
-        
-
         if ($this->user->usr_info() === 'cliente') {
 
             $this->dataInfo['titlePage'] = 'Bem-vindo';

@@ -41,8 +41,7 @@
     </div>
     <!-- /.col -->
 
-    <!-- fix for small devices only -->
-    <div class="clearfix visible-sm-block"></div>
+
 
 
     <!-- /.col -->
@@ -61,7 +60,7 @@
   </div>
   <!-- /.col -->
 
-  <div class="col-md-6 col-sm-6 col-xs-12">
+  <div class="col-md-6 col-sm-12 col-xs-12">
     <div class="box box-primary">
       <div class="box-header with-border">
         <h3 class="box-title">Etapas Pendentes</h3>
@@ -98,7 +97,7 @@
   </div>
 
   <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
-    <div class="col-md-6 col-sm-6 col-xs-12">
+    <div class="col-md-6 col-sm-12 col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
           <h3 class="box-title">Etapas Pendentes Financeiro</h3>

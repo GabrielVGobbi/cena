@@ -8,25 +8,25 @@ class obrasController extends controller
         parent::__construct();
 
         $this->user = new Users();
-        $this->obra = new Obras();
-        $this->etapa = new Etapa('Etapa');
-        $this->documento = new Documentos();
-
-
-        $this->cliente = new Cliente();
-        $this->concessionaria = new Concessionaria();
-        $this->servico = new Servicos();
-
-
-        $this->location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';
-
-
         $this->user->setLoggedUser();
 
         if ($this->user->isLogged() == false) {
             header("Location: " . BASE_URL . "login");
             exit();
         }
+
+        $this->obra = new Obras();
+        $this->etapa = new Etapa('Etapa');
+        $this->documento = new Documentos();
+
+        $this->cliente = new Cliente();
+        $this->concessionaria = new Concessionaria();
+        $this->servico = new Servicos();
+
+        $this->location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';
+
+        $this->type = $this->user->getId() == 63 ? '?tipo=1' : '';
+
 
         $this->painel = new Painel();
         $this->filtro = array();
@@ -153,8 +153,6 @@ class obrasController extends controller
         echo json_encode($output);
     }
 
-
-
     public function add()
     {
         if ($this->user->hasPermission('obra_view')) {
@@ -207,8 +205,9 @@ class obrasController extends controller
         if (isset($_POST['obra_nome']) && $_POST['obra_nome'] != '') {
 
             $result = $this->obra->edit($_POST, $this->user->getCompany(), $_FILES);
+            
 
-            header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $_POST['id']);
+            header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $_POST['id'].$this->type);
             exit();
         } else {
 
@@ -221,13 +220,10 @@ class obrasController extends controller
 
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_delete')) {
 
-
-            
-
             $result = $this->obra->delete($id, $this->user->getCompany());
 
 
-            header("Location: " . BASE_URL . $this->location);
+            header("Location: " . BASE_URL . $this->location.$this->type);
 
             if ($result) {
                 $this->dataInfo['success'] = 'true';
@@ -251,7 +247,7 @@ class obrasController extends controller
 
             //aqui
 
-            header("Location: " . BASE_URL . $this->location);
+            header("Location: " . BASE_URL . $this->location.$this->type);
             exit();
         } else {
             $this->loadViewError();
@@ -265,7 +261,7 @@ class obrasController extends controller
 
             $result = $this->obra->desconcluir($id, $this->user->getCompany());
 
-            header("Location: " . BASE_URL . $this->location);
+            header("Location: " . BASE_URL . $this->location.$this->type);
             exit();
         } else {
             $this->loadViewError();
@@ -308,7 +304,7 @@ class obrasController extends controller
             $this->etapa->delete_etapa_obra($id_etapa_obra, $this->user->getCompany(), $this->user->getId());
         }
 
-        header("Location: " . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $id_obra);
+        header("Location: " . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $id_obra.$this->type);
         exit();
     }
 
