@@ -476,7 +476,7 @@ class Financeiro extends model
         $sql = $this->db->prepare("
             SELECT * FROM historico_faturamento histf
             INNER JOIN obra obr ON (obr.id = histf.id_obra)
-            WHERE recebido_status = 0 AND data_vencimento >= :hoje AND status <> 1
+            WHERE histf.recebido_status = 0 AND histf.data_vencimento <= :hoje AND histf.status <> 1 AND obr.atv = 1
         ");
 
         $sql->bindValue(":hoje", $hoje);
@@ -486,7 +486,6 @@ class Financeiro extends model
             $array_faturamento  = $sql->fetchAll();
         }
 
-        
         return $array_faturamento;
 
     }

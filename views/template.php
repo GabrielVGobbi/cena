@@ -128,7 +128,7 @@
                     <span class="label label-success"><?php echo $total_recebido != 0 ? $total_recebido : ''; ?></span>
                   </a>
                   <ul class="dropdown-menu">
-                    <li class="header">Total Faturamento Receber: <?php echo $total_recebido != 0 ? $total_recebido : ''; ?></li>
+                    <li class="header">Total Faturamento Receber: <?php echo $total_recebido != 0 ? $total_recebido : '0'; ?></li>
                     <li>
                       <ul class="menu">
                         <?php if(isset($recebido) && count($recebido) > 0 ): ?>
@@ -140,13 +140,14 @@
                                   <!--<small><i class="fa fa-clock-o"></i> 5 mins</small>-->
                                 </h4>
                                 <p>R$ <?php echo controller::number_format($pdr['valor']); ?></p>
+
                               </a>
                             </li>
                           <?php endforeach; ?>
                         <?php endif; ?>
                       </ul>
                     </li>
-                    <li class="footer"><a href="#">See All Messages</a></li>
+                    <!--<li class="footer"><a href="#">See All Messages</a></li>-->
                   </ul>
                 </li>
                 <li class="dropdown user user-menu">
