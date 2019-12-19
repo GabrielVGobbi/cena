@@ -74,7 +74,6 @@ class usuarioController extends controller
 		if (isset($_POST['login']) && $_POST['login'] != '') {
 
 			$result = $this->user->add($_POST,$this->user->getCompany());
-			$this->addValicao($result);
 
 
 			header('Location:' . BASE_URL . 'usuario');
@@ -97,7 +96,6 @@ class usuarioController extends controller
 					controller::alert('danger','por favor, selecione ao menos um parametro de permissão');
 				} else {
 					$result = $this->user->edit($this->user->getCompany(), $_POST);
-					$this->addValicao($result);
 
 					header('Location:' . BASE_URL . 'usuario');
 					exit();
@@ -142,6 +140,6 @@ class usuarioController extends controller
 			$_SESSION['form']['mensagem'] = "Algo deu Errado, Contate o administrador do sistema";
 		}
 
-		return $_SESSION['form'];
+		#return $_SESSION['form'];
 	}
 }

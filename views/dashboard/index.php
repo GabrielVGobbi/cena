@@ -26,81 +26,42 @@
       </div>
       <!-- /.info-box -->
     </div>
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <a href="<?php echo BASE_URL; ?>clientes"> <span class="info-box-icon bg-red"><i class="ion ion-person-add"></i></span></a>
-
-        <div class="info-box-content">
-          <span class="info-box-text">Clientes</span>
-          <span class="info-box-number"><?php echo $count_cliente; ?></span>
-        </div>
-        <!-- /.info-box-content -->
-      </div>
-      <!-- /.info-box -->
-    </div>
-    <!-- /.col -->
-
-
-
-
-    <!-- /.col -->
-    <div class="col-md-3 col-sm-6 col-xs-12">
-      <div class="info-box">
-        <a href="<?php echo BASE_URL; ?>servicos"> <span class="info-box-icon bg-yellow"><i class="ion ion-pie-graph"></i></span>
+    <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-red"><i class="ion ion-cash"></i></span>
 
           <div class="info-box-content">
-            <span class="info-box-text">Serviços</span>
-        </a>
-        <span class="info-box-number"><?php echo $count_servico; ?></span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-
-  <div class="col-md-6 col-sm-12 col-xs-12">
-    <div class="box box-primary">
-      <div class="box-header with-border">
-        <h3 class="box-title">Etapas Pendentes</h3>
-
-        <div class="box-tools pull-right">
-          <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
-          </button>
+            <span class="info-box-text">Financeiro Penden</span>
+            <span class="info-box-number"><?php echo isset($etapas_pendentes_financeiro) ? count($etapas_pendentes_financeiro) : '0'; ?></span>
+          </div>
+          <!-- /.info-box-content -->
         </div>
-
+        <!-- /.info-box -->
       </div>
-      <div class="box-body">
-        <ul class="products-list product-list-in-box">
-          <?php foreach ($etapas_pendentes as $etpp) : ?>
-            <li class="item">
+      <!-- /.col -->
 
-              <div class="product-info">
-                <a href="<?php echo BASE_URL ?>obras/edit/<?php echo $etpp['id_obra']; ?> " class="product-title"><?php echo $etpp['etp_nome_etapa_obra']; ?>
-                  <div class="pull-right">
-                    <?php controller::loadTempo($etpp['prazo_atendimento'], $etpp['data_abertura'], $etpp['check']); ?>
-                  </div>
-                </a>
-                <span class="product-description">
-                  Cliente: <?php echo $etpp['cliente_nome']; ?><br>
-                  Obra: <?php echo $etpp['obr_razao_social']; ?>
+      <!-- /.col -->
+      <div class="col-md-3 col-sm-6 col-xs-12">
+        <div class="info-box">
+          <span class="info-box-icon bg-yellow"><i class="ion ion-cash"></i></span>
 
-                </span>
-              </div>
-            </li>
-          <?php endforeach; ?>
-        </ul>
+
+          <div class="info-box-content">
+            <span class="info-box-text">Total Faturamento</span>
+            </a>
+            <span class="info-box-number">R$ <?php echo $total_etapas_financeiro != 0 ? controller::number_format($total_etapas_financeiro) : '0'; ?></span>
+          </div>
+          <!-- /.info-box-content -->
+        </div>
+        <!-- /.info-box -->
       </div>
+    <?php endif; ?>
 
-    </div>
-  </div>
-
-  <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
     <div class="col-md-6 col-sm-12 col-xs-12">
       <div class="box box-primary">
         <div class="box-header with-border">
-          <h3 class="box-title">Etapas Pendentes Financeiro</h3>
+          <h3 class="box-title">Etapas Pendentes</h3>
 
           <div class="box-tools pull-right">
             <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
@@ -110,16 +71,19 @@
         </div>
         <div class="box-body">
           <ul class="products-list product-list-in-box">
-            <?php foreach ($etapas_pendentes_financeiro as $etpf) : ?>
+            <?php foreach ($etapas_pendentes as $etpp) : ?>
               <li class="item">
 
                 <div class="product-info">
-                  <a href="<?php echo BASE_URL ?>financeiro/obra/<?php echo $etpf['id_obra']; ?>?hist=<?php echo $etpf['histf_id']; ?> " class="product-title"><?php echo $etpf['etp_nome']; ?>
-
+                  <a href="<?php echo BASE_URL ?>obras/edit/<?php echo $etpp['id_obra']; ?> " class="product-title"><?php echo $etpp['etp_nome_etapa_obra']; ?>
+                    <div class="pull-right">
+                      <?php controller::loadTempo($etpp['prazo_atendimento'], $etpp['data_abertura'], $etpp['check']); ?>
+                    </div>
                   </a>
                   <span class="product-description">
-                    Obra: <?php echo $etpf['obr_razao_social']; ?><br>
-                    Valor a Receber: <?php echo 'R$ ' . controller::number_format($etpf['valor_receber']); ?>
+                    Cliente: <?php echo $etpp['cliente_nome']; ?><br>
+                    Obra: <?php echo $etpp['obr_razao_social']; ?>
+
                   </span>
                 </div>
               </li>
@@ -128,11 +92,45 @@
         </div>
 
       </div>
-      <div class="box-footer text-center">
-        <div>Total: <?php echo 'R$ '.controller::number_format($total_etapas_financeiro); ?></div>
-      </div>
     </div>
-  <?php endif; ?>
+
+    <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
+      <div class="col-md-6 col-sm-12 col-xs-12">
+        <div class="box box-primary">
+          <div class="box-header with-border">
+            <h3 class="box-title">Etapas Pendentes Financeiro</h3>
+
+            <div class="box-tools pull-right">
+              <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+              </button>
+            </div>
+
+          </div>
+          <div class="box-body">
+            <ul class="products-list product-list-in-box">
+              <?php foreach ($etapas_pendentes_financeiro as $etpf) : ?>
+                <li class="item">
+
+                  <div class="product-info">
+                    <a href="<?php echo BASE_URL ?>financeiro/obra/<?php echo $etpf['id_obra']; ?>?hist=<?php echo $etpf['histf_id']; ?> " class="product-title"><?php echo $etpf['etp_nome']; ?>
+
+                    </a>
+                    <span class="product-description">
+                      Obra: <?php echo $etpf['obr_razao_social']; ?><br>
+                      Valor a Receber: <?php echo 'R$ ' . controller::number_format($etpf['valor_receber']); ?>
+                    </span>
+                  </div>
+                </li>
+              <?php endforeach; ?>
+            </ul>
+          </div>
+
+        </div>
+        <div class="box-footer text-center">
+          <div>Total: <?php echo 'R$ ' . controller::number_format($total_etapas_financeiro); ?></div>
+        </div>
+      </div>
+    <?php endif; ?>
 
   </div>
   </div>

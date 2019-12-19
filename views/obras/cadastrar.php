@@ -205,16 +205,16 @@
                         $('.result_null').hide();
 
                     } else {
-                        options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca'
+                        options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca';
                         $('.span_etapa').hide();
 
                         $('#result_null').html(options).show();
                         $('.result_null');
                     }
-
+                });
 
             } else {
-                options = 'Selecione o Serviço'
+                options = 'Selecione o Serviço';
                 $('.span_etapa').hide();
 
                 $('#result_null').html(options).show();

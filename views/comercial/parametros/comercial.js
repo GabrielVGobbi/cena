@@ -405,30 +405,40 @@ function updatePriceVariavel(obj) {
 }
 
 function updateDesconto() {
-    var total = 0;
-    var desconto = $('input[id=valor_desconto]').val();
-    var proposto = $('input[id=totalProposta]').val();
 
-    desconto = desconto.replace('R$ ', '');
-    proposto = proposto.replace('R$', '');
-    proposto = proposto.replace(',00', '');
-    proposto = proposto.replace('.', '');
-    proposto = proposto.trim();
+    if($('#totalProposta').val() != ''){
 
+        var total = 0;
+        var desconto = $('input[id=valor_desconto]').val();
+        var proposto = $('input[id=totalProposta]').val();
 
-    if ($('input[id=valor_desconto]').val() == '') {
-
-        proposto = $('input[id=totalProposta]').val();
+        desconto = desconto.replace('R$ ', '');
         proposto = proposto.replace('R$', '');
         proposto = proposto.replace(',00', '');
         proposto = proposto.replace('.', '');
         proposto = proposto.trim();
-        $('input[id=Totalnegociado]').val('R$ ' + formata(proposto));
+
+
+        if ($('input[id=valor_desconto]').val() == '') {
+
+            proposto = $('input[id=totalProposta]').val();
+            proposto = proposto.replace('R$', '');
+            proposto = proposto.replace(',00', '');
+            proposto = proposto.replace('.', '');
+            proposto = proposto.trim();
+            $('input[id=Totalnegociado]').val('R$ ' + formata(proposto));
+
+        } else {
+            total = parseInt(proposto) - parseInt(desconto);
+            $('input[id=Totalnegociado]').val('R$ ' + formata(total));
+        }
+    } else { 
+        $('#valor_desconto').val('');
+        $( "#totalProposta" ).focus();
+         toastr.error('Digite um valor para a proposta');
         
-    } else {
-        total = parseInt(proposto) - parseInt(desconto);
-        $('input[id=Totalnegociado]').val('R$ ' + formata(total));
     }
+
 }
 
 function formataNumbero() {

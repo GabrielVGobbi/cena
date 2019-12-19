@@ -41,8 +41,8 @@ class financeiroController extends controller
     {
         if ($this->user->hasPermission('financeiro_view')) {
             
-
-            $this->dataInfo['tableInfo'] = $this->financeiro->getFinanceirobyObra($id, $this->user->getCompany()); 
+       
+            $this->dataInfo['tableInfo'] = $this->financeiro->getFinanceirobyObra($id, $this->user->getCompany());
 
             if(count($this->dataInfo['tableInfo']) == 0){
                 
@@ -93,6 +93,60 @@ class financeiroController extends controller
         }
 
     }
+
+    public function add($id_obra = 0)
+    {
+
+        if ($this->user->hasPermission('financeiro_view')) {
+            
+            $this->dataInfo['titlePage'] = 'Financeiro Adicionar';
+
+            $this->dataInfo['id_obra'] = $id_obra != 0 ? $id_obra : '0';
+
+            if($this->dataInfo['id_obra'] != 0){
+                $verify = $this->financeiro->verifyFinanceiroObra($id_obra);
+
+                if($verify){
+                    header('Location:' . BASE_URL . $this->dataInfo['nome_tabela'].'/obra/'.$this->dataInfo['id_obra']);
+                    exit(); 
+                }
+            }
+
+            $this->dataInfo['obras'] = $this->obra->getAllByClear($this->user->getCompany());
+
+            $this->loadTemplate($this->dataInfo['pageController'] . "/cadastrar", $this->dataInfo);
+
+        } else {
+            $this->loadViewError();
+        }   
+
+    }
+
+    public function add_action(){
+        
+        if (isset($_POST['id_obra']) && $_POST['id_obra'] != '') {
+
+            $verify = $this->financeiro->verifyFinanceiroObra($id_obra);
+
+            if($verify){
+                header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/obra/'.$_POST['id_obra']);
+                exit(); 
+            }
+
+            $result = $this->financeiro->add($this->user->getCompany(), $_POST);
+
+            header('Location:' . BASE_URL . $this->dataInfo['nome_tabela'].'/obra/'.$_POST['id_obra']);
+            exit();
+        
+        } else {
+            
+            $this->loadViewError();
+        }
+    }
+
+    
+
+
 
 
 }

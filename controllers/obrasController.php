@@ -189,7 +189,6 @@ class obrasController extends controller
 
             $this->dataInfo['obr'] = $this->obra->getInfo($id, $this->user->getCompany());
 
-
             $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'];
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
@@ -206,7 +205,6 @@ class obrasController extends controller
 
             $result = $this->obra->edit($_POST, $this->user->getCompany(), $_FILES);
             
-
             header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $_POST['id'].$this->type);
             exit();
         } else {

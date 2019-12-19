@@ -489,4 +489,63 @@ class Financeiro extends model
         return $array_faturamento;
 
     }
+
+    public function add($id_company, $Parametros)
+	{
+
+		$valor_proposta 		= controller::PriceSituation($Parametros['valor_proposta']);
+		$valor_desconto 		= controller::PriceSituation($Parametros['valor_desconto']);
+		$valor_negociado 		= controller::PriceSituation($Parametros['valor_negociado']);
+        $valor_custo  			= controller::PriceSituation($Parametros['valor_custo']);
+        
+        $id_obra                = $Parametros['id_obra'];
+        $data_envio             = isset($Parametros['data_envio']) ? $Parametros['data_envio'] : '';
+
+		try {
+            $sql = "INSERT INTO financeiro_obra SET 
+
+                id_company = :id_company,
+                valor_proposta = :valor_proposta,
+                valor_negociado = :valor_negociado,
+                valor_desconto = :valor_desconto,
+                valor_custo = :valor_custo,
+                data_envio = :data_envio,
+                id_obra = :id_obra
+            ";
+            
+            $sql = $this->db->prepare($sql);
+
+            $sql->bindValue(":id_company", $id_company);
+			$sql->bindValue(":valor_proposta", $valor_proposta);
+			$sql->bindValue(":valor_negociado", $valor_negociado);
+			$sql->bindValue(":valor_desconto", $valor_desconto);
+			$sql->bindValue(":valor_custo", $valor_custo);
+            $sql->bindValue(":data_envio", $data_envio);
+			$sql->bindValue(":id_obra", $id_obra);
+            
+            $sql->execute() ? controller::alert('success', 'ok') : controller::alert('error', 'erro');
+            
+		} catch (PDOExecption $e) {
+			$sql->rollback();
+			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+		}
+
+		return $this->db->lastInsertId();
+
+    }
+    
+    public function verifyFinanceiroObra($id_obra){
+
+        $array_fin = array();
+
+        $sql = $this->db->prepare("
+            SELECT * FROM financeiro_obra WHERE id_obra = :id_obra 
+        ");
+
+        $sql->bindValue(":id_obra", $id_obra);
+        $sql->execute();
+
+        return ($sql->rowCount() > 0) ? true : false;
+
+    }
 }

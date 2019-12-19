@@ -232,7 +232,7 @@ class Obras extends model
 
 		$r = 0;
 
-		$sql = ("SELECT COUNT(*) as c FROM obra obr ");
+		$sql = ("SELECT COUNT(*) as c FROM obra obr WHERE id_status <> 4");
 		$sql = $this->db->prepare($sql);
 		$sql->execute();
 		
@@ -249,7 +249,7 @@ class Obras extends model
 	{
 
 		$r = 0;
-		$sql = $this->db->prepare("SELECT COUNT(*) AS c FROM obra WHERE id_company = :id_company AND atv = 1");
+		$sql = $this->db->prepare("SELECT COUNT(*) as c FROM obra obr WHERE (obr.atv <> 0 AND obr.atv <> 2) AND id_status = 3 AND id_company = :id_company");
 		$sql->bindValue(':id_company', $id_company);
 		$sql->execute();
 
@@ -778,5 +778,26 @@ class Obras extends model
 		} else {
 			return false;
 		}
+	}
+
+	public function getAllByClear($id_company){
+		
+		$sql = "SELECT * FROM obra obr		
+			WHERE obr.id <> '' AND obr.id NOT IN (SELECT fino.id_obra FROM financeiro_obra fino) AND
+			
+			(obr.atv <> 0 AND obr.atv <> 2) AND obr.id_status = 3 AND id_company = :id_company
+		"; 
+
+		$sql = $this->db->prepare($sql);
+		$sql->bindValue(':id_company', $id_company);
+
+
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$this->array = $sql->fetchAll();
+		}
+
+		return $this->array;
 	}
 }

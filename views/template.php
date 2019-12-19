@@ -75,13 +75,9 @@
                 <li class=""><a href="<?php echo BASE_URL; ?><?php echo $location; ?>">Obras <span class="sr-only">(current)</span></a></li>
               <?php endif; ?>
 
-
-
               <?php if ($this->userInfo['user']->hasPermission('documento_view')) : ?>
                 <!--<li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>-->
               <?php endif; ?>
-
-
 
             </ul>
 
@@ -447,8 +443,8 @@
         })
         .then((willDelete) => {
           if (willDelete) {
-            swal("Ainda não disponivel!");
-            //window.location.href = BASE_URL+'financeiro/add/'+id_obra;
+            window.location.href = BASE_URL+'financeiro/add/'+id_obra;
+            return;
 
           } else {
             <?php unset($_SESSION['form']); ?>
