@@ -72,9 +72,6 @@
                     </div>
                 </div>
             </div>
-            <!--
-            
-            -->
 
             <div class="box box-primary span_etapa" style="display:none;">
                 <div class="box-header">
@@ -151,7 +148,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="box box-primary result_null" style="display:none;">

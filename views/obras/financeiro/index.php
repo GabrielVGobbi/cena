@@ -72,6 +72,8 @@
 								
 								<?php elseif ($etpF['id_status'] == RECEBIDO ) : ?>
 									<a data-toggle="modal" data-target="#modalHistorico<?php echo $etpF['histf_id']; ?>"><span data-toggle="tooltip" title="" data-original-title="Recebido" class="label label-success">Recebido</span></a>
+								<?php else: ?>
+									<span data-toggle="tooltip" title="" data-original-title="Etapa ainda não foi concluida" class="label label-warning">Pendente</span>
 								<?php endif; ?>
 								<?php include('historico.php'); ?>
 							</td>

@@ -523,7 +523,7 @@ class Financeiro extends model
             $sql->bindValue(":data_envio", $data_envio);
 			$sql->bindValue(":id_obra", $id_obra);
             
-            $sql->execute() ? controller::alert('success', 'ok') : controller::alert('error', 'erro');
+            $sql->execute() ? controller::alert('success', 'Cadastrado com sucesso') : controller::alert('error', 'erro');
             
 		} catch (PDOExecption $e) {
 			$sql->rollback();

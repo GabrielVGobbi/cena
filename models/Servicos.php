@@ -127,68 +127,91 @@ class Servicos extends model
 		}
 	}
 
-	public function getEtapas($id_concessionaria, $id_servico, $tipo = false)
+	public function getEtapas($id_concessionaria, $id_servico, $tipo = false, $type = false)
 	{
-
-		if ($tipo == false) {
+		if($type == false){
+			if ($tipo == false) {
+				$sql = "SELECT * FROM  
+					etapas_servico_concessionaria etpsc
+					INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
+					WHERE etpsc.id_concessionaria = :id_concessionaria 
+					AND etpsc.id_servico = :id_servico 
+					ORDER BY etpsc.order_id ASC";
+	
+				$sql = $this->db->prepare($sql);
+				$sql->bindValue(":id_concessionaria", $id_concessionaria);
+				$sql->bindValue(":id_servico", $id_servico);
+				$sql->execute();
+	
+				if ($sql->rowCount() > 0) {
+					$this->array = $sql->fetchAll();
+				}
+	
+				return $this->array;
+			} else {
+				$sql = "SELECT * FROM  
+					etapas_servico_concessionaria etpsc
+					INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
+					WHERE etpsc.id_concessionaria = :id_concessionaria 
+					AND etpsc.id_servico = :id_servico 
+					AND etp.tipo = 4
+					ORDER BY etpsc.order_id ASC";
+	
+				$sql = $this->db->prepare($sql);
+				$sql->bindValue(":id_concessionaria", $id_concessionaria);
+				$sql->bindValue(":id_servico", $id_servico);
+				$sql->execute();
+	
+				if ($sql->rowCount() > 0) {
+					$this->array = $sql->fetchAll();
+	
+					for ($q = 0; $q < count($this->array); $q++) {
+					
+						$sql = $this->db->prepare("SELECT * FROM variavel_etapa WHERE id_etapa = :id_etapa");
+						$sql->bindValue(':id_etapa', $this->array[$q]['id']);
+						$sql->execute();
+	
+						if ($sql->rowCount() > 0) {
+							
+							$arrayVariavel = $sql->fetchAll();
+	
+							$this->array[$q]['variavel'] = array();
+	
+							foreach ($arrayVariavel as $var) {
+								array_push($this->array[$q]['variavel'], $var);
+	
+							}
+	
+							
+						}
+					}
+				}	
+	
+				return $this->array;
+			}
+		} else {
+			
 			$sql = "SELECT * FROM  
-				etapas_servico_concessionaria etpsc
-				INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
-				WHERE etpsc.id_concessionaria = :id_concessionaria 
-				AND etpsc.id_servico = :id_servico 
-				ORDER BY etpsc.order_id ASC";
-
+					etapas_servico_concessionaria etpsc
+					INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
+					WHERE etpsc.id_concessionaria = :id_concessionaria 
+					AND etpsc.id_servico = :id_servico 
+					ORDER BY etpsc.order_id ASC
+				";
+	
 			$sql = $this->db->prepare($sql);
 			$sql->bindValue(":id_concessionaria", $id_concessionaria);
 			$sql->bindValue(":id_servico", $id_servico);
 			$sql->execute();
-
+	
 			if ($sql->rowCount() > 0) {
 				$this->array = $sql->fetchAll();
 			}
-
+	
 			return $this->array;
-		} else {
-			$sql = "SELECT * FROM  
-				etapas_servico_concessionaria etpsc
-				INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
-				WHERE etpsc.id_concessionaria = :id_concessionaria 
-				AND etpsc.id_servico = :id_servico 
-				AND etp.tipo = 4
-				ORDER BY etpsc.order_id ASC";
 
-			$sql = $this->db->prepare($sql);
-			$sql->bindValue(":id_concessionaria", $id_concessionaria);
-			$sql->bindValue(":id_servico", $id_servico);
-			$sql->execute();
-
-			if ($sql->rowCount() > 0) {
-				$this->array = $sql->fetchAll();
-
-				for ($q = 0; $q < count($this->array); $q++) {
-				
-					$sql = $this->db->prepare("SELECT * FROM variavel_etapa WHERE id_etapa = :id_etapa");
-					$sql->bindValue(':id_etapa', $this->array[$q]['id']);
-					$sql->execute();
-
-					if ($sql->rowCount() > 0) {
-						
-						$arrayVariavel = $sql->fetchAll();
-
-						$this->array[$q]['variavel'] = array();
-
-						foreach ($arrayVariavel as $var) {
-							array_push($this->array[$q]['variavel'], $var);
-
-						}
-
-						
-					}
-				}
-			}	
-
-			return $this->array;
 		}
+		
 	}
 
 	public function getServicoByConcessionaria($id_concessionaria)

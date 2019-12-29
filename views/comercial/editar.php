@@ -18,6 +18,8 @@
 				<input type="hidden" class="form-control" name="id_obra" id="id_obra" autocomplete="off" value="<?php echo $tableInfo['id_obra']; ?>">
 				<input type="hidden" class="form-control" name="id_concessionaria" id="id_concessionaria" autocomplete="off" value="<?php echo $tableInfo['id_concessionaria']; ?>">
 				<input type="hidden" class="form-control" name="id_servico" id="id_servico" autocomplete="off" value="<?php echo $tableInfo['id_servico']; ?>">
+				<input type="hidden" class="form-control" name="type" id="type" autocomplete="off" value="edit">
+
 
 				<div class="box box-default box-solid">
 					<div class="row">
@@ -62,6 +64,7 @@
 					</div>
 				</div>
 
+
 				<div class="box box-default box-solid">
 					<div class="row">
 						<div class="col-md-12">
@@ -75,7 +78,7 @@
 								<div class="col-md-2">
 									<div class="form-group">
 										<label>Valor de Custo</label>
-										<input type="text" class="form-control"  name="valor_custo" id="valor_custo" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_custo'], 2, ',', '.'); ?>">
+										<input type="text" class="form-control" name="valor_custo" id="valor_custo" autocomplete="off" value="R$ <?php echo number_format($tableInfo['valor_custo'], 2, ',', '.'); ?>">
 									</div>
 								</div>
 
@@ -191,7 +194,6 @@
 												<th>Valor</th>
 												<th>Valor a Receber</th>
 												<th>Ação</th>
-
 											</tr>
 										</thead>
 										<tbody id="id_historico_etapa">
@@ -205,6 +207,86 @@
 					</div>
 				</div>
 
+				<div class="modal" id="listaCompra" tabindex="-1" role="dialog">
+					<div class="modal-dialog modal-lg" role="document">
+						<form action="<?php echo BASE_URL ?>servicos/importar" method="POST" enctype="multipart/form-data">
+							<div class="modal-content">
+								<div class="modal-header">
+									<h2 class="modal-title text-center">Lista de Compra</h2>
+									<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+										<span aria-hidden="true">&times;</span>
+									</button>
+								</div>
+								<div class="modal-body">
+
+									<div class="box box-primary span_lista_compra" style="">
+										<div class="box-header">
+											<i class="ion ion-clipboard"></i>
+											<a id="new_compra" type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-fw fa-plus-circle"></i> Novo</a>
+											<h3 class="box-title">Compras de "<?php echo $tableInfo['obr_razao_social']; ?>"</h3>
+										</div>
+										<div class="box-body">
+											<ul class="todo-list">
+												<table class="table table-striped">
+													<thead>
+														<tr>
+															<th>Nome</th>
+															<th>Quantidade</th>
+															<th>Tipo</th>
+															<th>Sub-Total</th>
+														</tr>
+													</thead>
+													<tbody id="id_sub_etapas_compras">
+
+													</tbody>
+													<tr>
+														<td colspan="3">Total </td>
+														<td colspan="1" id="total"> </td>
+														<td id="totalSub"> </td>
+													</tr>
+												</table>
+											</ul>
+
+											<div class="box box-danger adicionar_compra" style="display:none;">
+												<div class="box-header">
+													<i class="ion ion-clipboard"></i>
+													<h3 class="box-title tarefas-tittle">Adicionar Compra</h3>
+												</div>
+												<div class="box-body">
+													<ul class="todo-list">
+														<table class="table table-striped">
+															<thead>
+																<tr>
+																	<th>Nome</th>
+																	<th>Quantidade</th>
+																	<th>Tipo</th>
+																	<th>Preço Uni.</th>
+																	<th>Sub-Total</th>
+																</tr>
+															</thead>
+															<tbody id="id_sub_etapas">
+															</tbody>
+															<tr>
+																<td colspan="3">Total </td>
+																<td colspan="1" id="total"> </td>
+																<td id="totalSub"> </td>
+															</tr>
+														</table>
+													</ul>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+
+								<div class="modal-footer">
+									<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+
 				<div class="modal-footer">
 					<button type="submit" class="btn btn-primary">Salvar</button>
 					<a href="<?php echo BASE_URL; ?>comercial" class="btn btn-danger">Voltar</a>
@@ -213,82 +295,25 @@
 	</div>
 </div>
 
-<div class="modal" id="listaCompra" tabindex="-1" role="dialog">
-	<div class="modal-dialog" role="document">
-		<form action="<?php echo BASE_URL ?>servicos/importar" method="POST" enctype="multipart/form-data">
-			<div class="modal-content">
-				<div class="modal-header">
-					<h2 class="modal-title text-center">Lista de Compra</h2>
-					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						<span aria-hidden="true">&times;</span>
-					</button>
-				</div>
-				<div class="modal-body">
 
-					<div class="content">
-
-						<div class="row">
-
-							<ul class="todo-list">
-								<table class="table table-striped">
-									<thead>
-										<tr>
-											<th class="text-center">#</th>
-											<th>Nome</th>
-											<th class="text-center">Quantidade</th>
-											<th class="text-center">Preço</th>
-											<th class="text-center">Tipo</th>
-										</tr>
-									</thead>
-									<?php foreach ($compras as $list) : ?>
-										<tbody id="id_sub_etapas">
-											<tr>
-												<?php if ($list['etcc_quantidade'] != 0) : ?>
-													<td class="text-center"> <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL; ?>comercial/deleteEtapa/<?php echo $tableInfo['id_obra']; ?>/<?php echo $list['id_etapa_obra']; ?>"><i class="ion ion-trash-a"></i></a></td>
-													<td><?php echo $list['etp_nome_etapa_obra']; ?> </td>
-													<td class="text-center"><?php echo $list['etcc_quantidade'] != 0 ? $list['etcc_quantidade'] : ''; ?> </td>
-													<td class="text-center"><?php echo controller::number_format($list['preco']); ?> </td>
-													<td class="text-center"><?php echo $list['tipo_compra']; ?> </td>
-												<?php endif; ?>
-											</tr>
-											<?php $variavel = controller::getVariavelByEtapa($list['id_etapa'], $list['id_obra']); ?>
-											<?php if ($variavel) : ?>
-												<?php foreach ($variavel as $var) : ?>
-													<?php if ($var['etcc_quantidade'] != 0) : ?>
-														<tr>
-															<td class="text-center"> <?php echo $list['etp_nome_etapa_obra']; ?> </td>
-															<td><?php echo $var['nome_variavel']; ?> </td>
-															<td class="text-center"><?php echo $var['etcc_quantidade']; ?> </td>
-															<td class="text-center"><?php echo controller::number_format($var['preco_variavel']); ?> </td>
-															<td class="text-center"></td>
-														</tr>
-													<?php endif; ?>
-												<?php endforeach; ?>
-											<?php else : ?>
-											
-											<?php endif; ?>
-										</tbody>
-									<?php endforeach; ?>
-								</table>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<div class="modal-footer">
-					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-				</div>
-			</div>
-		</form>
-	</div>
-</div>
-<?php if(isset($_GET['list'])): ?>
+<?php if (isset($_GET['list'])) : ?>
 
 	<script>
-		$(function(){
-			$('#listaCompra').modal('show');	
+		$(function() {
+			$('#listaCompra').modal('show');
+
 		});
 	</script>
 
 <?php endif; ?>
+
+<script>
+	$(function() {
+
+		
+
+
+	});
+</script>
 
 <script src="<?php BASE_URL ?>/views/<?php echo $viewData['pageController']; ?>/parametros/<?php echo $viewData['pageController']; ?>.js"></script>

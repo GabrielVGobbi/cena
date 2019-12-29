@@ -77,13 +77,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
                           </div>
                         </div>
-
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Observações do sistema</label>
                             <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
                           </div>
                         </div>
+                        <?php endif;?>
 
 
                       <?php elseif ($array[0]['nome'] === 'COMPRA') : ?>
@@ -123,13 +124,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
                           </div>
                         </div>
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Observações do sistema</label>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            </div>
                           </div>
-                        </div>
+                        <?php endif; ?>
 
                       <?php elseif ($array[0]['nome'] === 'CONCESSIONARIA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
@@ -174,7 +176,7 @@ $msg = 'prazo';
                             </div>
                           </div>
                         </div>
-
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
                         <div class="col-md-12" style="margin-bottom: 13px;margin-top:5px">
                           <div class="input-group">
                             <span class="input-group-addon">
@@ -185,7 +187,7 @@ $msg = 'prazo';
                           </div>
                           <!-- /input-group -->
                         </div>
-
+                        <?php endif; ?>
 
 
                         <div class="col-md-12">
@@ -194,13 +196,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
                           </div>
                         </div>
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Observações do sistema</label>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            </div>
                           </div>
-                        </div>
+                        <?php endif;?>
 
 
 
@@ -255,13 +258,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
                           </div>
                         </div>
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Observações do sistema</label>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            </div>
                           </div>
-                        </div>
+                        <?php endif; ?>
 
 
                       <?php endif; ?>
@@ -321,9 +325,11 @@ $msg = 'prazo';
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Salvar</button>
-            </div>
+            <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
     </div>

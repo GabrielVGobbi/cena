@@ -71,6 +71,8 @@ class homeController extends controller
             $this->dataInfo['titlePage'] = 'Bem-vindo';
             $this->dataInfo['obr'] = $this->obra->getInfoObraCliente($id, $this->user->getCompany(), $this->user->getIdCliente());
 
+            $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'] != '' ? $this->dataInfo['obr']['obra_nota_numero'] : 'Bem-Vindo';
+
             if ($this->dataInfo['obr']) {
 
                 $this->loadTemplate('obrasClientes' . "/visualizar", $this->dataInfo);

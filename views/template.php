@@ -83,6 +83,7 @@
 
           </div>
 
+
           <?php if ($this->userInfo['user']->usr_info() != 'cliente') : ?>
             <div class="navbar-custom-menu">
               <ul class="nav navbar-nav">
@@ -160,6 +161,7 @@
             </div>
           <?php else : ?>
             <div class="navbar-custom-menu">
+
               <ul class="nav navbar-nav">
 
 
@@ -203,6 +205,7 @@
               </ul>
             </div>
 
+            <h3 style="text-align: center;position: relative;left: -15px;top: -6px;color: #fff;"> Bem Vindo </h3>
 
           <?php endif; ?>
         </div>

@@ -1148,7 +1148,7 @@ class Etapa extends model
             SELECT * FROM obra_etapa obrt 
             INNER JOIN etapa etp on (obrt.id_etapa = etp.id)
             INNER JOIN etapa_compra_comercial etcc on (etcc.id_etapa = etp.id)
-            WHERE  obrt.id_obra = :id_obra  AND etp.tipo = 4 AND etcc.id_obra = :id_obra GROUP BY id_etapa_obra
+            WHERE  obrt.id_obra = :id_obra  AND etp.tipo = 4 AND etcc.id_obra = :id_obra AND etcc.etcc_quantidade <> 0 GROUP BY id_etapa_obra 
         ");
 
         $sql->bindValue(':id_obra', $id_obra);
@@ -1157,7 +1157,28 @@ class Etapa extends model
 
         if ($sql->rowCount() > 0) {
             $this->array = $sql->fetchAll();
+
+            for ($q = 0; $q < count($this->array); $q++) {
+				
+                $sql = $this->db->prepare("SELECT * FROM variavel_etapa WHERE id_etapa = :id_etapa");
+                $sql->bindValue(':id_etapa', $this->array[$q]['id']);
+                $sql->execute();
+
+                if ($sql->rowCount() > 0) {
+                    
+                    $arrayVariavel = $sql->fetchAll();
+
+                    $this->array[$q]['variavel'] = array();
+
+                    foreach ($arrayVariavel as $var) {
+                        array_push($this->array[$q]['variavel'], $var);
+
+                    }
+                    
+                }
+            }
         }
+
 
         return $this->array;
     }

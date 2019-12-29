@@ -27,9 +27,6 @@ class Comercial extends model
 
 		$this->bindWhere($filtro, $sql);
 
-		error_log(print_r($sql,1));
-
-
 		$sql->execute();
 
 		if ($sql->rowCount() > 0) {
@@ -211,21 +208,41 @@ class Comercial extends model
 	}
 
 	public function setVariavelQuantidadeEtapa($id_obra, $Parametros){
-
 		if (isset($Parametros)) {
 			if (count($Parametros) > 0) {
 				for ($q = 0; $q < count($Parametros['id_variavel']); $q++) {
 
-					$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial (id_obra, id_variavel_etapa, id_etapa, etcc_quantidade)
-						VALUES (:id_obra, :id_variavel_etapa, :id_etapa, :quantidade)
-					");
+					if(isset($Parametros['etcc_id']) && $Parametros['etcc_id'] != 0 ){
 
-					$sql->bindValue(":id_variavel_etapa", $Parametros['id_variavel'][$q]);
-					$sql->bindValue(":id_obra", $id_obra);
-					$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
-					$sql->bindValue(":id_etapa", $Parametros['id_etapa'][$q]);
+						$sql = $this->db->prepare("UPDATE etapa_compra_comercial SET 
+
+							etcc_quantidade 		=	:quantidade
+						
+							WHERE id_obra = :id_obra AND etcc_id = :etcc_id
+						");
+
+						$sql->bindValue(":etcc_id", $Parametros['etcc_id'][$q]);
+						$sql->bindValue(":id_obra", $id_obra);
+						$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
+
+						$sql->execute();
+
+					} else {
+
+						$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial (id_obra, id_variavel_etapa, id_etapa, etcc_quantidade)
+							VALUES (:id_obra, :id_variavel_etapa, :id_etapa, :quantidade)
+						");
+
+						$sql->bindValue(":id_variavel_etapa", $Parametros['id_variavel'][$q]);
+						$sql->bindValue(":id_obra", $id_obra);
+						$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
+						$sql->bindValue(":id_etapa", $Parametros['id_etapa'][$q]);
+						
+						$sql->execute();
+					}
+
+						
 					
-					$sql->execute();
 				}
 			}
 		} else { }
@@ -335,18 +352,17 @@ class Comercial extends model
 
 		$nome_obra = $Parametros['nome_obra'];
 
-		$valor_proposta 		= $Parametros['valor_proposta'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_proposta'])) : '0';
-		$valor_desconto 		= $Parametros['valor_desconto'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_desconto'])) : '0';
-		$valor_negociado 		= $Parametros['valor_negociado'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_negociado'])) : '0';
+		$valor_proposta 	= $Parametros['valor_proposta'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_proposta'])) : '0';
+		$valor_desconto 	= $Parametros['valor_desconto'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_desconto'])) : '0';
+		$valor_negociado 	= $Parametros['valor_negociado'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_negociado'])) : '0';
 		$valor_custo 		= $Parametros['valor_custo'] != '' ? controller::PriceSituation(utf8_encode($Parametros['valor_custo'])) : '0';
 
+		$valor_proposta 	= str_replace('Â ','', $valor_proposta);
+		$valor_desconto 	= str_replace('Â ','', $valor_desconto);
+		$valor_negociado 	= str_replace('Â ','', $valor_negociado);
+		$valor_custo 		= str_replace('Â ','', $valor_custo);
 
-		$valor_proposta = str_replace('Â ','', $valor_proposta);
-		$valor_desconto = str_replace('Â ','', $valor_desconto);
-		$valor_negociado = str_replace('Â ','', $valor_negociado);
-		$valor_custo = str_replace('Â ','', $valor_custo);
-
-		$data_envio 			= $Parametros['data_envio'];
+		$data_envio 		= $Parametros['data_envio'];
 		$data_obra 			= $Parametros['data_obra'];
 
 
@@ -393,6 +409,11 @@ class Comercial extends model
 				} else {
 					controller::alert('danger', 'Erro ao fazer a edição!!');
 				}
+
+				if(isset($Parametros['variavel'])){
+					$this->setVariavelQuantidadeEtapa($Parametros['id_obra'],$Parametros['variavel']);
+				}
+
 			} catch (PDOExecption $e) {
 				$sql->rollback();
 				error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));

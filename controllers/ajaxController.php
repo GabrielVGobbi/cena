@@ -82,10 +82,11 @@ class ajaxController extends controller
 
         $id_concessionaria = $_REQUEST['id_concessionaria'];
         $id_servico        = $_REQUEST['id_servico'];
+        $edit              = $_REQUEST['edit'];
 
         $a = new Servicos();
 
-        $servico = $a->getEtapas($id_concessionaria, $id_servico, $tipo);
+        $servico = $a->getEtapas($id_concessionaria, $id_servico, $tipo, $edit);
 
         foreach ($servico as $citem) {
 
@@ -99,6 +100,42 @@ class ajaxController extends controller
                 'id'                    => $citem['id'],
                 'nome_sub_categoria'    => $citem['etp_nome'],
                 'quantidade'            => $citem['quantidade'],
+                'preco'                 => $citem['preco'],
+                'tipo_compra'           => $citem['tipo_compra'],
+                'variavel'              => $variavel
+            );
+        }
+
+        echo json_encode($data);
+    }
+
+    public function searchCompraByObra($tipo = false)
+    {
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+        $variavel = array();
+
+        $id_obra = $_REQUEST['id_obra'];
+        
+
+        $a = new Etapa('');
+
+        $servico = $a->getEtapasByTipoByObra($id_obra);
+
+        foreach ($servico as $citem) {
+
+            if (isset($citem['variavel'])) {
+                $variavel = $citem['variavel'];
+            } else { 
+                $variavel = array();
+            }
+
+            $data[] = array(
+                'id'                    => $citem['id'],
+                'etcc_id'               => $citem['etcc_id'],
+                'nome_sub_categoria'    => $citem['etp_nome'],
+                'quantidade'            => $citem['etcc_quantidade'],
                 'preco'                 => $citem['preco'],
                 'tipo_compra'           => $citem['tipo_compra'],
                 'variavel'              => $variavel

@@ -238,7 +238,7 @@ class obrasController extends controller
     public function concluir($id)
     {
 
-        if ($this->user->hasPermission('obra_view')) {
+        if ($this->user->hasPermission('obra_edit')) {
 
             
             $result = $this->obra->concluir($id, $this->user->getCompany());
@@ -255,7 +255,7 @@ class obrasController extends controller
     public function desconcluir($id)
     {
 
-        if ($this->user->hasPermission('obra_view')) {
+        if ($this->user->hasPermission('obra_edit')) {
 
             $result = $this->obra->desconcluir($id, $this->user->getCompany());
 

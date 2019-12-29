@@ -64,7 +64,7 @@ class financeiroController extends controller
 
                 $this->dataInfo['totalFaturado'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), FATURADO);
             
-                $this->dataInfo['totalFaturar'] =  intval($faturar) - intval($this->dataInfo['totalFaturado']);
+                $this->dataInfo['totalFaturar'] =  intval($faturar);
 
                 $this->dataInfo['recebido'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), RECEBIDO);
 
@@ -126,7 +126,7 @@ class financeiroController extends controller
         
         if (isset($_POST['id_obra']) && $_POST['id_obra'] != '') {
 
-            $verify = $this->financeiro->verifyFinanceiroObra($id_obra);
+            $verify = $this->financeiro->verifyFinanceiroObra($_POST['id_obra']);
 
             if($verify){
                 header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/obra/'.$_POST['id_obra']);
@@ -135,7 +135,7 @@ class financeiroController extends controller
 
             $result = $this->financeiro->add($this->user->getCompany(), $_POST);
 
-            header('Location:' . BASE_URL . $this->dataInfo['nome_tabela'].'/obra/'.$_POST['id_obra']);
+            header('Location:' . BASE_URL . 'comercial/edit/'.$_POST['id_obra']);
             exit();
         
         } else {
