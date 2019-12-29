@@ -53,7 +53,7 @@ class homeController extends controller
         
         if ($this->user->usr_info() === 'cliente') {
 
-            $this->dataInfo['titlePage'] = 'Bem-vindo';
+            $this->dataInfo['titlePage'] = '';
             $this->dataInfo['tableDados'] = $this->obra->getObraCliente($this->user->cliente(), '', $this->user->getCompany());
 
             $this->loadTemplate('obrasClientes' . "/index", $this->dataInfo);

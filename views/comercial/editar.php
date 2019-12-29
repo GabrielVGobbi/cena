@@ -222,7 +222,7 @@
 									<div class="box box-primary span_lista_compra" style="">
 										<div class="box-header">
 											<i class="ion ion-clipboard"></i>
-											<a id="new_compra" type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-fw fa-plus-circle"></i> Novo</a>
+											<!--<a id="new_compra" type="button" class="btn btn-default btn-sm pull-right"><i class="fa fa-fw fa-plus-circle"></i> Novo</a>-->
 											<h3 class="box-title">Compras de "<?php echo $tableInfo['obr_razao_social']; ?>"</h3>
 										</div>
 										<div class="box-body">
@@ -247,34 +247,7 @@
 												</table>
 											</ul>
 
-											<div class="box box-danger adicionar_compra" style="display:none;">
-												<div class="box-header">
-													<i class="ion ion-clipboard"></i>
-													<h3 class="box-title tarefas-tittle">Adicionar Compra</h3>
-												</div>
-												<div class="box-body">
-													<ul class="todo-list">
-														<table class="table table-striped">
-															<thead>
-																<tr>
-																	<th>Nome</th>
-																	<th>Quantidade</th>
-																	<th>Tipo</th>
-																	<th>Preço Uni.</th>
-																	<th>Sub-Total</th>
-																</tr>
-															</thead>
-															<tbody id="id_sub_etapas">
-															</tbody>
-															<tr>
-																<td colspan="3">Total </td>
-																<td colspan="1" id="total"> </td>
-																<td id="totalSub"> </td>
-															</tr>
-														</table>
-													</ul>
-												</div>
-											</div>
+											
 										</div>
 									</div>
 								</div>
@@ -315,5 +288,37 @@
 
 	});
 </script>
+
+
+
+<!--<div class="box box-danger adicionar_compra" style="display:none;">
+	<div class="box-header">
+		<i class="ion ion-clipboard"></i>
+		<h3 class="box-title tarefas-tittle">Adicionar Compra</h3>
+	</div>
+	<div class="box-body">
+		<ul class="todo-list">
+			<table class="table table-striped">
+				<thead>
+					<tr>
+						<th>Nome</th>
+						<th>Quantidade</th>
+						<th>Tipo</th>
+						<th>Preço Uni.</th>
+						<th>Sub-Total</th>
+					</tr>
+				</thead>
+				<tbody id="id_sub_etapas">
+				</tbody>
+				<tr>
+					<td colspan="3">Total </td>
+					<td colspan="1" id="total"> </td>
+					<td id="totalSub"> </td>
+				</tr>
+			</table>
+		</ul>
+	</div>
+</div>
+-->
 
 <script src="<?php BASE_URL ?>/views/<?php echo $viewData['pageController']; ?>/parametros/<?php echo $viewData['pageController']; ?>.js"></script>

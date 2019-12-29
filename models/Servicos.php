@@ -127,10 +127,12 @@ class Servicos extends model
 		}
 	}
 
-	public function getEtapas($id_concessionaria, $id_servico, $tipo = false, $type = false)
+	public function getEtapas($id_concessionaria, $id_servico, $tipo = 'cadastrar', $type = 'cadastrar')
 	{
-		if($type == false){
-			if ($tipo == false) {
+		
+
+		if($type == 'cadastrar'){
+			if ($tipo == 'editar') {
 				$sql = "SELECT * FROM  
 					etapas_servico_concessionaria etpsc
 					INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		
@@ -146,9 +148,10 @@ class Servicos extends model
 				if ($sql->rowCount() > 0) {
 					$this->array = $sql->fetchAll();
 				}
+			
 	
 				return $this->array;
-			} else {
+			} elseif ($tipo == true) {
 				$sql = "SELECT * FROM  
 					etapas_servico_concessionaria etpsc
 					INNER JOIN etapa etp ON (etpsc.id_etapa = etp.id)		

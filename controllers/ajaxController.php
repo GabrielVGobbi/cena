@@ -82,11 +82,12 @@ class ajaxController extends controller
 
         $id_concessionaria = $_REQUEST['id_concessionaria'];
         $id_servico        = $_REQUEST['id_servico'];
-        $edit              = $_REQUEST['edit'];
+        $type              = isset($_REQUEST['edite']) ? 'cadastrar' : 'editar';
+
 
         $a = new Servicos();
 
-        $servico = $a->getEtapas($id_concessionaria, $id_servico, $tipo, $edit);
+        $servico = $a->getEtapas($id_concessionaria, $id_servico, $tipo, $type);
 
         foreach ($servico as $citem) {
 

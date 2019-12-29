@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Tipo de Obra/Serviço</label>
-                                    <select class="form-control select2 service_select" style="width: 100%;" name="servico" data-tipo="true" id="id_servico" required>
+                                    <select class="form-control select2 service_select" style="width: 100%;" name="servico" data-tipo="cadastrar" id="id_servico" required>
                                         <option value="">selecione a concessionaria</option>
                                     </select>
                                 </div>

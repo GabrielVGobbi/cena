@@ -109,7 +109,6 @@ $(function () {
 
 
     $('#id_servico').change(function () {
-
         getLista(this);
     });
 
@@ -119,23 +118,26 @@ $(function () {
 
         var type = true;
 
-        getLista('', type);
+        //getLista('', type);
 
     })
 
     function getLista(serv, type = false){
 
+  
+
         var select = $('.concessionaria_select').select2('data');
         
         var service = $('.service_select').select2('data'); 
 
-        if ($(serv).attr('data-tipo') == true) {
-            var tipo = true;
+        if ($(serv).attr('data-tipo') == 'cadastrar') {
+            var tipo = 'cadastrar';
         } else {
-            var tipo = false;
+            var tipo = 'editar';
         }
 
-        var edit        = (type == false) ? true : false;
+        
+        var edit        = (type == false) ? 'cadastrar' : 'editar';
 
         var id_concessionaria = (type == false) ? select[0].id  : $('#id_concessionaria').val();
         var id_servico        = (type == false) ? $(serv).val() : $('#id_servico').val();
@@ -143,7 +145,7 @@ $(function () {
         $.getJSON(BASE_URL + 'ajax/search_categoria/' + tipo + '?search=', {
             id_servico: id_servico,
             id_concessionaria: id_concessionaria,
-            edit:edit,
+            edite:edit,
             ajax: 'true'
         }, function (j) {
             var options = '';
