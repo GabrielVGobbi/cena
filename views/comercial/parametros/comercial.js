@@ -109,160 +109,160 @@ $(function () {
 
 
     $('#id_servico').change(function () {
-        getLista(this);
-    });
-
-    $('#new_compra').on('click', function(){
-			
-        $('.adicionar_compra').toggle('slow');
-
-        var type = true;
-
-        //getLista('', type);
-
-    })
-
-    function getLista(serv, type = false){
-
-  
 
         var select = $('.concessionaria_select').select2('data');
-        
-        var service = $('.service_select').select2('data'); 
+        if (select) { }
+        service = $('.service_select').select2('data');
 
-        if ($(serv).attr('data-tipo') == 'cadastrar') {
-            var tipo = 'cadastrar';
+        if ($(this).attr('data-tipo') == true) {
+            var tipo = true;
         } else {
-            var tipo = 'editar';
+            var tipo = false;
         }
 
-        
-        var edit        = (type == false) ? 'cadastrar' : 'editar';
+        if ($(this).val()) {
+            $.getJSON(BASE_URL + 'ajax/search_categoria/' + tipo + '?search=', {
+                id_servico: $(this).val(),
+                id_concessionaria: select[0].id,
+                ajax: 'true'
+            }, function (j) {
+                var options = '';
+                var result = 0;
 
-        var id_concessionaria = (type == false) ? select[0].id  : $('#id_concessionaria').val();
-        var id_servico        = (type == false) ? $(serv).val() : $('#id_servico').val();
+                if (j.length != 0) {
+                    for (var i = 0; i < j.length; i++) {
 
-        $.getJSON(BASE_URL + 'ajax/search_categoria/' + tipo + '?search=', {
-            id_servico: id_servico,
-            id_concessionaria: id_concessionaria,
-            edite:edit,
-            ajax: 'true'
-        }, function (j) {
-            var options = '';
-            var result  = 0;'   '
-        
-            if (j.length != 0) {
-                for (var i = 0; i < j.length; i++) {
-                    options += '<tr>';
-                    options += '';
-                    precoformatado = 'R$ ' + formata(j[i].preco);
-                    subtotal = j[i].preco * j[i].quantidade;
-                    result += parseInt(j[i].preco);
-                
-                    if (j[i].variavel == '') {
-                    
-                        options += '<td>' + j[i].nome_sub_categoria + '</td>';
-                    
-                        options += '<td>' + '<input type="number" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="' + j[i].preco + '" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
-                        options += '<td>' + j[i].tipo_compra + '</td>';
-                        options += '<td class="unitario">' + precoformatado + '</td>';
-                        options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
-                        options += '</tr>';
-                    
-                    
-                    } else {
-                        options += '<td colspan="5"><div style="color:#ff0000" onclick="openVariavel(' + j[i].id + ')">' + j[i].nome_sub_categoria + '</div></td>'
-                    
-                    
-                        options += '<tr >'
-                        options += '<td colspan="5">'
-                        options += '<div style="display: none;position: relative;border-radius: 12px;margin-bottom: 20px;box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);border-left: 1px solid #000000;border-right: 1px solid #0a0a0a;border-bottom: 1px solid #000000;" id="open_' + j[i].id + '">'
-                    
-                        options += '<table class="table table-striped">'
-                        options += '<thead>'
-                        options += '<tr>'
-                        options += '<th>Nome</th>'
-                        options += '<th style="width: 24%;">Quantidade</th>'
-                        options += '<th>Tipo</th>'
-                        options += '<th>Preço Uni.</th>'
-                        options += '<th>Sub-Total</th>'
-                        options += '</tr>'
-                        options += '</thead>'
-                    
-                        for (var l = 0; l < j[i].variavel.length; l++) {
-                            options += '<input type="hidden" name="variavel[id_variavel][]" value="'+j[i].variavel[l].id_variavel_etapa+'"></input>'
-                            options += '<input type="hidden" name="variavel[id_etapa][]" value="'+j[i].id+'"></input>'
-                        
-                        
-                            options += '<tr>';
-                            options += '<td>' + j[i].variavel[l].nome_variavel + '</td>';
-                            options += '<td>' + '<input type="number" id="preco_variavel" data-price="' + j[i].variavel[l].preco_variavel + '" name="variavel[compra_quantidade][]" onchange="updateSubTotal(this)"  data-price="" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
+
+
+
+                        options += '<tr>';
+                        options += '';
+
+                        precoformatado = 'R$ ' + formata(j[i].preco);
+
+
+                        subtotal = j[i].preco * j[i].quantidade;
+
+                        result += parseInt(j[i].preco);
+
+
+
+
+
+
+                        if (j[i].variavel == '') {
+
+                            options += '<td>' + j[i].nome_sub_categoria + '</td>';
+
+                            options += '<td>' + '<input type="number" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="' + j[i].preco + '" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
                             options += '<td>' + j[i].tipo_compra + '</td>';
-                            options += '<td class="unitario">' + 'R$ ' + formata(j[i].variavel[l].preco_variavel) + '</td>';
-                        
+                            options += '<td class="unitario">' + precoformatado + '</td>';
                             options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
                             options += '</tr>';
-                        
+
+
+                        } else {
+                            options += '<td colspan="5"><div style="color:#ff0000" onclick="openVariavel(' + j[i].id + ')">' + j[i].nome_sub_categoria + '</div></td>'
+
+
+                            options += '<tr >'
+                            options += '<td colspan="5">'
+                            options += '<div style="display: none;position: relative;border-radius: 12px;margin-bottom: 20px;box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);border-left: 1px solid #000000;border-right: 1px solid #0a0a0a;border-bottom: 1px solid #000000;" id="open_' + j[i].id + '">'
+
+                            options += '<table class="table table-striped">'
+                            options += '<thead>'
+                            options += '<tr>'
+                            options += '<th>Nome</th>'
+                            options += '<th style="width: 24%;">Quantidade</th>'
+                            options += '<th>Tipo</th>'
+                            options += '<th>Preço Uni.</th>'
+                            options += '<th>Sub-Total</th>'
+                            options += '</tr>'
+                            options += '</thead>'
+
+                            for (var l = 0; l < j[i].variavel.length; l++) {
+                                options += '<input type="hidden" name="variavel[id_variavel][]" value="'+j[i].variavel[l].id_variavel_etapa+'"></input>'
+                                options += '<input type="hidden" name="variavel[id_etapa][]" value="'+j[i].id+'"></input>'
+
+
+                                options += '<tr>';
+                                options += '<td>' + j[i].variavel[l].nome_variavel + '</td>';
+                                options += '<td>' + '<input type="number" id="preco_variavel" data-price="' + j[i].variavel[l].preco_variavel + '" name="variavel[compra_quantidade][]" onchange="updateSubTotal(this)"  data-price="" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
+                                options += '<td>' + j[i].tipo_compra + '</td>';
+                                options += '<td class="unitario">' + 'R$ ' + formata(j[i].variavel[l].preco_variavel) + '</td>';
+
+                                options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
+                                options += '</tr>';
+
+                            }
+
+                            options += '</table>'
+
+                            options += '</div>'
+                            options += '</td>'
+                            options += '</tr>'
+
+
                         }
-                    
-                        options += '</table>'
-                    
-                        options += '</div>'
-                        options += '</td>'
-                        options += '</tr>'
+
+
+
+                        $('.tarefas-tittle').html('Compras de ' + service[0].text)
+                        //$('#total').html('R$ ' + formata(result))
                     }
-                
-                    //$('.tarefas-tittle').html('Compras de ' + service[0].text)
-                    //$('#total').html('R$ ' + formata(result))
+                    $('#id_sub_etapas').html(options).show();
+                    $('.span_etapa').show();
+                    $('.result_null').hide();
+
+                    updateTotal();
+
+                } else {
+                    options = 'Não existem compras desse serviço com essa concessionaria. Por favor, refaça a busca'
+                    $('.span_etapa').hide();
+
+                    $('#result_null').html(options).show();
+                    $('.result_null').show();
                 }
-                
-                $('#id_sub_etapas').html(options).show();
-                $('.span_etapa').show();
-                $('.result_null').hide();
-            
-                updateTotal();
-            
-            } else {
-                options = 'Não existem compras desse serviço com essa concessionaria. Por favor, refaça a busca'
-                $('.span_etapa').hide();
-            
-                $('#result_null').html(options).show();
-                $('.result_null').show();
-            }
-        
-        });
-    
-    
-    
-        $.getJSON(BASE_URL + 'ajax/search_categoria/?search=', {
-            id_servico: id_servico,
-            id_concessionaria: id_concessionaria,
-            ajax: 'true'
-        }, function (j) {
-            var options = '';
-            var result = 0;
-        
-            if (j.length != 0) {
-                for (var i = 0; i < j.length; i++) {
-                
-                    options += '<option value="' + j[i].id + '">' + j[i].nome_sub_categoria + '</option>';
-                
+
+            });
+
+
+
+            $.getJSON(BASE_URL + 'ajax/search_categoria/?search=', {
+                id_servico: $(this).val(),
+                id_concessionaria: select[0].id,
+                ajax: 'true'
+            }, function (j) {
+                var options = '';
+                var result = 0;
+
+                if (j.length != 0) {
+                    for (var i = 0; i < j.length; i++) {
+
+                        options += '<option value="' + j[i].id + '">' + j[i].nome_sub_categoria + '</option>';
+
+                    }
+                    // $('#id_sub_etapas_todas').html(options).show();
+
+
+                } else {
+                    options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca'
+                    $('.span_etapa').hide();
+
+                    $('#result_null').html(options).show();
+                    $('.result_null').show();
                 }
-                // $('#id_sub_etapas_todas').html(options).show();
-            
-            
-            } else {
-                options = 'Não existem Etapas desse serviço com essa concessionaria. Por favor, refaça a busca'
-                $('.span_etapa').hide();
-            
-                $('#result_null').html(options).show();
-                $('.result_null').show();
-            }
-        
-        
-        });
-            
-    }
+
+
+            });
+        } else {
+            options = 'Selecione o Serviço'
+            $('.span_etapa').hide();
+
+            $('#result_null').html(options).show();
+            $('.result_null').show();
+        }
+    });
 
     $(function () {
         $('#comercialStatusSelect').on('change', function (event) {
@@ -497,6 +497,8 @@ function add_cliente(obj) {
                                 title: "Sucesso!",
                                 text: "Cadastro efetuado com sucesso",
                                 icon: "success",
+
+
                             })
                             $(".span-cliente").css("border-color", "#09a916");
                             $('.searchresultscliente').hide();
@@ -509,6 +511,8 @@ function add_cliente(obj) {
                                 title: "Oops!!",
                                 text: "Ja existe um cliente: " + name,
                                 icon: "warning",
+
+
                             })
                         }
 
@@ -526,106 +530,6 @@ $(function () {
     if ($('#id_obra').val() != undefined) {
         $(document).ready(readyFn);
         $(document).ready(gethistorico);
-        $(document).ready(getCompra);
-    }
-
-    function getCompra(){
-
-        var id_obra = $('#id_obra').val();
-
-        $.getJSON(BASE_URL + 'ajax/searchCompraByObra/?search=', {
-            id_obra: id_obra,
-            ajax: 'true'
-        }, function (j) {
-            var options = '';
-            var result = 0;
-        
-            if (j.length != 0) {
-                for (var i = 0; i < j.length; i++) {
-                
-                    options += '<tr>';
-                    options += '';
-                
-                    precoformatado = 'R$ ' + formata(j[i].preco);
-                
-                
-                    subtotal = j[i].preco * j[i].quantidade;
-                
-                    result += parseInt(j[i].preco);
-                
-                    if (j[i].variavel == '') {
-                    
-                        options += '<td>' + j[i].nome_sub_categoria + '</td>';
-                    
-                        options += '<td>' + '<input type="number" name="compra_quantidade[' + j[i].id + ']" onchange="updateSubTotal(this)"  data-price="' + j[i].preco + '" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
-                        options += '<td>' + j[i].tipo_compra + '</td>';
-                        options += '<td class="unitario">' + precoformatado + '</td>';
-                        options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
-                        options += '</tr>';
-                    
-                    
-                    } else {
-                        options += '<td colspan="5"><div style="color:#ff0000" onclick="openVariavel(' + j[i].id + ')">' + j[i].nome_sub_categoria + '</div></td>'
-                    
-                    
-                        options += '<tr >'
-                        options += '<td colspan="5">'
-                        options += '<div style="display: none;position: relative;border-radius: 12px;margin-bottom: 20px;box-shadow: 0 0px 1px rgba(0, 0, 0, 0.1);border-left: 1px solid #000000;border-right: 1px solid #0a0a0a;border-bottom: 1px solid #000000;" id="open_' + j[i].id + '">'
-                    
-                        options += '<table class="table table-striped">'
-                        options += '<thead>'
-                        options += '<tr>'
-                        options += '<th>Nome</th>'
-                        options += '<th style="width: 24%;">Quantidade</th>'
-                        options += '<th>Tipo</th>'
-                        options += '<th>Preço Uni.</th>'
-                        options += '<th>Sub-Total</th>'
-                        options += '</tr>'
-                        options += '</thead>'
-                    
-                        for (var l = 0; l < j[i].variavel.length; l++) {
-                            options += '<input type="hidden" name="variavel[etcc_id][]" value="'+j[i].etcc_id+'"></input>'
-                            options += '<input type="hidden" name="variavel[id_variavel][]" value="'+j[i].variavel[l].id_variavel_etapa+'"></input>'
-                            options += '<input type="hidden" name="variavel[id_etapa][]" value="'+j[i].id+'"></input>'
-                        
-                        
-                            options += '<tr>';
-                            options += '<td>' + j[i].variavel[l].nome_variavel + '</td>';
-                            options += '<td>' + '<input type="number" id="preco_variavel" data-price="' + j[i].variavel[l].preco_variavel + '" name="variavel[compra_quantidade][]" onchange="updateSubTotal(this)"  data-price="" style="width: 30%;text-align:center" class="p_quant" value=' + j[i].quantidade + ' />' + '</td>';
-                            options += '<td>' + j[i].tipo_compra + '</td>';
-                            options += '<td class="unitario">' + 'R$ ' + formata(j[i].variavel[l].preco_variavel) + '</td>';
-                        
-                            options += '<td class="subtotal">' + 'R$ ' + formata(subtotal) + '</td>';
-                            options += '</tr>';
-                        
-                        }
-                    
-                        options += '</table>'
-                    
-                        options += '</div>'
-                        options += '</td>'
-                        options += '</tr>'
-                    
-                    
-                    }
-                
-                    //$('#total').html('R$ ' + formata(result))
-                }
-                $('#id_sub_etapas_compras').html(options).show();
-                $('.span_etapa').show();
-                $('.result_null').hide();
-            
-                //updateTotal();
-            
-            } else {
-                options = 'Não existem compras desse serviço com essa concessionaria. Por favor, refaça a busca'
-                $('.span_etapa').hide();
-            
-                $('#result_null').html(options).show();
-                $('.result_null').show();
-            }
-        
-        });
     }
 
 
