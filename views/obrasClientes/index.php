@@ -21,8 +21,9 @@
 										<tbody>
 											<tr>
 												<th style="width: 22%;">Ações</th>
-												<th>ID</th>
 												<th>Nome</th>
+												<th>Serviço</th>
+
 											</tr>
 											<?php foreach ($tableDados as $obr) : ?>
 												<tr>
@@ -30,8 +31,10 @@
 														<a type="button" class="btn btn-info" data-toggle="modal" href="<?php echo BASE_URL;?>home/visualizar/<?php echo $obr[0];?>"><i class="fa fa-fw fa-info"></i></a>
 
 													</td>
-													<td><?php echo $obr['id'] ?></td>
 													<td><?php echo $obr['obr_razao_social'] ?></td>
+													<td><?php echo $obr['sev_nome']; ?></td>
+
+													
 												</tr>
 
 											<?php endforeach; ?>
