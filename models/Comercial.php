@@ -60,6 +60,8 @@ class Comercial extends model
 			$where[] = 'obr.id_status in (1,2)';
 		}
 
+
+
 		return $where;
 	}
 
@@ -67,15 +69,11 @@ class Comercial extends model
 	{
 		if (!empty($filtro['nome_obra'])) {
 			if ($filtro['nome_obra'] != '') {
+
 				$sql->bindValue(":nome_obra", '%' . $filtro['nome_obra'] . '%');
 			}
 		}
 
-		if (!empty($filtro['situacao'])) {
-			if ($filtro['situacao'] != '') {
-				$sql->bindValue(":id_status", $filtro['situacao']);
-			}
-		}
 	}
 
 	public function add($id_company, $Parametros)

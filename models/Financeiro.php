@@ -469,14 +469,16 @@ class Financeiro extends model
 
     public function getPendentesRecebido(){
 
-        $hoje = date('d/m/Y');
+        $hoje = date('Y-d-m');
+
+        error_log(print_r($hoje,1));
 
         $array_faturamento = array();
 
         $sql = $this->db->prepare("
             SELECT * FROM historico_faturamento histf
             INNER JOIN obra obr ON (obr.id = histf.id_obra)
-            WHERE histf.recebido_status = 0 AND histf.data_vencimento <= :hoje AND histf.status <> 1 AND obr.atv = 1
+            WHERE (histf.recebido_status = 0 AND histf.status <> 1 AND obr.atv = 1) AND histf.data_vencimento <= :hoje
         ");
 
         $sql->bindValue(":hoje", $hoje);
