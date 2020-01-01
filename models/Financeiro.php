@@ -36,6 +36,9 @@ class Financeiro extends model
 
         if ($sql->rowCount() == 1) {
             $this->array = $sql->fetch();
+                        
+
+
         }
         return $this->array;
     }
@@ -91,6 +94,7 @@ class Financeiro extends model
 
         if ($sql->rowCount() > 0) {
             $this->retorno = $sql->fetchAll();
+
         }
 
         return $this->retorno;
@@ -108,6 +112,9 @@ class Financeiro extends model
 
         if ($sql->rowCount() > 0) {
             $row = $sql->fetch();
+                        
+
+
         }
 
         $r = $row['c'];
@@ -134,6 +141,9 @@ class Financeiro extends model
 
             $r = $row['c'];
 
+                        
+
+
             return $r;
         }else {
             $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND histf.status <> 1");
@@ -144,6 +154,9 @@ class Financeiro extends model
     
             if ($sql->rowCount() > 0) {
                 $row = $sql->fetch();
+                            
+
+
             }
     
             $r = $row['c'];
@@ -250,7 +263,7 @@ class Financeiro extends model
             }
 
             #return $sql->execute() ? true : false;
-            $this->db = null;
+            
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -461,7 +474,8 @@ class Financeiro extends model
             controller::setLog($Parametros, 'historico_lançamento', 'delete');
             //$this->deleteEtapasObras($id);
 
-            $sql = null;
+            
+
         } else {
             controller::alert('error', 'não foi possivel deletar o lançamento');
         }
@@ -470,8 +484,6 @@ class Financeiro extends model
     public function getPendentesRecebido(){
 
         $hoje = date('Y-d-m');
-
-        error_log(print_r($hoje,1));
 
         $array_faturamento = array();
 
@@ -486,6 +498,8 @@ class Financeiro extends model
 
         if ($sql->rowCount() > 0) {
             $array_faturamento  = $sql->fetchAll();
+            
+
         }
 
         return $array_faturamento;

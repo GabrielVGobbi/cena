@@ -349,5 +349,14 @@ class controller
 
 	}
 
+	public function Iniciais($nome,$minusculas = true){
+		$nome = ucWords(strtolower($nome)); #ESSA LINHA
+        preg_match_all('/\s?([A-Z])/',$nome,$matches);
+        $ret = implode('',$matches[1]);
+        return $minusculas?
+		strtoupper($ret) :
+                $ret;
+	}
+
 	
 }

@@ -1,6 +1,11 @@
 <?php
 $check = 'danger';
 $msg = 'prazo';
+$nome = $this->user->getName();
+            
+$Iniciais = controller::Iniciais($nome);
+$data_hoje = date('d/m');
+
 ?>
 
 <div class="modal fade" id="editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -81,7 +86,7 @@ $msg = 'prazo';
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?> </textarea>
                           </div>
                         </div>
                         <?php endif;?>
@@ -128,7 +133,7 @@ $msg = 'prazo';
                           <div class="col-md-12">
                             <div class="form-group">
                               <label>Observações do sistema</label>
-                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
                             </div>
                           </div>
                         <?php endif; ?>
@@ -200,7 +205,7 @@ $msg = 'prazo';
                           <div class="col-md-12">
                             <div class="form-group">
                               <label>Observações do sistema</label>
-                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
                             </div>
                           </div>
                         <?php endif;?>
@@ -262,7 +267,7 @@ $msg = 'prazo';
                           <div class="col-md-12">
                             <div class="form-group">
                               <label>Observações do sistema</label>
-                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
                             </div>
                           </div>
                         <?php endif; ?>
