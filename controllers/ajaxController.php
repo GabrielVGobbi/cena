@@ -356,6 +356,23 @@ class ajaxController extends controller
         echo json_encode($data['id']);
     }
 
+    public function getDepartamentoById(){
+
+        $array = array();
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $cliente = new Cliente();
+        
+        $array = $cliente->getDepartamentoById($_POST['id_departamento']);
+
+        echo json_encode($array);
+        
+        exit;
+
+
+    }
+
     public function verificarMensagem()
     {
 

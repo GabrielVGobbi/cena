@@ -111,9 +111,6 @@ class ComercialController extends controller
 
             if (isset($_POST['nome_obra']) && isset($_POST['id_obra'])) {
 
-                error_log(print_r($_POST,1));
-
-
                 $result = $this->comercial->edit($_POST, $this->user->getCompany());
                 
                 header('Location:' . BASE_URL . 'comercial/edit/'.$id);

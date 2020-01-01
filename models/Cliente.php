@@ -541,6 +541,21 @@ class Cliente extends model
 		$sql->bindValue(':id_cliente', $id_cliente);
 		$sql->execute();
 
+		
+
 		return $array = ($sql->rowCount() > 0) ? $sql->fetchAll() : array();
+	}
+
+	public function getDepartamentoById($id_departamento){
+
+		$sql = $this->db->prepare("SELECT * FROM departamento depcli
+			
+			WHERE depcli.id_departamento = :id_departamento
+		");
+		$sql->bindValue(':id_departamento', $id_departamento);
+		$sql->execute();
+
+		return $array = ($sql->rowCount() == 1) ? $sql->fetch() : array();
+
 	}
 }

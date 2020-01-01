@@ -29,7 +29,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 								<h3 class="box-title">Dados</h3>
 							</div>
 							<div class="box-body" style="">
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label>Nome da Obra</label>
 										<input type="text" class="form-control" name="obra_nome" id="obra_nome" value="<?php echo $obr['obr_razao_social']; ?>" autocomplete="off">
@@ -43,16 +43,11 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 									</div>
 								</div>
 
-								<div class="col-md-4">
+								<div class="col-md-3">
 									<div class="form-group">
 										<label>Tipo de Obra/Serviço</label>
 										<input type="text" class="form-control" disabled name="servico_nome" id="servico_nome" value="<?php echo $obr['sev_nome']; ?>" autocomplete="off">
 									</div>
-								</div>
-
-								<div class="col-md-10" style="margin-bottom:6px;">
-									<label>Cliente</label>
-									<input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $obr['cliente_apelido']; ?>" autocomplete="off">
 								</div>
 
 								<div class="col-md-2" style="margin-bottom:6px;">
@@ -61,6 +56,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 								</div>
 							</div>
 
+							<?php include_once('include/departamento.php'); ?>
 
 							<?php include_once('include/endereco.php'); ?>
 						</div>
@@ -73,16 +69,16 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 									<i class="ion ion-clipboard"></i>
 									<h3 class="box-title title-tipo">Etapas
 										<?php if (isset($_GET['tipo'])) {
-																																											if ($_GET['tipo'] == CONCESSIONARIA) {
-																																												echo 'Concessionaria';
-																																											} else if ($_GET['tipo'] == ADMINISTRATIVA) {
-																																												echo 'Administativo';
-																																											} else if ($_GET['tipo'] == OBRA) {
-																																												echo 'Obra';
-																																											} else if ($_GET['tipo'] == COMPRA) {
-																																												echo ' de Compra';
-																																											}
-																																										}
+											if ($_GET['tipo'] == CONCESSIONARIA) {
+												echo 'Concessionaria';
+											} else if ($_GET['tipo'] == ADMINISTRATIVA) {
+												echo 'Administativo';
+											} else if ($_GET['tipo'] == OBRA) {
+												echo 'Obra';
+											} else if ($_GET['tipo'] == COMPRA) {
+												echo ' de Compra';
+											}
+										}
 
 										?> </h3>
 									<div class="box-tools pull-right select_obras">

@@ -559,8 +559,9 @@ class Obras extends model
 
 
 			$razao_social = isset($Parametros['razao_social_obra_cliente']) ? $Parametros['razao_social_obra_cliente'] : '';
-
-
+			
+			$id_departamento = isset($Parametros['cliente_departamento']) ? $Parametros['cliente_departamento'] : '';
+			
 			$id_endereco = isset($Parametros['id_endereco'])
 				? $this->setEnderecoObra($Parametros, $id_company, $Parametros['id_endereco'])
 				: $this->setEnderecoObra($Parametros, $id_company);
@@ -570,7 +571,9 @@ class Obras extends model
 				data_obra = :data_obra, 
 				id_endereco_obra = :id_endereco_obra,
 				cnpj_obra = :obra_cnpj,
-				razao_social_obra_cliente = :razao_social_obra_cliente
+				razao_social_obra_cliente = :razao_social_obra_cliente,
+				id_departamento = :id_departamento
+
 				
 				
 				WHERE id = :id_obra
@@ -582,7 +585,7 @@ class Obras extends model
 			$sql->bindValue(":id_endereco_obra", $id_endereco);
 			$sql->bindValue(":obra_cnpj", $Parametros['obra_cnpj']);
 			$sql->bindValue(":razao_social_obra_cliente", $razao_social);
-
+			$sql->bindValue(":id_departamento", $id_departamento);
 
 			$sql->execute();
 

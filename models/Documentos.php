@@ -56,6 +56,14 @@ class Documentos extends model
 			}
 		}
 
+		if (!empty($filtro['id'])) {
+
+			if ($filtro['id'] != '') {
+
+				$where[] = "docs.id = :id";
+			}
+		}
+
 		return $where;
 	}
 

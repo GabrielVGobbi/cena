@@ -9,6 +9,9 @@ class documentosController extends controller
 
         $this->user = new Users();
         $this->documento = new Documentos();
+        $this->obra = new Obras();
+        $this->cliente = new Cliente();
+
         $this->user->setLoggedUser();
 
         if ($this->user->isLogged() == false) {
@@ -31,9 +34,21 @@ class documentosController extends controller
 
         if ($this->user->hasPermission('documento_view')) {
 
+            $this->dataInfo['tableDados'] = array();
+            $this->dataInfo['getCount']   = 0;
+            $this->dataInfo['p_count']    = 0;
+
             if (isset($_GET['filtros'])) {
                 $this->filtro = $_GET['filtros'];
+
+                $this->dataInfo['tableDados'] = $this->documento->getAll($this->filtro, $this->user->getCompany());
+                $this->dataInfo['getCount']   = $this->documento->getCount($this->user->getCompany());
+                $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
+
             }
+
+            $this->dataInfo['clientes'] = $this->cliente->getAll(0,'', $this->user->getCompany());
+            $this->dataInfo['obras'] = $this->obra->getAllByClear($this->user->getCompany());
 
             $this->dataInfo['p'] = 1;
             if (isset($_GET['p']) && !empty($_GET['p'])) {
@@ -43,10 +58,7 @@ class documentosController extends controller
               }
             }
 
-            $this->dataInfo['tableDados'] = $this->documento->getAll($this->filtro, $this->user->getCompany());
-            $this->dataInfo['getCount']   = $this->documento->getCount($this->user->getCompany());
-            $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
-
+            
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
         } else {

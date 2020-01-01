@@ -188,6 +188,8 @@ class obrasController extends controller
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_edit')) {
 
             $this->dataInfo['obr'] = $this->obra->getInfo($id, $this->user->getCompany());
+            $this->dataInfo['departamento_cliente'] = $this->cliente->getDepartamentoClienteById($this->dataInfo['obr']['id_cliente']);
+
 
             $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'];
 
