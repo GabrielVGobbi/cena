@@ -1141,6 +1141,27 @@ class Etapa extends model
         return $arrayTipo;
     }
 
+    public function getEtapasByIdAndObra($id_etapa, $id_obra)
+    {
+
+        $sql = $this->db->prepare("
+            SELECT * FROM obra_etapa WHERE id_etapa = :id_etapa AND id_obra = :id_obra LIMIT 1
+        ");
+
+        $sql->bindValue(':id_etapa', $id_etapa);
+        $sql->bindValue(':id_obra', $id_obra);
+
+
+        $sql->execute();
+
+        if ($sql->rowCount() == 1) {
+            $arrayTipo = $sql->fetch();
+            $this->db = null;
+        }
+
+        return $arrayTipo;
+    }
+
     public function getEtapasByTipoByObra($id_obra)
     {
 

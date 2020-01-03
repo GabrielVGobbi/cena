@@ -115,9 +115,9 @@
 						</tr>
 						<tr>
 							<th>Saldo: </th>
-							<td>
+							<td>R$ 
 								<?php $saldo = intval($tableInfo['valor_negociado']) - intval($totalFaturado); 
-								echo $saldo != '' ? 'R$ '.controller::number_format($saldo) : '0,00';;?>
+								echo $saldo != '' ? controller::number_format($saldo) : '0,00';;?>
 							</td>
 						</tr>
 

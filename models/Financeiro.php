@@ -104,7 +104,7 @@ class Financeiro extends model
     {
 
         $r = 0;
-        $sql = $this->db->prepare("SELECT SUM(valor_receber) AS c FROM historico_financeiro WHERE id_company = :id_company AND id_obra = :id_obra AND (histf_id_status = {$status} OR histf_id_status = 7)");
+        $sql = $this->db->prepare("SELECT SUM(valor_receber) AS c FROM historico_financeiro WHERE id_company = :id_company AND id_obra = :id_obra AND (histf_id_status = {$status})");
         $sql->bindValue(':id_company', $id_company);
         $sql->bindValue(':id_obra', $id_obra);
 
@@ -170,8 +170,8 @@ class Financeiro extends model
     public function faturar($id_etapa, $id_obra, $id_historico)
     {
 
-        $status = FATURADO;
 
+        $status = FATURADO;
 
         $sql = $this->db->prepare("UPDATE historico_financeiro histf SET
 
@@ -187,22 +187,28 @@ class Financeiro extends model
         $sql->bindValue(':id_status',   $status);
         $sql->execute();
 
+        try {
+            $sql = $this->db->prepare("
+                
+                UPDATE obra_etapa obr SET
 
-        $sql = $this->db->prepare("
-            
-            UPDATE obra_etapa obr SET
+                obr.id_status 		= :id_status
 
-			obr.id_status 		= :id_status
+                WHERE (id_etapa = :id) AND (id_obra = :id_obra)
 
-			WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+            ");
 
-		");
+            $sql->bindValue(':id',   $id_etapa);
+            $sql->bindValue(':id_obra',   $id_obra);
+            $sql->bindValue(':id_status',   $status);
 
-        $sql->bindValue(':id',   $id_etapa);
-        $sql->bindValue(':id_obra',   $id_obra);
-        $sql->bindValue(':id_status',   $status);
 
-        return $sql->execute() ? true : false;
+            return $sql->execute() ? true : false;
+
+        } catch (PDOExecption $e) {
+            $sql->rollback();
+            error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+        }
     }
 
     public function addHistoricoFaturamento($Parametros, $id_company, $id_usuario)
@@ -218,9 +224,12 @@ class Financeiro extends model
         $data_emissao               = $Parametros['data_emissao'];
         $valor_faturamento          = $Parametros['valor_faturamento'];
         $id_etapa                   = $Parametros['id_etapa'];
-        $data_value                   = $Parametros['data_value'];
+        $data_value                 = $Parametros['data_value'];
 
 
+        $data_vencimento = str_replace('/', '-', $data_vencimento);
+
+        $data_vencimento =  date('Y-d-m', strtotime($data_vencimento));
 
         try {
             $sql = $this->db->prepare("INSERT INTO historico_faturamento SET 
@@ -259,7 +268,7 @@ class Financeiro extends model
             $atualizar = $this->verify($histfa_id);
 
             if ($atualizar == '0') {
-                #$this->faturar($id_etapa, $id_obra, $id_historico_financeiro);
+                $this->faturar($id_etapa, $id_obra, $id_historico_financeiro);
             }
 
             #return $sql->execute() ? true : false;
@@ -337,12 +346,11 @@ class Financeiro extends model
 
         $sql->execute();
 
-        if ($sql->rowCount() == 1) {
+        if ($sql->rowCount() > 0) {
             $row = $sql->fetch();
 
             $r = $row['c'];
         }
-
 
         return $r;
     }
@@ -354,7 +362,7 @@ class Financeiro extends model
             SELECT hist.*, etp.etp_nome, obr.obr_razao_social,obr.id as id_obra FROM historico_financeiro hist 
             INNER JOIN etapa etp ON (etp.id = hist.id_etapa)
             INNER JOIN obra obr ON(obr.id = hist.id_obra)
-            WHERE histf_id_status = :histfa_id
+            WHERE histf_id_status = :histfa_id AND obr.atv = 1
         ");
 
         $sql->bindValue(":histfa_id", FATURAR);
@@ -374,8 +382,6 @@ class Financeiro extends model
         $sql = $this->db->prepare("SELECT SUM(valor_receber) AS count FROM historico_financeiro WHERE histf_id_status = :histf_id_status");
         $sql->bindValue(':histf_id_status', FATURAR);
         $sql->execute();
-
-
 
         $row = $sql->fetch();
         $r = $row['count'];
@@ -417,7 +423,6 @@ class Financeiro extends model
             if ($sql->rowCount() == 1) {
                 $row = $sql->fetch();
 
-                error_log(print_r($row['valor_receber'],1));
                 
                 if($row['valor_receber'] == 0){
                     
@@ -490,15 +495,15 @@ class Financeiro extends model
         $sql = $this->db->prepare("
             SELECT * FROM historico_faturamento histf
             INNER JOIN obra obr ON (obr.id = histf.id_obra)
-            WHERE (histf.recebido_status = 0 AND histf.status <> 1 AND obr.atv = 1) AND histf.data_vencimento <= :hoje
+            WHERE (histf.recebido_status = 0 AND histf.status <> 1 AND obr.atv = 1)
         ");
 
         $sql->bindValue(":hoje", $hoje);
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
-            $array_faturamento  = $sql->fetchAll();
-            
+          
+            $array_faturamento  = $sql->fetchAll();   
 
         }
 

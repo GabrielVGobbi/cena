@@ -313,8 +313,12 @@ class Comercial extends model
 		$metodo_valor = $Parametros['metodo_valor'];
 		$valor_receber = controller::PriceSituation($Parametros['valor_receber']);
 
+		$etp = new Etapa('');
 
+		$etapa = $etp->getEtapasByIdAndObra($id_etapa, $id_obra);
 
+		$status = $etapa['check'] == 1 ? FATURAR : PENDENTE;
+		
 		try {
 
 			$sql = $this->db->prepare("INSERT INTO historico_financeiro SET 
@@ -324,7 +328,8 @@ class Comercial extends model
 				id_company 			=	:id_company,
 				metodo				= 	:metodo,
 				metodo_valor		=	:metodo_valor,
-				valor_receber		= 	:valor_receber
+				valor_receber		= 	:valor_receber,
+				histf_id_status		=   :statu
 			
 			");
 
@@ -334,6 +339,8 @@ class Comercial extends model
 			$sql->bindValue(":metodo", $metodo);
 			$sql->bindValue(":metodo_valor", $metodo_valor);
 			$sql->bindValue(":valor_receber", ($valor_receber));
+			$sql->bindValue(":statu", ($status));
+
 
 			$sql->execute();
 

@@ -49,7 +49,6 @@ class homeController extends controller
         $this->dataInfo['etapas_pendentes_financeiro'] = $this->financeiro->getPendentesFinanceiroALL();
         $this->dataInfo['total_etapas_financeiro'] = $this->financeiro->getTotalFinanceiroAll();
 
-
         
         if ($this->user->usr_info() === 'cliente') {
 

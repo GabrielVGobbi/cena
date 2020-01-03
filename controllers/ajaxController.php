@@ -213,7 +213,10 @@ class ajaxController extends controller
             $data['id'] = $a->addHistoricoFaturamento($_POST, $u->getCompany(), $u->getId());
         }
 
+        controller::setLog($_POST, 'financeiro', 'faturar');
+
         echo json_encode($data['id']);
+        exit();
     }
 
     
@@ -238,6 +241,7 @@ class ajaxController extends controller
 
 
         echo json_encode($servicoByConcessionaria);
+        exit();
     }
 
     public function valorReceber(){
@@ -672,7 +676,7 @@ class ajaxController extends controller
             'valor' => $return,
         ];
 
-        controller::setLog($Parametros, 'historico_faturamento', 'alteracao');
+        controller::setLog($Parametros, 'historico_faturamento (financeiro)', 'receber');
 
         echo json_encode($return);
         exit;
