@@ -51,7 +51,6 @@ class obrasController extends controller
 
     public function getAll()
     {
-       
 
         $tabela = $this->obra->getAll($_REQUEST, $this->user->getCompany());
 

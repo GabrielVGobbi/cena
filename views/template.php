@@ -128,12 +128,12 @@
                     <li class="header">Total Faturamento Receber: <?php echo $total_recebido != 0 ? $total_recebido : '0'; ?></li>
                     <li>
                       <ul class="menu">
-                        <?php if(isset($recebido) && count($recebido) > 0 ): ?>
-                          <?php foreach ($recebido as $pdr): ?>
+                        <?php if (isset($recebido) && count($recebido) > 0) : ?>
+                          <?php foreach ($recebido as $pdr) : ?>
                             <li>
-                              <a href="<?php echo BASE_URL;?>financeiro/obra/<?php echo $pdr['id_obra']; ?>">
+                              <a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $pdr['id_obra']; ?>">
                                 <h4>
-                                <?php echo ($pdr['obr_razao_social']); ?>
+                                  <?php echo ($pdr['obr_razao_social']); ?>
                                   <!--<small><i class="fa fa-clock-o"></i> 5 mins</small>-->
                                 </h4>
                                 <p>R$ <?php echo controller::number_format($pdr['valor']); ?></p>
@@ -446,7 +446,7 @@
         })
         .then((willDelete) => {
           if (willDelete) {
-            window.location.href = BASE_URL+'financeiro/add/'+id_obra;
+            window.location.href = BASE_URL + 'financeiro/add/' + id_obra;
             return;
 
           } else {
@@ -460,26 +460,39 @@
 
   <script src="<?php echo BASE_URL; ?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
-  
+
 
   <script type="text/javascript">
     var save_method; //for save method string
-    var table;
 
     $(function() {
 
-      $('#table').on( 'length.dt', function ( e, settings, len ) {
+      $('#table').on('length.dt', function(e, settings, len) {
         localStorage.setItem('max_obras', len);
       });
 
+      $('#table').on('page.dt', function() {
+        var table = $('#table').DataTable();
+
+        var info = table.page.info();
+        console.log(info);
+      });
+
       $(document).ready(function() {
-        
+
         var filtro = <?php echo json_encode($_GET); ?>;
 
         var max_obras = localStorage.getItem('max_obras')
         max_obras = max_obras == null ? '10' : max_obras;
 
         var myTable = $('#table').DataTable({
+          stateSave: true,
+          stateSaveCallback: function(settings, data) {
+            localStorage.setItem('DataTables_' + settings.sInstance, JSON.stringify(data))
+          },
+          stateLoadCallback: function(settings) {
+            return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance))
+          },
           "processing": true,
           "serverSide": true,
           "autoWidth": false,
@@ -503,6 +516,7 @@
             "sFirst": "Primeiro",
             "sLast": "Último"
           },
+          "pages": 2,
           paginate: true,
           filter: true,
           "ajax": {
