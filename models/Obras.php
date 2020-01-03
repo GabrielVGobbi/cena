@@ -19,10 +19,14 @@ class Obras extends model
 
 	public function getAll($filtro, $id_company)
 	{
+
 		
-		$start = isset($filtro['start']) ? $filtro['start'] : '0';
+		
 		$length = isset($filtro['length']) ? $filtro['length'] : '10';
 
+		
+		$start = isset($filtro['start']) ? $filtro['start'] : '0';
+		
 		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : ' ORDER BY obr.obr_razao_social';
 
 		$where = $this->buildWhere($filtro, $id_company);
@@ -43,11 +47,13 @@ class Obras extends model
 
 		$this->bindWhere($filtro, $sql);
 
+
 		$sql->execute();
 
 		$this->retorno = ($sql->rowCount() > 0) ? $sql->fetchAll() : '';
-
+		
 		return $this->retorno;
+		exit();
 	}
 
 	//selecionar todos
@@ -425,9 +431,6 @@ class Obras extends model
 					}
 				}
 			} else { }
-
-
-
 
 			//if($Parametros['id_comercial']){
 			//	$this->addFinanceiroObra($Parametros['id_comercial'], $id_obra, $id_company);

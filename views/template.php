@@ -460,6 +460,7 @@
 
   <script src="<?php echo BASE_URL; ?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
+  
 
   <script type="text/javascript">
     var save_method; //for save method string
@@ -467,15 +468,22 @@
 
     $(function() {
 
-      $(document).ready(function() {
+      $('#table').on( 'length.dt', function ( e, settings, len ) {
+        localStorage.setItem('max_obras', len);
+      });
 
+      $(document).ready(function() {
+        
         var filtro = <?php echo json_encode($_GET); ?>;
+
+        var max_obras = localStorage.getItem('max_obras')
+        max_obras = max_obras == null ? '10' : max_obras;
 
         var myTable = $('#table').DataTable({
           "processing": true,
           "serverSide": true,
           "autoWidth": false,
-          "displayLength": 10,
+          "displayLength": max_obras,
           "language": {
             "sEmptyTable": "Nenhum registro encontrado",
             "sInfo": "Mostrando de _START_ até _END_ de _TOTAL_ registro(s)",
@@ -502,7 +510,6 @@
             "type": "POST",
             "data": {
               filtro,
-
             }
 
           },

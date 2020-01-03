@@ -257,7 +257,7 @@ class Concessionaria extends model
 
 	public function setDocumentoAdd($Parametros, $id_concessionaria, $id_company, $arquivos)
 	{
-		$tmpname =  $arquivos['documento_arquivo']['name'];
+		$tmpname =  strtolower($arquivos['documento_arquivo']['name']);
 
 		//move_uploaded_file($arquivos['documento']['tmp_name'], 'assets/documentos/nome_documento/'.$arquivos['documento']['name'] );
 		for ($b = 0; $b < count($arquivos['documento_arquivo']['name']); $b++) {
@@ -278,7 +278,7 @@ class Concessionaria extends model
 								VALUES (:nome_documento, :id_company)
 						");
 
-						$sql->bindValue(":nome_documento", $arquivos['documento_arquivo']['name'][$q]);
+						$sql->bindValue(":nome_documento", strtolower($arquivos['documento_arquivo']['name'][$q]));
 						$sql->bindValue(":id_company", $id_company);
 						$sql->execute();
 

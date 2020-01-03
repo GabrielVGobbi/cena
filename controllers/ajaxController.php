@@ -238,8 +238,6 @@ class ajaxController extends controller
             );
         }
 
-
-
         echo json_encode($servicoByConcessionaria);
         exit();
     }
