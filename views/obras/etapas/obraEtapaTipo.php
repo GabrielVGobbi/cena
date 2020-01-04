@@ -10,27 +10,27 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 ?>
 
 <?php foreach ($etapas as $etp) :  ?>
+    <?php $variavel = controller::getVariavelbtEtapa( $etp['id_etapa'],  $etp['id_obra']); ?>
 
 
-    <?php if ($etp['tipo'] == COMPRA && $etp['quantidade_obra'] == 0) : ?>
 
-    <?php else : ?>
+    <?php if($etp['tipo'] == COMPRA): ?>
+
+        <?php $verify = controller::getVerifyComercial( $etp['id_etapa'],  $etp['id_obra']); ?>
+
+
+    <?php endif; ?>
+
+    <?php if($etp['tipo'] == COMPRA && !$verify): ?>
+
+    <?php else: ?>
         <div class="no-border">
             <ul class="todo-list ">
                 <li>
 
                     <a data-toggle="collapse" data-parent="#accordion" href="#collapse<?php echo $etp['id_etapa_obra']; ?>" aria-expanded="false" class="collapsed">
 
-
-
-                        <?php
-
-
-                                controller::loadEtapaCheck($etp['id_etapa_obra'], $etp['ordem'], $obr[0], $etp['tipo'], $etp);
-
-                                ?>
-
-
+                        <?php controller::loadEtapaCheck($etp['id_etapa_obra'], $etp['ordem'], $obr[0], $etp['tipo'], $etp); ?>
 
                         <span class="text"><?php echo $etp['etp_nome_etapa_obra']; ?></span>
 
@@ -45,7 +45,6 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
                                     if(strtotime(date('d-m-Y')) > strtotime($data_meta)){
                                         $meta = 'danger';
                                     }
-
                                     
                             ?>
                             <span style="font-size: 12px" class="label label-<?php echo $meta; ?>"><i class="fa fa-clock-o"></i> <?php echo $etp['meta_etapa']; ?></span>
@@ -74,7 +73,7 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
                 <div id="collapse<?php echo $etp['id_etapa_obra']; ?>" class="panel-collapse collapse" aria-expanded="false" style="height: 0px;">
                     <div class="box-body">
-                        <?php controller::loadEtapaByTipo($etp['id_etapa_obra'], $obr['cliente_nome']); ?>
+                        <?php controller::loadEtapaByTipo($etp['id_etapa_obra'], $obr['cliente_nome'], $variavel, $verify); ?>
                     </div>
                 </div>
 
@@ -152,5 +151,6 @@ $etapas = $this->obra->getEtapas($obr[0], $tipo);
 
             });
         </script>
-    <?php endif; ?>
+                    <?php endif; ?>
+
 <?php endforeach; ?>

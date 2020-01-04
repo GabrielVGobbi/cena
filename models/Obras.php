@@ -40,7 +40,6 @@ class Obras extends model
 				INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 				INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
 				LEFT JOIN obra_endereco obre ON (obre.id_obra_endereco = obr.id_endereco_obra)
-				LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra) 
 				WHERE " . implode(' AND ', $where).'  GROUP BY obr.id ' . $order . " LIMIT " . $start . " ," . $length);
 		
 		$sql = $this->db->prepare($sql);
@@ -520,7 +519,7 @@ class Obras extends model
 		$sql = "SELECT *, obrt.quantidade AS quantidade_obra, obrt.preco AS preco_obra, obrt.tipo_compra AS tipo_compra FROM  
 			obra_etapa obrt
 			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
-		WHERE obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY  tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC";
+		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC";
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_obra", $id_obra);

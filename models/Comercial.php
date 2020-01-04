@@ -80,7 +80,6 @@ class Comercial extends model
 	{
 		$tipo = "Inserido";
 
-		
 		$obra_nome 				= $Parametros['obra_nome'];
 		$comercial_descricao 	= $Parametros['comercial_descricao'];
 		$id_concessionaria 		= $Parametros['concessionaria'];
@@ -150,17 +149,21 @@ class Comercial extends model
 
 			if (isset($Parametros['compra_quantidade'])) {
 				foreach ($Parametros['compra_quantidade'] as $id_etapa => $quantidade) {
-					$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial SET 
-						id_etapa 			=	:id_etapa,
-						id_obra 			=	:id_obra,
-						etcc_quantidade 	=	:quantidade
-					");
+					if($quantidade != 0){
 
-					$sql->bindValue(":id_etapa", $id_etapa);
-					$sql->bindValue(":id_obra", $id_obra);
-					$sql->bindValue(":quantidade", $quantidade);
+						$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial SET 
+							id_etapa 			=	:id_etapa,
+							id_obra 			=	:id_obra,
+							etcc_quantidade 	=	:quantidade
+						");
 
-					$sql->execute();
+						$sql->bindValue(":id_etapa", $id_etapa);
+						$sql->bindValue(":id_obra", $id_obra);
+						$sql->bindValue(":quantidade", $quantidade);
+
+						$sql->execute();
+					}
+
 				}
 			}
 
@@ -206,37 +209,42 @@ class Comercial extends model
 	}
 
 	public function setVariavelQuantidadeEtapa($id_obra, $Parametros){
+
 		if (isset($Parametros)) {
 			if (count($Parametros) > 0) {
 				for ($q = 0; $q < count($Parametros['id_variavel']); $q++) {
 
-					if(isset($Parametros['etcc_id']) && $Parametros['etcc_id'] != 0 ){
 
-						$sql = $this->db->prepare("UPDATE etapa_compra_comercial SET 
+					if($Parametros['compra_quantidade'][$q] != 0 ){
 
-							etcc_quantidade 		=	:quantidade
-						
-							WHERE id_obra = :id_obra AND etcc_id = :etcc_id
-						");
+						if(isset($Parametros['etcc_id']) && $Parametros['etcc_id'] != 0 ){
 
-						$sql->bindValue(":etcc_id", $Parametros['etcc_id'][$q]);
-						$sql->bindValue(":id_obra", $id_obra);
-						$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
+							$sql = $this->db->prepare("UPDATE etapa_compra_comercial SET 
 
-						$sql->execute();
+								etcc_quantidade 		=	:quantidade
+							
+								WHERE id_obra = :id_obra AND etcc_id = :etcc_id
+							");
 
-					} else {
+							$sql->bindValue(":etcc_id", $Parametros['etcc_id'][$q]);
+							$sql->bindValue(":id_obra", $id_obra);
+							$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
 
-						$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial (id_obra, id_variavel_etapa, id_etapa, etcc_quantidade)
-							VALUES (:id_obra, :id_variavel_etapa, :id_etapa, :quantidade)
-						");
+							$sql->execute();
 
-						$sql->bindValue(":id_variavel_etapa", $Parametros['id_variavel'][$q]);
-						$sql->bindValue(":id_obra", $id_obra);
-						$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
-						$sql->bindValue(":id_etapa", $Parametros['id_etapa'][$q]);
-						
-						$sql->execute();
+						} else {
+
+							$sql = $this->db->prepare("INSERT INTO etapa_compra_comercial (id_obra, id_variavel_etapa, id_etapa, etcc_quantidade)
+								VALUES (:id_obra, :id_variavel_etapa, :id_etapa, :quantidade)
+							");
+
+							$sql->bindValue(":id_variavel_etapa", $Parametros['id_variavel'][$q]);
+							$sql->bindValue(":id_obra", $id_obra);
+							$sql->bindValue(":quantidade", $Parametros['compra_quantidade'][$q]);
+							$sql->bindValue(":id_etapa", $Parametros['id_etapa'][$q]);
+							
+							$sql->execute();
+						}
 					}
 
 						

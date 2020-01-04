@@ -57,7 +57,6 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 							</div>
 
 							<?php include_once('include/departamento.php'); ?>
-
 							<?php include_once('include/endereco.php'); ?>
 						</div>
 					</form>

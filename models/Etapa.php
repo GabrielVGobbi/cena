@@ -1206,7 +1206,7 @@ class Etapa extends model
 
     public function getVariavelByEtapa($id_etapa, $id_obra)
     {
-
+        
         $array = array();
 
         $sql = $this->db->prepare("
@@ -1249,6 +1249,28 @@ class Etapa extends model
         }
 
         return $array;
+    }
+
+    public function getVerifyComercial($id_etapa, $id_obra){
+
+        $array = array();
+
+        $sql = $this->db->prepare("
+            SELECT * FROM etapa_compra_comercial etcc
+            
+            WHERE id_obra = :id_obra AND etcc.id_etapa = :id_etapa LIMIT 1;
+        ");
+
+        $sql->bindValue(':id_etapa', $id_etapa);
+        $sql->bindValue(':id_obra', $id_obra);
+        $sql->execute();
+
+        if ($sql->rowCount() == 1) {
+            $array = $sql->fetch();
+        }
+
+        return $array;
+
     }
 
     public function duplicarEtapaByServicoxConcessionaria($Parametros)

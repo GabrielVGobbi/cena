@@ -147,16 +147,37 @@ class controller
 		}
 	}
 
-	public function loadEtapaByTipo($id, $cliente)
+	public function loadEtapaByTipo($id, $cliente, $variavel = array(), $verify = array())
 	{
 		$etp = new Etapa('etapas');
 
 		$array = $etp->getIdEtapaObra($id);
+		
+		$variavel = $variavel;
 
+		$verify = $verify;
+		
 		$nome_tela = strtolower($array[0]['nome']);
 
 		include 'views/obras/etapas/' . $nome_tela . '.php';
+
 		include "views/obras/etapas/editarEtapa.php";
+	}
+
+	public function getVariavelbtEtapa($id_etapa, $id_obra){
+
+		$etp = new Etapa('etapas');
+
+		return $etp->getVariavelByEtapa($id_etapa, $id_obra);	
+
+	}
+
+	public function getVerifyComercial($id_etapa, $id_obra){
+
+		$etp = new Etapa('etapas');
+
+		return $etp->getVerifyComercial($id_etapa, $id_obra);	
+
 	}
 
 	public function loadEtapaCheck($id_etapa,$ordem, $id_obra, $tipo, $etp)
