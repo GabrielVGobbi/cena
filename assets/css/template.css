@@ -11,6 +11,21 @@ body {
     }
 }
 
+.checketapa {
+    background: url(blue.png) no-repeat;
+    display: inline-block;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 20px;
+    height: 20px;
+    background: url(blue.png) no-repeat;
+    border: none;
+    cursor: pointer;
+    background-position: 0 0;
+    position: relative;
+}
+
 .topo {
     height: 40px;
     background-color: #999;

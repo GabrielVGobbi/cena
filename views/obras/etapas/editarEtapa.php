@@ -17,8 +17,6 @@ $data_hoje = date('d/m');
         <input type="hidden" class="form-control" name="server" autocomplete="off" value="<?php echo (isset($_GET['tipo']) ? $_GET['tipo'] : '0') ?>">
         <input type="hidden" class="form-control" name="cliente" autocomplete="off" value="<?php echo $cliente; ?>">
 
-
-
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
             <div class="modal-header">
@@ -320,7 +318,7 @@ $data_hoje = date('d/m');
                           <div class="input-group-btn">
                             <div class="btn btn-default btn-file">
                               <i class="fa fa-paperclip"></i> PDF
-                              <input type="file" class="btn btn-success file_doc" name="documento_arquivo">
+                              <input type="file"  class="btn btn-success file_doc" name="documento_arquivo">
                             </div>
                           </div>
                         </div>
@@ -354,5 +352,5 @@ $data_hoje = date('d/m');
 
     });
 
-  })
+  });
 </script>

@@ -1,10 +1,9 @@
 <?php
 
 $documento_obra = $this->documento->getDocumentoObra($obr[0]);
-
+$_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '0';
 ?>
 <section class="content-header">
-
 	<ol class="breadcrumb" style="    top: -17px;">
 		<li><a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr[0]; ?> ">Financeiro</a></li>
 		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr[0]; ?> ">Comercial</a></li>
@@ -12,15 +11,10 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 </section>
 
 <div class="col-md-12">
-
 	<div class="nav-tabs-custom">
-
 		<div class="tab-content">
-
 			<div class="box box-default box-solid">
-
 				<div class="row">
-
 					<form id="obra" method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>obras/edit_action/<?php echo $obr[0]; ?>">
 						<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr[0]; ?>">
 
@@ -58,6 +52,28 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 
 							<?php include_once('include/departamento.php'); ?>
 							<?php include_once('include/endereco.php'); ?>
+
+							<div class="col-md-12">
+								<div class="box box-default box-solid">
+									<div class="row">
+										<div class="col-md-12">
+											<div class="box-header with-border text-center">
+												<h3 class="box-title ">Informações Importantes</h3>
+												
+											</div>
+											<div class="box-body" style="">
+												<div class="row">
+													<div class="col-md-3">
+														<div class="form-group">
+															<textarea type="text" class="form-control" name="obra_infor" id="obra_infor"  style="margin: 0px -772px 0px 0px; width: 1004px; height: 138px;"> <?php echo $obr['obr_informacoes']; ?> </textarea>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
 						</div>
 					</form>
 
@@ -66,25 +82,14 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 							<div class="box box-primary">
 								<div class="box-header ">
 									<i class="ion ion-clipboard"></i>
-									<h3 class="box-title title-tipo">Etapas
-										<?php if (isset($_GET['tipo'])) {
-											if ($_GET['tipo'] == CONCESSIONARIA) {
-												echo 'Concessionaria';
-											} else if ($_GET['tipo'] == ADMINISTRATIVA) {
-												echo 'Administativo';
-											} else if ($_GET['tipo'] == OBRA) {
-												echo 'Obra';
-											} else if ($_GET['tipo'] == COMPRA) {
-												echo ' de Compra';
-											}
-										}
-
-										?> </h3>
+									<h3 class="box-title title-tipo">
+											Etapas
+								 	</h3>
 									<div class="box-tools pull-right select_obras">
 
 										<div class="form-group">
 											<select class="form-control select2" style="width: 100%;" name="select-etapas" id="select-etapas">
-												<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '') ?  'selected' : '' ?> value="">Todos</option>
+												<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '')  ?  'selected' : '' ?> value="">Todos</option>
 												<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '2') ?  'selected' : '' ?> value="<?php echo CONCESSIONARIA; ?>">Concessionaria</option>
 												<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '1') ?  'selected' : '' ?> value="<?php echo ADMINISTRATIVA; ?>">Administrativo</option>
 												<option <?php echo (isset($_GET['tipo']) && $_GET['tipo'] == '3') ?  'selected' : '' ?> value="<?php echo OBRA; ?>">Obra</option>
@@ -94,7 +99,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 									</div>
 								</div>
 								<div class="box-body">
-									<?php include('etapas/obraEtapaTipo.php') ?>
+									<?php include_once('etapas/obraEtapaTipo.php') ?>
 								</div>
 								<div class="box-footer clearfix no-border">
 								</div>
@@ -163,10 +168,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 	</div>
 </div>
 <script type="text/javascript">
-	$('#select-etapas').on('change', function() {
-		var tipo = $("#select-etapas option:selected").val();
-		window.location.href = BASE_URL + 'obras/edit/<?php echo $obr[0]; ?>?tipo=' + tipo;
-	});
+	
 
 	$(function() {
 

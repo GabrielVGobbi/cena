@@ -100,6 +100,8 @@ class controller
 
 		$valor = trim($valor);
 		$valor = str_replace('/', '-', $valor);
+		$valor = date_create($valor);
+		$valor = date_format($valor, 'd-m-Y');
 
 
 		return $valor;
@@ -135,8 +137,12 @@ class controller
 		return $mobile;
 	}
 
-	public  static function SomarData($data, $dias, $meses = 0, $ano = 0)
+	public  static function SomarData($data, $dias = 0, $meses = 0, $ano = 0)
 	{
+		if($dias == ''){
+			$dias = 0;
+		}
+
 		if ($data != '') {
 			//passe a data no formato dd-mm-yyyy
 			//yyyy-mm-dd
@@ -150,6 +156,7 @@ class controller
 	public function loadEtapaByTipo($id, $cliente, $variavel = array(), $verify = array())
 	{
 		$etp = new Etapa('etapas');
+
 
 		$array = $etp->getIdEtapaObra($id);
 		
@@ -254,7 +261,7 @@ class controller
 			include 'views/obras/tempo.php';
 
 		}else {
-	
+	 
 			
 		}
 

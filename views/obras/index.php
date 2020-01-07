@@ -1,4 +1,10 @@
-<?php require_once("cadastrar.php");  ?>
+<?php 
+
+require_once("cadastrar.php");  
+
+
+												
+?>
 
 <div class="col-xs-12">
 	<div class="box box-primary">
@@ -27,6 +33,12 @@
 		?>
 		<?php if (count($tableDados) > 0) : ?>
 			<?php foreach ($tableDados as $obr) : ?>
+			<?php 
+				$etapas 		  = $this->obra->getEtapas($obr[0], ''); 
+				$etapasConcluidas = $this->obra->getEtapasConcluidas($obr[0]);
+				$soma = (100) / count($etapas);
+				$soma_etapa = $etapasConcluidas != 0 ? ($soma * $etapasConcluidas) : '0';
+			?>
 
 				<div class="col-md-4" style="margin-top:20px;">
 
@@ -46,15 +58,8 @@
 									<b>Concessionaria:</b> <?php echo $obr['razao_social']; ?><br>
 									<div class="progress-group" style="margin-top: 14px;">
 										<span class="progress-text">Etapas Concluidas</span>
-										<span class="progress-number"><b><?php echo $etapas = $this->obra->getEtapasConcluidas($obr[0]); ?></b>/<?php echo $etapas = count($this->obra->getEtapas($obr[0], '')); ?></span>
-										<?php
-												$soma = (100) / count($this->obra->getEtapas($obr[0], ''));
-												if ($this->obra->getEtapasConcluidas($obr[0]) != 0) {
-													$soma_etapa = $soma * $this->obra->getEtapasConcluidas($obr[0]);
-												} else {
-													$soma_etapa = 0;
-												}
-												?>
+										<span class="progress-number"><b><?php echo ($etapasConcluidas) ?></b>/<?php echo count($etapas) ?></span>
+										
 										<div class="progress sm">
 											<div class="progress-bar progress-bar-green" style="width: <?php echo $soma_etapa; ?>%"></div>
 										</div>
@@ -90,7 +95,6 @@
 			<div class="col-md-12" style="margin-top:20px;text-align: center;">
 				Não foi encontrado nenhum resultado
 			</div>
-
 		<?php endif; ?>
 	</div>
 
@@ -102,25 +106,13 @@
 				$('#modalVisualizar' + id).modal('show');
 			});
 
-
-
-
 		<?php endif; ?>
 		$(function() {
 			$('#lista').on('click', function() {
 
-
 				setCookie('obras', 'obras', 25);
-				
 				window.location.href = BASE_URL+'obras';
 
-			});
-
-			function setCookie(cname, cvalue, exdays) {
-				var d = new Date();
-				d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
-				var expires = "expires=" + d.toUTCString();
-				document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-			}
+			});			
 		});
 	</script>

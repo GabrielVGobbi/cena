@@ -104,7 +104,6 @@ class Documentos extends model
 	public function add($arquivos, $id_company, $id_obra = 0, $nome_documento = '')
 	{
 
-
 		$nome_documento = strtolower($nome_documento);
 		
 		if (is_dir("assets/documentos/")) {
@@ -217,15 +216,15 @@ class Documentos extends model
 		$sql = $this->db->prepare("
 			SELECT * FROM documento_etapa docet
 			INNER JOIN documentos doc ON (doc.id = docet.id_documento)
-			WHERE  id_etapa_obra = :id_etapa_obra
+			WHERE  id_etapa_obra = :id_etapa_obra LIMIT 1
 		");
 
 		$sql->bindValue(':id_etapa_obra', $id_etapa_obra);
 
 		$sql->execute();
 
-		if ($sql->rowCount() > 0) {
-			$this->array = $sql->fetchAll();
+		if ($sql->rowCount() == 1) {
+			$this->array = $sql->fetch();
 			$this->db = null;
 		}
 
@@ -366,6 +365,10 @@ class Documentos extends model
 				readfile($fullPath);
 				//removemos o arquivo zip após download
 				unlink($fullPath);
+			} else {
+				$var = "<script>javascript:history.back(-2)</script>";
+				echo $var;
+				controller::alert('warning', 'Não foram encontrado(s) documento(s) nessa obra!!');
 			}
 		} else {
 			$var = "<script>javascript:history.back(-2)</script>";

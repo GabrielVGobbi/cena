@@ -8,6 +8,8 @@
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
+  <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
+
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/template.css">
 
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/bootstrap-daterangepicker/daterangepicker.css">
@@ -26,7 +28,6 @@
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
   <link rel="shortcut icon" href="data:image/x-icon;," type="image/x-icon">
   <script src="https://unpkg.com/imask"></script>
-  <script src="<?php echo BASE_URL; ?>assets/js/script.js"></script>
 
 
 
@@ -473,9 +474,7 @@
 
       $('#table').on('page.dt', function() {
         var table = $('#table').DataTable();
-
         var info = table.page.info();
-        console.log(info);
       });
 
       $(document).ready(function() {

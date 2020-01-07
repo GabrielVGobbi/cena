@@ -264,7 +264,6 @@ class Servicos extends model
 		$sql->bindValue(':id_obra',   $Parametros['id_obra']);
 		$sql->bindValue(':id_status',   $status);
 
-
 		$sql->execute();
 
 		if ($check == 1) {
@@ -312,6 +311,8 @@ class Servicos extends model
 					'link' => BASE_URL . 'obras/edit/' . $Parametros['id_obra']
 				);
 
+				return true;
+
 				//$this->notificacao->insert($id_company, $ParametrosNotificacao);
 			}
 		} else {
@@ -328,10 +329,12 @@ class Servicos extends model
 			$sql->bindValue(':id_obra',   $Parametros['id_obra']);
 			$sql->bindValue(':id_status',   $status);
 
-
 			$sql->execute();
 
+			return true;
+
 		}
+		$this->db = null;
 	}
 
 	public function validacao($id_company, $nome)

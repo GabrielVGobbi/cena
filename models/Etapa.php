@@ -649,7 +649,7 @@ class Etapa extends model
             INNER JOIN etapa etp ON (etp.id = obrt.id_etapa)
             INNER JOIN etapa_tipo etpt ON (etp.tipo = etpt.id_etapatipo)
 
-            WHERE obrt.id_etapa_obra = :id 
+            WHERE obrt.id_etapa_obra = :id LIMIT 1
             
         ");
 
@@ -657,8 +657,8 @@ class Etapa extends model
 
         $sql->execute();
 
-        if ($sql->rowCount() > 0) {
-            $array = $sql->fetchAll();
+        if ($sql->rowCount() == 1) {
+            $array = $sql->fetch();
         }
 
 
@@ -667,6 +667,8 @@ class Etapa extends model
 
     public function editEtapaObra($id_etapa, $Parametros, $arquivos, $id_company, $id_user)
     {
+        
+        
         $tipo = 'Editado';
 
 
@@ -697,6 +699,7 @@ class Etapa extends model
                 $com = array();
 
                 $com['check_nota'] = isset($Parametros['check_nota']) ? $Parametros['check_nota'] : '';
+
 
                 $com['id_obra'] = $Parametros['id_obra'];
 
@@ -751,7 +754,8 @@ class Etapa extends model
                 $comp['tipo_compra'] = $Parametros['tipo_compra'];
                 $comp['meta_etapa'] = $Parametros['meta_etapa'];
 
-
+                $comp['observacao'] = $Parametros['observacao'];
+                $comp['observacao_sistema'] = $Parametros['observacao_sistema'];
 
 
                 $this->etapaCompra($id_etapa, $comp, $id_company, $id_user);
@@ -760,20 +764,22 @@ class Etapa extends model
             controller::setLog($Parametros, 'etapa', 'obra_etapa');
 
 
-            if (isset($arquivos) && $Parametros['documento_etapa_nome'] != '') {
+            if (!empty($arquivos) && isset($Parametros['documento_etapa_nome']) && $Parametros['documento_etapa_nome'] != '') {
                 $d = new Documentos;
 
                 $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'] . '_' . $Parametros['cliente'];
                 $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company, $Parametros['id_obra']);
             }
 
-            if (isset($arquivos) && isset($Parametros['documento_nome'])  && $Parametros['documento_nome'] != '') {
+            if (!empty($arquivos) && isset($Parametros['documento_nome'])  && $Parametros['documento_nome'] != '') {
                 $d = new Documentos;
 
 
                 $Parametros['documento_nome'] = $Parametros['documento_nome'] . '_' . $Parametros['cliente'];
                 $d->add($arquivos, $id_company, $Parametros['id_obra'], $Parametros['documento_nome']);
             }
+
+
         } else {
             controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
         }
@@ -826,9 +832,7 @@ class Etapa extends model
 
                 //$this->notificacao->insert($id_company, $ParametrosNotificacao);
 
-                controller::alert('success', 'Editado com sucesso!!');
             } else {
-                controller::alert('danger', 'Erro ao fazer a edição!!');
             }
         } catch (PDOExecption $e) {
             $sql->rollback();
@@ -838,6 +842,7 @@ class Etapa extends model
 
     public function etapaConcessionaria($id_etapa, $Parametros, $id_company, $id_user)
     {
+
 
         $data = str_replace("/", "-", $Parametros["nova_data"]);
         $nova_data = date('Y-m-d', strtotime($data));
@@ -891,9 +896,7 @@ class Etapa extends model
 
                 //$this->notificacao->insert($id_company, $ParametrosNotificacao);
 
-                controller::alert('success', 'Editado com sucesso!!');
             } else {
-                controller::alert('danger', 'Erro ao fazer a edição!!');
             }
 
             if ($Parametros['check_nota'] == 1) {
@@ -968,9 +971,7 @@ class Etapa extends model
 
                 //$this->notificacao->insert($id_company, $ParametrosNotificacao);
 
-                controller::alert('success', 'Editado com sucesso!!');
             } else {
-                controller::alert('danger', 'Erro ao fazer a edição!!');
             }
         } catch (PDOExecption $e) {
             $sql->rollback();
@@ -990,7 +991,9 @@ class Etapa extends model
                 preco = :preco,
                 tipo_compra = :tipo_compra,
                 etp_nome_etapa_obra = :etp_nome_etapa_obra,
-                meta_etapa = :meta_etapa
+                meta_etapa = :meta_etapa,
+                observacao = :observacao, 
+                observacao_sistema = :observacao_sistema
 
 
                 WHERE id_etapa_obra = :id
@@ -1001,6 +1004,8 @@ class Etapa extends model
             $sql->bindValue(":tipo_compra", $Parametros['tipo_compra']);
             $sql->bindValue(":etp_nome_etapa_obra", $Parametros['nome_etapa_obra']);
             $sql->bindValue(":meta_etapa", $Parametros['meta_etapa']);
+            $sql->bindValue(":observacao_sistema", $Parametros['observacao_sistema']);
+            $sql->bindValue(":observacao", $Parametros['observacao']);
 
 
             $sql->bindValue(":id", $id_etapa);
@@ -1021,9 +1026,7 @@ class Etapa extends model
 
                 //$this->notificacao->insert($id_company, $ParametrosNotificacao);
 
-                controller::alert('success', 'Editado com sucesso!!');
             } else {
-                controller::alert('danger', 'Erro ao fazer a edição!!');
             }
         } catch (PDOExecption $e) {
             $sql->rollback();
@@ -1058,6 +1061,7 @@ class Etapa extends model
             if ($row['parcial'] == 1  || $row['check'] == 1 || $row['check'] == '') {
 
                 return 1;
+                
             } else {
 
                 return 0;

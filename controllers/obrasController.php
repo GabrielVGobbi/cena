@@ -67,19 +67,21 @@ class obrasController extends controller
         if ($tabela) {
             foreach ($tabela as $list) {
 
+                $etapa_concluidas = array();
                 $etapa_concluidas = $this->obra->getEtapasConcluidas($list['id_obra']);
                 $etapas_total     = count($this->obra->getEtapas($list['id_obra'], ''));
+
 
 
                 if ($list['id_obra'] != '') {
 
 
-                    if (count($this->obra->getEtapas($list['id_obra'], '')) > 0 && $this->obra->getEtapas($list['id_obra'], '')) {
+                    if ($etapas_total > 0 && $etapas_total) {
 
-                        $soma = (100) / count($this->obra->getEtapas($list['id_obra'], ''));
+                        $soma = (100) / $etapas_total;
 
-                        if ($this->obra->getEtapasConcluidas($list['id_obra']) != 0) {
-                            $soma_etapa = $soma * $this->obra->getEtapasConcluidas($list['id_obra']);
+                        if ($etapa_concluidas != 0) {
+                            $soma_etapa = $soma * $etapa_concluidas;
                         } else {
                             $soma_etapa = 0;
                         }
@@ -273,11 +275,12 @@ class obrasController extends controller
     {
 
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_delete')) {
-
+            
             $result = $this->etapa->editEtapaObra($id_etapa_obra, $_POST, $_FILES, $this->user->getCompany(), $this->user->getName());
-
-            header("Location: " . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $_POST['id_obra'] . '?tipo=' . $_POST['server']);
+        
+            echo json_encode($result);
             exit();
+
         } else {
             $this->loadViewError();
         }
@@ -386,6 +389,7 @@ class obrasController extends controller
     {
         $this->documento->gerarWinrarObra($id);
     }
+
     public function Lista()
     {
 

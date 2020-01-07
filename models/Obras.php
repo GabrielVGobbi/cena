@@ -20,37 +20,32 @@ class Obras extends model
 	public function getAll($filtro, $id_company)
 	{
 
-		
-		
 		$length = isset($filtro['length']) ? $filtro['length'] : '10';
 
-		
 		$start = isset($filtro['start']) ? $filtro['start'] : '0';
-		
+
 		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : ' ORDER BY obr.obr_razao_social';
 
 		$where = $this->buildWhere($filtro, $id_company);
 
 		$sql = (" SELECT 
-				obr.obr_razao_social, cle.cliente_nome, cle.cliente_apelido,
-				sev.sev_nome,con.razao_social, obr.atv, obr.obra_nota_numero, obr.id as id_obra FROM 
-
+					obr.obr_razao_social, cle.cliente_nome, cle.cliente_apelido,
+					sev.sev_nome,con.razao_social, obr.atv, obr.obra_nota_numero, obr.id as id_obra FROM 
 				obra obr
 				INNER JOIN servico sev ON(obr.id_servico = sev.id)
 				INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 				INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
 				LEFT JOIN obra_endereco obre ON (obre.id_obra_endereco = obr.id_endereco_obra)
-				WHERE " . implode(' AND ', $where).'  GROUP BY obr.id ' . $order . " LIMIT " . $start . " ," . $length);
-		
+				WHERE " . implode(' AND ', $where) . '  GROUP BY obr.id ' . $order . " LIMIT " . $start . " ," . $length);
+
 		$sql = $this->db->prepare($sql);
 
 		$this->bindWhere($filtro, $sql);
 
-
 		$sql->execute();
 
 		$this->retorno = ($sql->rowCount() > 0) ? $sql->fetchAll() : '';
-		
+
 		return $this->retorno;
 		exit();
 	}
@@ -65,13 +60,12 @@ class Obras extends model
 			INNER JOIN servico sev ON(obr.id_servico = sev.id)
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
-			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)		
 		WHERE " . implode(' AND ', $where) . "  GROUP BY obr.id ORDER BY obr.obr_razao_social";
-		
+
 		$sql = $this->db->prepare($sql);
-		
+
 		$this->bindWhere($filtro, $sql);
-		
+
 		$sql->execute();
 		if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
@@ -117,12 +111,12 @@ class Obras extends model
 		);
 
 
-		if(!isset($filtro['filtro']['filtros']['situacao'])){
+		if (!isset($filtro['filtro']['filtros']['situacao'])) {
 			$where[] = 'obr.atv=1';
 		}
 
-		if($id_cliente != 0){
-			$where[] = 'obr.id_cliente='. $id_cliente;
+		if ($id_cliente != 0) {
+			$where[] = 'obr.id_cliente=' . $id_cliente;
 		}
 
 		if (!empty($filtro['filtro']['filtros']['nome_obra'])) {
@@ -145,7 +139,7 @@ class Obras extends model
 				$where[] = "obr.atv = :situacao";
 			}
 		}
-		
+
 		if (!empty($filtro['filtro']['filtros']['obra_nota_numero'])) {
 			if ($filtro['filtro']['filtros']['obra_nota_numero'] != '') {
 				$where[] = "obr.obra_nota_numero LIKE :obra_nota_numero";
@@ -187,10 +181,10 @@ class Obras extends model
 		}
 		if (!empty($filtro['filtro']['filtros']['situacao'])) {
 			if ($filtro['filtro']['filtros']['situacao'] != '') {
-				if($filtro['filtro']['filtros']['situacao'] == 3){
+				if ($filtro['filtro']['filtros']['situacao'] == 3) {
 					$filtro['filtro']['filtros']['situacao'] = '0';
 				}
-				
+
 				$sql->bindValue(":situacao", $filtro['filtro']['filtros']['situacao']);
 			}
 		}
@@ -210,13 +204,12 @@ class Obras extends model
 		$r = 0;
 		$where = $this->buildWhere($filtro, $id_company);
 
-		$sql = (" SELECT COUNT(*) as c FROM 
+		$sql = (" SELECT COUNT(obr.id) as c FROM 
 				
 				obra obr 
 				INNER JOIN servico sev ON(obr.id_servico = sev.id)
 				INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
-				INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria) WHERE " . implode(' AND ', $where)
-				);
+				INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria) WHERE " . implode(' AND ', $where));
 
 		$sql = $this->db->prepare($sql);
 
@@ -240,7 +233,7 @@ class Obras extends model
 		$sql = ("SELECT COUNT(*) as c FROM obra obr WHERE id_status <> 4");
 		$sql = $this->db->prepare($sql);
 		$sql->execute();
-		
+
 		if ($sql->rowCount() > 0) {
 			$row = $sql->fetch();
 		}
@@ -429,7 +422,8 @@ class Obras extends model
 						$sql->execute();
 					}
 				}
-			} else { }
+			} else {
+			}
 
 			//if($Parametros['id_comercial']){
 			//	$this->addFinanceiroObra($Parametros['id_comercial'], $id_obra, $id_company);
@@ -519,7 +513,7 @@ class Obras extends model
 		$sql = "SELECT *, obrt.quantidade AS quantidade_obra, obrt.preco AS preco_obra, obrt.tipo_compra AS tipo_compra FROM  
 			obra_etapa obrt
 			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
-		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC";
+		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY `check` ASC, tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC";
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_obra", $id_obra);
@@ -530,6 +524,25 @@ class Obras extends model
 
 		if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
+
+			for ($q = 0; $q < count($this->array); $q++) {
+				$doc = new Documentos();
+				$arrayDoc = array();
+				$arrayDoc = $doc->getDocumentoEtapa($this->array[$q]['id_etapa_obra']);
+
+				$this->array[$q]['documento'] = array();
+
+
+
+				if (!empty($arrayDoc)) {
+					$docNome = $arrayDoc['docs_nome'];
+
+				
+
+
+					$this->array[$q]['documento'] = ($docNome);
+				}
+			}
 		}
 
 		return $this->array;
@@ -561,9 +574,11 @@ class Obras extends model
 
 
 			$razao_social = isset($Parametros['razao_social_obra_cliente']) ? $Parametros['razao_social_obra_cliente'] : '';
-			
+
 			$id_departamento = isset($Parametros['cliente_departamento']) ? $Parametros['cliente_departamento'] : '';
-			
+
+			$obr_informacoes = isset($Parametros['obra_infor']) ? $Parametros['obra_infor'] : '';
+
 			$id_endereco = isset($Parametros['id_endereco'])
 				? $this->setEnderecoObra($Parametros, $id_company, $Parametros['id_endereco'])
 				: $this->setEnderecoObra($Parametros, $id_company);
@@ -574,7 +589,8 @@ class Obras extends model
 				id_endereco_obra = :id_endereco_obra,
 				cnpj_obra = :obra_cnpj,
 				razao_social_obra_cliente = :razao_social_obra_cliente,
-				id_departamento = :id_departamento
+				id_departamento = :id_departamento,
+				obr_informacoes = :obr_informacoes
 
 				
 				
@@ -588,6 +604,7 @@ class Obras extends model
 			$sql->bindValue(":obra_cnpj", $Parametros['obra_cnpj']);
 			$sql->bindValue(":razao_social_obra_cliente", $razao_social);
 			$sql->bindValue(":id_departamento", $id_departamento);
+			$sql->bindValue(":obr_informacoes", $obr_informacoes);
 
 			$sql->execute();
 
@@ -610,7 +627,8 @@ class Obras extends model
 						controller::setLog($Parametros, 'obra', 'concluir_obra');
 					}
 				}
-			} else { }
+			} else {
+			}
 
 
 
@@ -650,7 +668,6 @@ class Obras extends model
 			$sql->execute();
 
 			$id_endereco = $this->db->lastInsertId();
-			
 		} else {
 
 			$sql = $this->db->prepare("UPDATE `obra_endereco` SET  
@@ -785,13 +802,14 @@ class Obras extends model
 		}
 	}
 
-	public function getAllByClear($id_company){
-		
+	public function getAllByClear($id_company)
+	{
+
 		$sql = "SELECT * FROM obra obr		
 			WHERE obr.id <> '' AND obr.id NOT IN (SELECT fino.id_obra FROM financeiro_obra fino) AND
 			
 			(obr.atv <> 0 AND obr.atv <> 2) AND obr.id_status = 3 AND id_company = :id_company
-		"; 
+		";
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(':id_company', $id_company);

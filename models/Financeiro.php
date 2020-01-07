@@ -226,11 +226,6 @@ class Financeiro extends model
         $id_etapa                   = $Parametros['id_etapa'];
         $data_value                 = $Parametros['data_value'];
 
-
-        $data_vencimento = str_replace('/', '-', $data_vencimento);
-
-        $data_vencimento =  date('Y-d-m', strtotime($data_vencimento));
-
         try {
             $sql = $this->db->prepare("INSERT INTO historico_faturamento SET 
                 
@@ -488,7 +483,7 @@ class Financeiro extends model
 
     public function getPendentesRecebido(){
 
-        $hoje = date('Y-d-m');
+        $hoje = date('Y-m-d');
 
         $array_faturamento = array();
 
@@ -502,8 +497,19 @@ class Financeiro extends model
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
-          
-            $array_faturamento  = $sql->fetchAll();   
+      
+            $array_faturamento_fat  = $sql->fetchAll();         
+
+            foreach ($array_faturamento_fat as $fat) {
+
+                $data = str_replace('/', '-', $fat['data_vencimento']);
+
+                $vencimento =  date('Y-m-d', strtotime($data));
+
+                if($vencimento <= $hoje){
+                    $array_faturamento[] = $fat;
+                }
+            }
 
         }
 

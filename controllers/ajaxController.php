@@ -23,6 +23,17 @@ class ajaxController extends controller
 
     public function index()
     { }
+    
+    public function getDocumentoEtapaObra($id_etapa_obra)
+	{
+
+		$doc = new Documentos();
+		$array = array();
+		$array = $doc->getDocumentoEtapa($id_etapa_obra);
+
+        echo json_encode($array);
+        exit();
+	}
 
     public function search_servico()
     {
@@ -389,21 +400,32 @@ class ajaxController extends controller
 
     public function updateEtapa()
     {
-        $data = array();
+        $data = false;
         $u = new Users();
         $u->setLoggedUser();
         $a = new Servicos();
         $Parametros = array();
 
-
-
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
-            $data['id'] = $a->updateEtapa($_POST, $u->getCompany(), $u->getName());
+            $data = $a->updateEtapa($_POST, $u->getCompany(), $u->getName());
         }
 
-        echo json_encode($data['id']);
+        echo json_encode($data);
         exit;
+    }
+
+    public function getIdEtapaObra($id_etapa_obra){
+
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $a = new Etapa('etapa');
+
+        $data = $a->getIdEtapaObra($id_etapa_obra);
+
+        echo json_encode($data);
     }
 
     public function changeStatusComercial()
@@ -468,11 +490,25 @@ class ajaxController extends controller
         $a = new Etapa('Etapa');
         $Parametros = array();
 
-
-
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $array = $a->searchByName($_POST);
+        }
+
+        echo json_encode($array);
+        exit;
+    }
+
+    public function getEtapas()
+    {
+        $array = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Obras();
+        $Parametros = array();
+
+        if (isset($_REQUEST['id_obra']) && !empty($_REQUEST['id_obra'])) {
+            $array = $a->getEtapas($_REQUEST['id_obra'], $_REQUEST['tipo']);
         }
 
         echo json_encode($array);
