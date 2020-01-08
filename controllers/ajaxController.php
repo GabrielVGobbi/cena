@@ -29,7 +29,7 @@ class ajaxController extends controller
 
 		$doc = new Documentos();
 		$array = array();
-		$array = $doc->getDocumentoEtapa($id_etapa_obra);
+		$array = $doc->getDocumentoEtapaALL($id_etapa_obra);
 
         echo json_encode($array);
         exit();
@@ -377,10 +377,13 @@ class ajaxController extends controller
 
         $cliente = new Cliente();
         
-        $array = $cliente->getDepartamentoById($_POST['id_departamento']);
+        if(isset($_POST['id_departamento']) && !empty($_POST['id_departamento'])){
 
-        echo json_encode($array);
-        
+            $array = $cliente->getDepartamentoById($_POST['id_departamento']);
+
+            echo json_encode($array);
+            
+        }
         exit;
 
 

@@ -513,7 +513,7 @@ class Obras extends model
 		$sql = "SELECT *, obrt.quantidade AS quantidade_obra, obrt.preco AS preco_obra, obrt.tipo_compra AS tipo_compra FROM  
 			obra_etapa obrt
 			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
-		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY `check` ASC, tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC";
+		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC";
 
 		$sql = $this->db->prepare($sql);
 		$sql->bindValue(":id_obra", $id_obra);
@@ -532,13 +532,8 @@ class Obras extends model
 
 				$this->array[$q]['documento'] = array();
 
-
-
 				if (!empty($arrayDoc)) {
 					$docNome = $arrayDoc['docs_nome'];
-
-				
-
 
 					$this->array[$q]['documento'] = ($docNome);
 				}

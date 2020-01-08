@@ -59,13 +59,13 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 										<div class="col-md-12">
 											<div class="box-header with-border text-center">
 												<h3 class="box-title ">Informações Importantes</h3>
-												
+
 											</div>
 											<div class="box-body" style="">
 												<div class="row">
 													<div class="col-md-3">
 														<div class="form-group">
-															<textarea type="text" class="form-control" name="obra_infor" id="obra_infor"  style="margin: 0px -772px 0px 0px; width: 1004px; height: 138px;"> <?php echo $obr['obr_informacoes']; ?> </textarea>
+															<textarea type="text" class="form-control" name="obra_infor" id="obra_infor" style="margin: 0px -772px 0px 0px; width: 1004px; height: 138px;"> <?php echo $obr['obr_informacoes']; ?> </textarea>
 														</div>
 													</div>
 												</div>
@@ -83,8 +83,8 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 								<div class="box-header ">
 									<i class="ion ion-clipboard"></i>
 									<h3 class="box-title title-tipo">
-											Etapas
-								 	</h3>
+										Etapas
+									</h3>
 									<div class="box-tools pull-right select_obras">
 
 										<div class="form-group">
@@ -135,6 +135,11 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 													<a href="<?php echo BASE_URL ?>assets/documentos/<?php echo $doc['docs_nome']; ?>" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
 														<i class="fa fa-info"></i>
 													</a>
+												
+
+													<button class="btn btn-danger btn-flat" data-toggle="popover" title="Remover?" data-content="<a href=<?php echo BASE_URL ?>documentos/delete/<?php echo $doc['id']; ?>/<?php echo $obr['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
+																<i class="fa fa-trash"></i>
+															</button>
 												</div>
 											</div>
 										</div>
@@ -168,8 +173,6 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 	</div>
 </div>
 <script type="text/javascript">
-	
-
 	$(function() {
 
 		$("#formobra").click(function() {

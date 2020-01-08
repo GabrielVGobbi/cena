@@ -80,8 +80,6 @@ $data_hoje = date('d/m');
                                             <div id="COMPRA" style="display: none">
                                                 <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
 
-
-
                                                 <div class="col-md-3">
                                                     <div class="form-group">
                                                         <label>Quantidade</label>
@@ -210,10 +208,10 @@ $data_hoje = date('d/m');
 
                                         </div>
                                         <div class="box-body" style="">
-                                            <div class="col-md-10">
+                                            <div class="col-md-10" style="margin-bottom:20px">
                                                 <label>Adicionar novo Documento</label>
                                                 <div class="input-group">
-                                                    <input class="form-control" name="documento_etapa_nome" placeholder="Nome do Documento">
+                                                    <input class="form-control" name="documento_etapa_nome" id="documento_etapa_nome" placeholder="Nome do Documento" >
                                                     <div class="input-group-btn">
                                                         <div class="btn btn-default btn-file">
                                                             <i class="fa fa-paperclip"></i> PDF
@@ -222,17 +220,25 @@ $data_hoje = date('d/m');
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="col-md-10">
+                                                <div class="etapa_documento">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-
                             </div>
                             <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
-                                    <a id="delete_etapa" type="button" data-toggle="tooltip" title="" data-original-title="Deletar Etapa" class="btn btn-danger pull-left" href=""><i class="ion ion-trash-a"></i></a>
-                                </div>
-                            <?php endif; ?>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+
+
+                                        <div class="btn btn-danger btn-flat pull-left" data-toggle="popover" title="Remover?" data-content="<a id='delete_etapa' href='' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
+                                            <i class="fa fa-trash"></i>
+                                        </div>
+
+                                    </div>
+                                <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -248,6 +254,7 @@ $data_hoje = date('d/m');
     $(function() {
 
         $(document).ready(gethistorico);
+
 
         var cookie = getCookie('select_etapas');
         var tipo = $("#select-etapas option:selected").val();
@@ -274,7 +281,13 @@ $data_hoje = date('d/m');
                 dataType: 'json',
                 success: function(json) {
                     toastr.success('Editado com sucesso');
+                     $('#documento_etapa_nome').val('');
+                     $('#file').val('');
+
                     $(document).ready(gethistorico);
+                    $(document).ready(checkDocumentoEtapa(id_etapa_obra, $('[name="id_obra"]').val()));
+                    $(document).ready(edit_etapa(id_etapa_obra));
+                    
                 },
                 cache: false,
                 contentType: false,
@@ -283,7 +296,6 @@ $data_hoje = date('d/m');
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) { // Avalia se tem suporte a propriedade upload
                         myXhr.upload.addEventListener('progress', function() {
-                            /* faz alguma coisa durante o progresso do upload */
                         }, false);
                     }
                     return myXhr;
@@ -365,6 +377,7 @@ $data_hoje = date('d/m');
                 $('.list-etapas').html(options).show();
 
 
+
             } else {
 
                 $(".list-etapas").css("display", "none");
@@ -411,12 +424,16 @@ $data_hoje = date('d/m');
         $("#COMPRA").css("display", "none");
         $("#ADMINISTRATIVA").css("display", "none");
 
+
+
         //Ajax Load data from ajax
         $.ajax({
             url: BASE_URL + 'ajax/getIdEtapaObra/' + id,
             type: "GET",
             dataType: "JSON",
             success: function(data) {
+
+
 
                 $("#" + data.nome).css("display", "");
 
@@ -462,17 +479,25 @@ $data_hoje = date('d/m');
 
                 $('[name="meta_etapa"]').val(data.meta_etapa);
                 $('[name="observacao"]').val(data.observacao);
-                $('[name="observacao_sistema"]').val(observacao_sistema + '<?php echo '\n' . $data_hoje . ' (' . ($Iniciais) . ')';  ?>');
+                $('[name="observacao_sistema"]').val(observacao_sistema);
 
                 $("#delete_etapa").attr("href", BASE_URL + 'obras/obra_etapa_delete/' + data.id_etapa_obra + '/' + data.id_obra);
 
+
+
                 $('#modal_form').modal('show');
+
+
+                checkDocumentoEtapa(id, data.id_obra);
+
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 alert('Error get data from ajax');
             },
         });
+
+
     }
 
     function loadTempo(prazo, abertura, check) {
@@ -482,9 +507,13 @@ $data_hoje = date('d/m');
         if (check == 0) {
             if (abertura) {
                 if (prazo) {
+                    abertura = abertura.replace('-', '/');
+                    abertura = abertura.replace('-', '/');
 
-                    var inicio = moment(abertura, "DD/MM/YYYY").add(parseInt(prazo), 'days');
+
+                    var inicio = moment(abertura).add(parseInt(prazo), 'days');
                     var fim = moment();
+
 
                     var dias = fim.diff(inicio, 'days');
                     var ano = fim.diff(inicio, 'years');
@@ -493,17 +522,20 @@ $data_hoje = date('d/m');
                     mes = (mes != '' ? mes + ' mese(s) e ' : '');
                     var msg = 'Restam: ' + mes + '' + dias + ' Dia(s)';
 
-                    if (dias == '0') {
-                        array.msg = 'Entrega Hoje';
-                        array.type = 'warning';
-                    } else if (inicio > fim) {
-                        array.msg = 'Atrasado em ' + mes + dias + ' Dia(s)';
-                        array.type = 'danger';
+                    //if (dias == '0') {
+                    //    array.msg = 'Entrega Hoje';
+                    //    array.type = 'warning';
+                    //} else if (inicio > fim) {
+                    //    array.msg = 'Atrasado em ' + mes + dias + ' Dia(s)';
+                    //    array.type = 'danger';
+//
+                    //} else if (inicio < fim) {
+                    //    array.msg = mes + dias + ' Dia(s) Restante(s)';
+                    //    array.type = 'success';
+                    //}
 
-                    } else if (inicio < fim) {
-                        array.msg = mes + dias + ' Dia(s) Restante(s)';
+                        array.msg = 'arrumando';
                         array.type = 'success';
-                    }
 
                 } else {
                     array.type = 'warning';
@@ -525,15 +557,31 @@ $data_hoje = date('d/m');
 
     }
 
-    function checkDocumentoEtapa(id) {
-        var documento = [];
+    function checkDocumentoEtapa(id, id_obra) {
         $.ajax({
             url: BASE_URL + 'ajax/getDocumentoEtapaObra/' + id,
             type: "GET",
             dataType: "JSON",
-            success: function(data) {
+            success: function(j) {
+                var options = '';
+                if (j.length != 0) {
+                    for (var i = 0; i < j.length; i++) {
 
-                return (data);
+                        options += '<div class="input-group" style="width: 100%;">'
+                        options += '<input type="text" class="form-control" autocomplete="off" value="' + j[i].docs_nome + '">'
+                        options += '<div class="input-group-btn">'
+                        options += '<a href="' + BASE_URL + 'assets/documentos/' + j[i].docs_nome + '" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">'
+                        options += '    <i class="fa fa-info"></i>'
+                        options += '</a>'
+                        options += '<a href="' + BASE_URL + 'documentos/delete/' + j[i].id + '/' + id_obra + '/' + j[i].id + '" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">'
+                        options += '    <i class="fa fa-trash"></i>'
+                        options += '</a>'
+                        options += '</div>'
+                        options += '</div>'
+                    }
+
+                    $('.etapa_documento').html(options).show();
+                }
 
             },
             error: function(jqXHR, textStatus, errorThrown) {

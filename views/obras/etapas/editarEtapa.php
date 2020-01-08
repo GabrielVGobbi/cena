@@ -193,22 +193,6 @@ $data_hoje = date('d/m');
                         <?php endif; ?>
 
 
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações</label>
-                            <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
-                          </div>
-                        </div>
-                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
-                          <div class="col-md-12">
-                            <div class="form-group">
-                              <label>Observações do sistema</label>
-                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
-                            </div>
-                          </div>
-                        <?php endif;?>
-
-
 
                       <?php elseif ($array[0]['nome'] === 'OBRA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="OBRA">

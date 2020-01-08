@@ -659,6 +659,8 @@ class Etapa extends model
 
         if ($sql->rowCount() == 1) {
             $array = $sql->fetch();
+
+			
         }
 
 
@@ -667,7 +669,6 @@ class Etapa extends model
 
     public function editEtapaObra($id_etapa, $Parametros, $arquivos, $id_company, $id_user)
     {
-        
         
         $tipo = 'Editado';
 

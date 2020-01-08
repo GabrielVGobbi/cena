@@ -523,7 +523,10 @@
             "type": "POST",
             "data": {
               filtro,
-            }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                window.location.href = BASE_URL+'obras';
+            },
 
           },
         });

@@ -232,6 +232,29 @@ class Documentos extends model
 		exit();
 	}
 
+
+
+	public function getDocumentoEtapaALL($id_etapa_obra)
+	{
+
+		$sql = $this->db->prepare("
+			SELECT * FROM documento_etapa docet
+			INNER JOIN documentos doc ON (doc.id = docet.id_documento)
+			WHERE  id_etapa_obra = :id_etapa_obra 
+		");
+
+		$sql->bindValue(':id_etapa_obra', $id_etapa_obra);
+
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$this->array = $sql->fetchALL();
+		}
+
+		return $this->array;
+		exit();
+	}
+
 	public function addDocumentoObra($id_obra, $id)
 	{
 
