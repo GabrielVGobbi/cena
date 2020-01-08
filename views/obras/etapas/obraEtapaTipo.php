@@ -211,7 +211,7 @@ $data_hoje = date('d/m');
                                             <div class="col-md-10" style="margin-bottom:20px">
                                                 <label>Adicionar novo Documento</label>
                                                 <div class="input-group">
-                                                    <input class="form-control" name="documento_etapa_nome" id="documento_etapa_nome" placeholder="Nome do Documento" >
+                                                    <input class="form-control" name="documento_etapa_nome" id="documento_etapa_nome" placeholder="Nome do Documento">
                                                     <div class="input-group-btn">
                                                         <div class="btn btn-default btn-file">
                                                             <i class="fa fa-paperclip"></i> PDF
@@ -229,16 +229,16 @@ $data_hoje = date('d/m');
                                 </div>
                             </div>
                             <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                    <div class="modal-footer">
-                                        <button type="submit" class="btn btn-primary">Salvar</button>
+                                <div class="modal-footer">
+                                    <button type="submit" class="btn btn-primary">Salvar</button>
 
 
-                                        <div class="btn btn-danger btn-flat pull-left" data-toggle="popover" title="Remover?" data-content="<a id='delete_etapa' href='' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
-                                            <i class="fa fa-trash"></i>
-                                        </div>
-
+                                    <div class="btn btn-danger btn-flat pull-left delete_etapa" data-toggle="popover" title="Remover Etapa?" data-content="">
+                                        <i class="fa fa-trash"></i>
                                     </div>
-                                <?php endif; ?>
+
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -281,13 +281,13 @@ $data_hoje = date('d/m');
                 dataType: 'json',
                 success: function(json) {
                     toastr.success('Editado com sucesso');
-                     $('#documento_etapa_nome').val('');
-                     $('#file').val('');
+                    $('#documento_etapa_nome').val('');
+                    $('#file').val('');
 
                     $(document).ready(gethistorico);
                     $(document).ready(checkDocumentoEtapa(id_etapa_obra, $('[name="id_obra"]').val()));
                     $(document).ready(edit_etapa(id_etapa_obra));
-                    
+
                 },
                 cache: false,
                 contentType: false,
@@ -295,8 +295,7 @@ $data_hoje = date('d/m');
                 xhr: function() { // Custom XMLHttpRequest
                     var myXhr = $.ajaxSettings.xhr();
                     if (myXhr.upload) { // Avalia se tem suporte a propriedade upload
-                        myXhr.upload.addEventListener('progress', function() {
-                        }, false);
+                        myXhr.upload.addEventListener('progress', function() {}, false);
                     }
                     return myXhr;
                 }
@@ -481,8 +480,7 @@ $data_hoje = date('d/m');
                 $('[name="observacao"]').val(data.observacao);
                 $('[name="observacao_sistema"]').val(observacao_sistema);
 
-                $("#delete_etapa").attr("href", BASE_URL + 'obras/obra_etapa_delete/' + data.id_etapa_obra + '/' + data.id_obra);
-
+                $(".delete_etapa").attr("data-content", "<a  href='" + BASE_URL + 'obras/obra_etapa_delete/' + data.id_etapa_obra + '/' + data.id_obra + "' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>");
 
 
                 $('#modal_form').modal('show');
@@ -528,14 +526,14 @@ $data_hoje = date('d/m');
                     //} else if (inicio > fim) {
                     //    array.msg = 'Atrasado em ' + mes + dias + ' Dia(s)';
                     //    array.type = 'danger';
-//
+                    //
                     //} else if (inicio < fim) {
                     //    array.msg = mes + dias + ' Dia(s) Restante(s)';
                     //    array.type = 'success';
                     //}
 
-                        array.msg = 'arrumando';
-                        array.type = 'success';
+                    array.msg = 'arrumando';
+                    array.type = 'success';
 
                 } else {
                     array.type = 'warning';
@@ -558,6 +556,7 @@ $data_hoje = date('d/m');
     }
 
     function checkDocumentoEtapa(id, id_obra) {
+        msgConfirm = "'"+'Deseja deletar esse documento?'+"'"
         $.ajax({
             url: BASE_URL + 'ajax/getDocumentoEtapaObra/' + id,
             type: "GET",
@@ -573,7 +572,7 @@ $data_hoje = date('d/m');
                         options += '<a href="' + BASE_URL + 'assets/documentos/' + j[i].docs_nome + '" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">'
                         options += '    <i class="fa fa-info"></i>'
                         options += '</a>'
-                        options += '<a href="' + BASE_URL + 'documentos/delete/' + j[i].id + '/' + id_obra + '/' + j[i].id + '" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">'
+                        options += '<a    onclick="toastAlertDelete(' + j[i].id_documento + ', ' + id_obra + ')" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">'
                         options += '    <i class="fa fa-trash"></i>'
                         options += '</a>'
                         options += '</div>'
@@ -598,5 +597,29 @@ $data_hoje = date('d/m');
             BASE_URL + "assets/documentos/" + id,
             '_blank' // <- This is what makes it open in a new window.
         );
+    }
+    function toastAlertDelete(id_documento, id_obra){
+        href= BASE_URL +'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento 
+
+        toastr.warning("Deseja deletar esse documento <br> <br> <a type='button' href='"+href+"' class='btn btn-danger btn-flat'>Sim</a>")
+        toastr.options = {
+            "closeButton": false,
+            "debug": false,
+            "newestOnTop": false,
+            "progressBar": false,
+            "positionClass": "toast-top-right",
+            "preventDuplicates": true,
+            "onclick": null,
+            "showDuration": "300",
+            "hideDuration": "1000",
+            "timeOut": 0,
+            "extendedTimeOut": 0,
+            "showEasing": "swing",
+            "hideEasing": "linear",
+            "showMethod": "fadeIn",
+            "hideMethod": "fadeOut",
+            "tapToDismiss": true
+        }
+
     }
 </script>

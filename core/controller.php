@@ -97,11 +97,14 @@ class controller
 
 	public static function returnDate($valor)
 	{
+		if($valor != '' ){
 
-		$valor = trim($valor);
-		$valor = str_replace('/', '-', $valor);
-		$valor = date_create($valor);
-		$valor = date_format($valor, 'd-m-Y');
+			$valor = trim($valor);
+			$valor = str_replace('/', '-', $valor);
+			$valor = date_create($valor);
+			$valor = date_format($valor, 'd-m-Y');
+		}
+
 
 
 		return $valor;
