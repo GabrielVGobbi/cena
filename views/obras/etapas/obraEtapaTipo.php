@@ -505,35 +505,51 @@ $data_hoje = date('d/m');
         if (check == 0) {
             if (abertura) {
                 if (prazo) {
-                    abertura = abertura.replace('-', '/');
-                    abertura = abertura.replace('-', '/');
+
+                    var minhaData = moment(abertura, "DD/MM/YYYY");
+                    var inicio = minhaData.add(prazo, 'days').format("DD/MM/YYYY");
 
 
-                    var inicio = moment(abertura).add(parseInt(prazo), 'days');
-                    var fim = moment();
+
+                    inicio = inicio.replace('/', '-')
+                    inicio = inicio.replace('/', '-')
 
 
-                    var dias = fim.diff(inicio, 'days');
-                    var ano = fim.diff(inicio, 'years');
-                    var mes = fim.diff(inicio, 'month');
 
-                    mes = (mes != '' ? mes + ' mese(s) e ' : '');
-                    var msg = 'Restam: ' + mes + '' + dias + ' Dia(s)';
+                    const dataSplit = inicio.split('-');
 
-                    //if (dias == '0') {
-                    //    array.msg = 'Entrega Hoje';
-                    //    array.type = 'warning';
-                    //} else if (inicio > fim) {
-                    //    array.msg = 'Atrasado em ' + mes + dias + ' Dia(s)';
-                    //    array.type = 'danger';
-                    //
-                    //} else if (inicio < fim) {
-                    //    array.msg = mes + dias + ' Dia(s) Restante(s)';
-                    //    array.type = 'success';
-                    //}
+                    const day = dataSplit[0]; // 10
+                    const month = dataSplit[1]; // 01
+                    const year = dataSplit[2]; // 2020
 
-                    array.msg = 'arrumando';
-                    array.type = 'success';
+                    const now = dataFormatada(new Date());
+
+                    var antes = moment(now);
+                    var depois = moment(year + '-' + month + '-' + day);
+
+                    var days = depois.diff(antes, 'days');
+                    var years = depois.diff(antes, 'years');
+                    var months = depois.diff(antes, 'month');
+
+
+                    console.log(months)
+
+
+                    mes = (months != '' ? months + ' mese(s) e ' : '');
+                    var msg = 'Restam: ' + months + '' + days + ' Dia(s)';
+
+                    if (days == '0') {
+                        array.msg = 'Entrega Hoje';
+                        array.type = 'warning';
+                    } else if (antes > depois) {
+                        array.msg = 'Atrasado em ' + mes + days + ' Dia(s)';
+                        array.type = 'danger';
+
+                    } else if (antes < depois) {
+                        array.msg = mes + days + ' Dia(s) Restante(s)';
+                        array.type = 'success';
+                    }
+
 
                 } else {
                     array.type = 'warning';
@@ -556,7 +572,7 @@ $data_hoje = date('d/m');
     }
 
     function checkDocumentoEtapa(id, id_obra) {
-        msgConfirm = "'"+'Deseja deletar esse documento?'+"'"
+        msgConfirm = "'" + 'Deseja deletar esse documento?' + "'"
         $.ajax({
             url: BASE_URL + 'ajax/getDocumentoEtapaObra/' + id,
             type: "GET",
@@ -598,12 +614,12 @@ $data_hoje = date('d/m');
             '_blank' // <- This is what makes it open in a new window.
         );
     }
-    function toastAlertDelete(id_documento, id_obra){
-        href= BASE_URL +'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento 
 
-        toastr.warning("Deseja deletar esse documento <br> <br> <a type='button' href='"+href+"' class='btn btn-danger btn-flat'>Sim</a>")
+    function toastAlertDelete(id_documento, id_obra) {
+        href = BASE_URL + 'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento
+
         toastr.options = {
-            "closeButton": false,
+            "closeButton": true,
             "debug": false,
             "newestOnTop": false,
             "progressBar": false,
@@ -620,6 +636,23 @@ $data_hoje = date('d/m');
             "hideMethod": "fadeOut",
             "tapToDismiss": true
         }
+        toastr.warning("<br><a type='button' href='" + href + "' class='btn btn-danger btn-flat'>Sim</a>", "Deseja deletar esse documento")
 
+
+    }
+
+    function dataFormatada() {
+        var data = new Date();
+        var dia = data.getDate();
+        if (dia.toString().length == 1) {
+            dia = "0" + dia;
+        }
+        var mes = data.getMonth() + 1;
+        if (mes.toString().length == 1) {
+            mes = "0" + mes;
+        }
+        var ano = data.getFullYear();
+
+        return ano + "-" + mes + "-" + dia;
     }
 </script>
