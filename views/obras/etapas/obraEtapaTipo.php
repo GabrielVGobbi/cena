@@ -532,7 +532,6 @@ $data_hoje = date('d/m');
                     var months = depois.diff(antes, 'month');
 
 
-                    console.log(months)
 
 
                     mes = (months != '' ? months + ' mese(s) e ' : '');

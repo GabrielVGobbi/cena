@@ -146,7 +146,7 @@ class obrasController extends controller
             $total = $this->obra->getCount($this->user->getCompany(), $_REQUEST);
 
             $output = array(
-                "draw" => $_POST['draw'],
+                "draw" => $_REQUEST['draw'],
                 "recordsTotal" => $total,
                 "recordsFiltered" =>  $total,
                 "data" => $data,
@@ -191,12 +191,16 @@ class obrasController extends controller
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_edit')) {
 
             $this->dataInfo['obr'] = $this->obra->getInfo($id, $this->user->getCompany());
-            $this->dataInfo['departamento_cliente'] = $this->cliente->getDepartamentoClienteById($this->dataInfo['obr']['id_cliente']);
 
+            if($this->dataInfo['obr'] && count($this->dataInfo['obr'])>0){
+                
+                $this->dataInfo['departamento_cliente'] = $this->cliente->getDepartamentoClienteById($this->dataInfo['obr']['id_cliente']);
 
-            $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'];
-
-            $this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
+                $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'];
+    
+                $this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
+            }
+            
         } else {
 
             $this->loadViewError();
@@ -305,7 +309,7 @@ class obrasController extends controller
     {
 
         if ($id_etapa_obra != '') {
-            $this->etapa->delete_etapa_obra($id_etapa_obra, $this->user->getCompany(), $this->user->getId());
+            $this->etapa->delete_etapa_obra($id_etapa_obra, $id_obra, $this->user->getCompany(), $this->user->getId());
         }
 
         header("Location: " . BASE_URL . $this->dataInfo['pageController'] . '/edit/' . $id_obra.$this->type);

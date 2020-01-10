@@ -1,10 +1,26 @@
+<?php 
+$title = 'Admin';
+if(isset($viewData['tableDados']['obr_razao_social'])){
+  $title = $viewData['tableDados']['obr_razao_social'];
+} else if(isset($viewData['tableInfo']['obr_razao_social'])){
+  $title = $viewData['tableInfo']['obr_razao_social'];
+}else if (isset($viewData['obr']['obr_razao_social'])){
+  $title = $viewData['obr']['obr_razao_social'];
+}
+
+?>
+
 <!DOCTYPE html>
 <html>
 
 <head>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <title>Admin</title>
+  <title><?php echo $title; ?></title>
+  
+
+
+  
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
@@ -23,6 +39,11 @@
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/select2/dist/css/select2.min.css">
   <link rel="stylesheet" href="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/datatables-bs4/css/dataTables.bootstrap4.css">
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/plugins/iCheck/icheck.min.js"></script>
+
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.js' type='text/javascript'></script>
+
+  <link href='https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.4.0/dropzone.css' type='text/css' rel='stylesheet'>
+
 
 
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
@@ -520,12 +541,12 @@
           filter: true,
           "ajax": {
             "url": BASE_URL + "<?php echo $viewData['pageController']; ?>/getAll",
-            "type": "POST",
+            "type": "GET",
             "data": {
               filtro,
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                window.location.href = BASE_URL+'obras';
+              window.location.href = BASE_URL + 'obras';
             },
 
           },

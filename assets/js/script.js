@@ -331,7 +331,7 @@ $(function () {
     $('.new_obra').on('click', function (e) {
 
         $('#new_obra').toggle();
-        $('#obra_ok').toggle();
+        //$('#obra_ok').toggle();
 
         $('.file_doc').attr('name', 'documento_arquivo');
 
@@ -519,23 +519,6 @@ function getCookie(cname) {
     return "";
 }
 
-function previewDoc(){
-	var imagem = document.querySelector('input[name=documento_arquivo]').files[0];
-    var preview = document.querySelector('input[name=preview]');
-    
-	
-	var reader = new FileReader();
-	
-	reader.onloadend = function () {
-		preview.src = reader.result;
-	}
-	console.log(preview.src);
-	if(imagem){
-		reader.readAsDataURL(imagem);
-	}else{
-		preview.src = "";
-	}
-}
 
 
 

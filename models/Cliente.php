@@ -488,6 +488,28 @@ class Cliente extends model
 		return $this->array;
 	}
 
+	public function getClienteByIdName($id, $id_company)
+	{
+
+		$name = '';
+		$sql = $this->db->prepare("
+			SELECT cliente_nome FROM cliente cli
+			
+			WHERE id_company = :id_company AND id = :id LIMIT 1
+		");
+
+		$sql->bindValue(':id', $id);
+		$sql->bindValue(':id_company', $id_company);
+		$sql->execute();
+
+		if ($sql->rowCount() == 1) {
+			$array = $sql->fetch();
+			$name = $array['cliente_nome'];
+		}
+
+		return $name;
+	}
+
 	public function searchClienteByName($var, $id_company)
 	{
 

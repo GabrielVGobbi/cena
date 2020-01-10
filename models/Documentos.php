@@ -101,16 +101,18 @@ class Documentos extends model
 		return $r;
 	}
 
-	public function add($arquivos, $id_company, $id_obra = 0, $nome_documento = '')
+	public function add($arquivos, $id_company, $id_obra = 0, $nome_documento = '', $type = '.pdf')
 	{
 
 		$nome_documento = strtolower($nome_documento);
+
+		$type = str_replace('application/','',$arquivos['documento_arquivo']['type']);
 		
 		if (is_dir("assets/documentos/")) {
-			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . '.pdf');
+			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);
 		} else {
 			mkdir("assets/documentos/");
-			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . '.pdf');
+			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);
 		}
 
 
@@ -121,10 +123,54 @@ class Documentos extends model
 								VALUES (:nome_documento, :id_company)
 						");
 
-			$sql->bindValue(":nome_documento", strtolower($nome_documento . '.pdf'));
+			$sql->bindValue(":nome_documento", strtolower($nome_documento . $type));
 			$sql->bindValue(":id_company", $id_company);
 			if ($sql->execute()) {
 				controller::alert('success', 'documento adicionado com sucesso!!');
+
+				$id = $this->db->lastInsertId();
+	
+				if((isset($id_obra) && $id_obra != '')){
+					$this->addDocumentoObra($id_obra, $id);
+				}
+
+			} else {
+				controller::alert('error', 'Contate o administrador do sistema!!');
+			}
+		} catch (PDOExecption $e) {
+			$sql->rollback();
+			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+		}
+
+		return $id;
+	}
+
+	public function addByDropeZone($arquivos, $id_company, $id_obra = 0, $nome_documento = '', $type = '.pdf')
+	{
+
+		$nome_documento = strtolower($nome_documento);
+
+	
+		
+		
+		if (is_dir("assets/documentos/")) {
+			$subiu = move_uploaded_file($arquivos['file']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);
+		} else {
+			mkdir("assets/documentos/");
+			$subiu = move_uploaded_file($arquivos['file']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);
+		}
+
+
+		try {
+
+
+			$sql = $this->db->prepare("INSERT INTO documentos (docs_nome,id_company)
+								VALUES (:nome_documento, :id_company)
+						");
+
+			$sql->bindValue(":nome_documento", strtolower($nome_documento . $type));
+			$sql->bindValue(":id_company", $id_company);
+			if ($sql->execute()) {
 
 				$id = $this->db->lastInsertId();
 	

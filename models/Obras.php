@@ -265,7 +265,6 @@ class Obras extends model
 	//Selecionar por ID
 	public function getInfo($id, $id_company)
 	{
-
 		$array = array();
 
 		$sql = $this->db->prepare("

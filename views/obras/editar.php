@@ -9,7 +9,6 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr[0]; ?> ">Comercial</a></li>
 	</ol>
 </section>
-
 <div class="col-md-12">
 	<div class="nav-tabs-custom">
 		<div class="tab-content">
@@ -50,10 +49,12 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 								</div>
 							</div>
 
-							<?php include_once('include/departamento.php'); ?>
-							<?php include_once('include/endereco.php'); ?>
+							<?php include_once('include/departamento.php');
+							?>
+							<?php include_once('include/endereco.php');
+							?>
 
-							<div class="col-md-12">
+							<div class="col-md-12 col-sm-12">
 								<div class="box box-default box-solid">
 									<div class="row">
 										<div class="col-md-12">
@@ -124,41 +125,20 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 								</ul>
 							</div>
 						</div>
-						<div class="box-body" style="">
-							<div id="obra_ok">
-								<?php if (count($documento_obra) > 0) : ?>
-									<?php foreach ($documento_obra as $doc) : ?>
-										<div class="col-md-12 col-xs-12">
-											<div class="input-group" style="width: 50%;">
-												<input type="text" class="form-control" autocomplete="off" value="<?php echo $doc['docs_nome']; ?>">
-												<div class="input-group-btn">
-													<a href="<?php echo BASE_URL ?>assets/documentos/<?php echo $doc['docs_nome']; ?>" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
-														<i class="fa fa-info"></i>
-													</a>
-												
+						<div class="box-body">
 
-													<button class="btn btn-danger btn-flat" data-toggle="popover" title="Remover?" data-content="<a href=<?php echo BASE_URL ?>documentos/delete/<?php echo $doc['id']; ?>/<?php echo $obr['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
-																<i class="fa fa-trash"></i>
-															</button>
-												</div>
-											</div>
-										</div>
-									<?php endforeach; ?>
-								<?php else : ?>
-									Não foram encontrados resultados.
-								<?php endif; ?>
-							</div>
-							<div class="col-md-10 col-xs-12" style="display:none;" id="new_obra">
-								<label>Adicionar novo Documento</label>
-								<div class="input-group">
-									<input class="form-control" name="documento_nome" placeholder="Nome do Documento">
-									<div class="input-group-btn">
-										<div class="btn btn-default btn-file">
-											<i class="fa fa-paperclip"></i> PDF
-											<input type="file" class="btn btn-success file_doc">
-										</div>
-									</div>
+							<div id="new_obra" style="display:none">
+								<form action="<?php echo BASE_URL; ?>ajax/getPreview/<?php echo $obr['0']; ?>/<?php echo $obr['id_cliente']; ?>" class="dropzone" id="dropzoneFrom"></form>
+
+
+								<br>
+								<div align="center">
+									<button type="submit" class="btn btn-info" id="submit-all" style="display:none">Enviar</button>
 								</div>
+							</div>
+							<div class="col-md-12 col-sm-12" id="obra_ok" style="display:">
+								<ul class="mailbox-attachments clearfix" id="preview">
+								</ul>
 							</div>
 						</div>
 					</div>
@@ -172,12 +152,97 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 	</div>
 </div>
-<script type="text/javascript">
-	$(function() {
 
-		$("#formobra").click(function() {
-			$("#obra").submit();
+<script type="text/javascript">
+	Dropzone.autoDiscover = false;
+	var submitButton = document.querySelector('#submit-all');
+
+	list_image();
+	$(document).ready(function() {
+
+
+
+		var myDropzone = new Dropzone(".dropzone", {
+			autoProcessQueue: false,
+			dictDefaultMessage: "Arraste seus arquivos para cá!",
+			acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg,.pdf,.docx,.xls,.xlsx,.zip,.dwg",
+			dictRemoveFile: "Remover",
+			addRemoveLinks: true,
+			parallelUploads: 100,
+			url: BASE_URL + "ajax/getPreview/<?php echo $obr[0]; ?>/<?php echo $obr['id_cliente']; ?>",
+			init: function() {
+				var submitButton = document.querySelector('#submit-all');
+				this.on("addedfile", function(event) {
+
+					submitButton.style.display = 'list-item';
+
+				});
+				myDropzone = this;
+				submitButton.addEventListener("click", function() {
+					myDropzone.processQueue();
+				});
+				this.on("queuecomplete", function() {
+					if (this.getQueuedFiles().length == 0 && this.getUploadingFiles().length == 0) {
+
+						var _this = this;
+						_this.removeAllFiles();
+					}
+					list_image();
+					submitButton.style.display = 'none';
+					toastr.success('documento enviado com sucesso');
+				});
+			}
 		});
 
+		function toastAlertDelete(id_documento, id_obra) {
+        	href = BASE_URL + 'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento
+
+        	toastr.options = {
+        	    "closeButton": true,
+        	    "debug": false,
+        	    "newestOnTop": false,
+        	    "progressBar": false,
+        	    "positionClass": "toast-top-right",
+        	    "preventDuplicates": true,
+        	    "onclick": null,
+        	    "showDuration": "300",
+        	    "hideDuration": "1000",
+        	    "timeOut": 0,
+        	    "extendedTimeOut": 0,
+        	    "showEasing": "swing",
+        	    "hideEasing": "linear",
+        	    "showMethod": "fadeIn",
+        	    "hideMethod": "fadeOut",
+        	    "tapToDismiss": true
+        	}
+        	toastr.warning("<br><a type='button' href='" + href + "' class='btn btn-danger btn-flat'>Sim</a>", "Deseja deletar esse documento")
+    	}
+
+
+
+
+		//$(document).on('click', '.remove_doc', function() {
+		//	var name = $(this).attr('id');
+		//	$.ajax({
+		//		url: BASE_URL + "ajax/getPreview",
+		//		method: "POST",
+		//		data: {
+		//			name: name
+		//		},
+		//		success: function(data) {
+		//			list_image();
+		//		}
+		//	})
+		//});
+
 	});
+
+	function list_image() {
+		$.ajax({
+			url: "<?php echo BASE_URL; ?>ajax/getPreview/<?php echo $obr[0]; ?>/<?php echo $obr['id_cliente']; ?>",
+			success: function(data) {
+				$('#preview').html(data);
+			}
+		});
+	}
 </script>

@@ -22,18 +22,19 @@ class ajaxController extends controller
     }
 
     public function index()
-    { }
-    
-    public function getDocumentoEtapaObra($id_etapa_obra)
-	{
+    {
+    }
 
-		$doc = new Documentos();
-		$array = array();
-		$array = $doc->getDocumentoEtapaALL($id_etapa_obra);
+    public function getDocumentoEtapaObra($id_etapa_obra)
+    {
+
+        $doc = new Documentos();
+        $array = array();
+        $array = $doc->getDocumentoEtapaALL($id_etapa_obra);
 
         echo json_encode($array);
         exit();
-	}
+    }
 
     public function search_servico()
     {
@@ -75,13 +76,13 @@ class ajaxController extends controller
 
         $u = new Users();
         $u->setLoggedUser();
-        
-        $notepad = $u->saveNotepad($_POST, $u->getId(),$u->getCompany());
+
+        $notepad = $u->saveNotepad($_POST, $u->getId(), $u->getCompany());
 
         echo json_encode($notepad);
     }
 
-    
+
 
 
     public function search_categoria($tipo = false)
@@ -102,7 +103,7 @@ class ajaxController extends controller
 
             if (isset($citem['variavel'])) {
                 $variavel = $citem['variavel'];
-            } else { 
+            } else {
                 $variavel = array();
             }
 
@@ -119,7 +120,7 @@ class ajaxController extends controller
         echo json_encode($data);
     }
 
-   
+
     public function getHistorico($tipo = false)
     {
         $u = new Users();
@@ -230,7 +231,7 @@ class ajaxController extends controller
         exit();
     }
 
-    
+
 
     public function searchServicoByConcessionaria()
     {
@@ -253,7 +254,8 @@ class ajaxController extends controller
         exit();
     }
 
-    public function valorReceber(){
+    public function valorReceber()
+    {
 
 
         $data = array();
@@ -268,7 +270,6 @@ class ajaxController extends controller
 
 
         echo json_encode($receber);
-
     }
 
     public function search_cliente()
@@ -369,24 +370,22 @@ class ajaxController extends controller
         echo json_encode($data['id']);
     }
 
-    public function getDepartamentoById(){
+    public function getDepartamentoById()
+    {
 
         $array = array();
         $u = new Users();
         $u->setLoggedUser();
 
         $cliente = new Cliente();
-        
-        if(isset($_POST['id_departamento']) && !empty($_POST['id_departamento'])){
+
+        if (isset($_POST['id_departamento']) && !empty($_POST['id_departamento'])) {
 
             $array = $cliente->getDepartamentoById($_POST['id_departamento']);
 
             echo json_encode($array);
-            
         }
         exit;
-
-
     }
 
     public function verificarMensagem()
@@ -418,7 +417,8 @@ class ajaxController extends controller
         exit;
     }
 
-    public function getIdEtapaObra($id_etapa_obra){
+    public function getIdEtapaObra($id_etapa_obra)
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -475,7 +475,7 @@ class ajaxController extends controller
         $a = new Financeiro('');
         $Parametros = array();
 
-    
+
         if (isset($_POST['id_etapa']) && !empty($_POST['id_etapa'])) {
 
             $return = $a->faturar($_POST['id_etapa'], $_POST['id_obra'], $_POST['id_historico']);
@@ -553,6 +553,119 @@ class ajaxController extends controller
         }
     }
 
+    public function getPreview($id_obra = '', $id_cliente = '')
+    {
+
+        $array = array();
+        $u = new Users();
+        $u->setLoggedUser();
+        $a = new Obras();
+        $d = new Documentos();
+        $c = new Cliente();
+
+        $id_company = $u->getCompany();
+
+        $Parametros = array();
+
+        $folder_name = 'assets/documentos/';
+
+        if (!empty($id_obra)) {
+
+            //if (!empty($_FILES)) {
+            //
+            //    $temp_file = $_FILES['file']['tmp_name'];
+            //    $location = $folder_name . $_FILES['file']['name'];
+            //
+            //    move_uploaded_file($temp_file, $location);
+            //}
+            //
+            //if (isset($_POST["name"])) {
+            //    $filename = $folder_name . $_POST["name"];
+            //    unlink($filename);
+            //}
+
+            //$result = array();
+            //
+            //$files = scandir('assets/documentos/');
+
+
+
+            $nome_cliente = $c->getClienteByIdName($id_cliente, $id_company);
+
+
+
+            //ADD
+            if (!empty($_FILES)) {
+                $name = strstr($_FILES['file']['name'],'.',true).'_cli_'.$nome_cliente;
+                $type = explode('.',$_FILES['file']['name']);
+                $type = '.'.$type[1];
+                $d->addByDropeZone($_FILES, $id_company, $id_obra, $name, $type);
+
+            }
+
+
+            //DELETE 
+            if (isset($_POST["name"])) {
+                //$filename = $folder_name . $_POST["name"];
+                //unlink($filename);
+            }
+
+
+            $Arraydocumento = $d->getDocumentoObra($id_obra, 1);
+
+
+            if (isset($Arraydocumento) && !empty($Arraydocumento)) {
+
+                foreach ($Arraydocumento as $doc) {
+                    $scanDir[] = $doc;
+
+                }
+            }
+
+            $output = '<div class="row">';
+
+            if (isset($scanDir) && false !== $scanDir) {
+                
+                foreach ($scanDir as $file) {
+
+
+                    if ('.' !=  $file && '..' != $file) {
+
+                        $type = explode('.',$file['docs_nome']);
+                        $type = isset($type[1]) ? mb_strtoupper($type[1],'UTF-8') : '??';
+
+                        $fileName = mb_strimwidth($file['docs_nome'], 0, 90, "...");
+                        $output .= '
+                            <li>
+                                <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+
+                                <div class="mailbox-attachment-info"  style="max-width: 29ch;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;">
+                                    <a href="' . BASE_URL . 'assets/documentos/' . $fileName . '" target="_blank" class="mailbox-attachment-name">' . $fileName . '</a>
+                                    <span class="mailbox-attachment-size">
+                                        ' . $type . '
+                                        <a download href="' . BASE_URL . 'assets/documentos/' . $fileName . '" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
+                                        <a download onclick="toastAlertDelete('. $file['id_documento']. ', '. $id_obra. ')" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i></a>
+
+                                        </span>
+                                </div>
+                            </li>
+                        ';
+                    }
+                }
+
+            }else {
+                $output .= '<p class="lead">obra sem documento</p>';
+            }
+
+            $output .= '</div>';
+
+            echo ($output);
+        }
+    }
+
     public function buscarEtapa()
     {
 
@@ -562,49 +675,43 @@ class ajaxController extends controller
         $u->setLoggedUser();
 
         $requestData = $_REQUEST;
-        
+
         $etapas = $e->getEtapasByTipoAjax($offset = 0, 'COMPRA', $requestData['id_concessionaria'], $requestData['id_servico'], $requestData);
         $total  = $this->etapa->getCountEtapaByTipo('COMPRA', $requestData['id_concessionaria'], $requestData['id_servico']);
-    
-        
+
+
         $dados = array();
         foreach ($etapas as $etp) {
 
-           
-            $dado = array();
-            $dado[] = "<a type='button' data-toggle='tooltip' title='' data-original-title='Deletar' class='btn btn-danger' href='".BASE_URL."concessionarias/delete_etapa/".$etp['id']."/".$requestData['id_concessionaria']."/".$requestData['id_servico']."/compra'><i class='ion ion-trash-a'></i></a>
-            <a class='btn btn-info' href='javascript:void(0)' onclick='edit_person(".$etp['id'].")'><i class='glyphicon glyphicon-pencil'></i> </a>
 
-            <a type='button' class='btn btn-primary btn-xs' href='".BASE_URL."concessionarias/add_etapa/".$requestData['id_concessionaria']."/".$requestData['id_servico']."/".$etp['id']."/compra'><i class='fa fa-arrow-right'></i> Add</a>
+            $dado = array();
+            $dado[] = "<a type='button' data-toggle='tooltip' title='' data-original-title='Deletar' class='btn btn-danger' href='" . BASE_URL . "concessionarias/delete_etapa/" . $etp['id'] . "/" . $requestData['id_concessionaria'] . "/" . $requestData['id_servico'] . "/compra'><i class='ion ion-trash-a'></i></a>
+            <a class='btn btn-info' href='javascript:void(0)' onclick='edit_person(" . $etp['id'] . ")'><i class='glyphicon glyphicon-pencil'></i> </a>
+
+            <a type='button' class='btn btn-primary btn-xs' href='" . BASE_URL . "concessionarias/add_etapa/" . $requestData['id_concessionaria'] . "/" . $requestData['id_servico'] . "/" . $etp['id'] . "/compra'><i class='fa fa-arrow-right'></i> Add</a>
         ";
 
 
             $dado[] = $etp["etp_nome"];
 
- 
-            
+
+
             $dados[] = $dado;
-
-            
-
-            
-
-        
         }
 
-        
 
-        if(isset($requestData['search']['value']) && !empty($requestData['search']['value']) && count($etapas) > 0 ){
-            $total = $etapas['rowCount']; 
+
+        if (isset($requestData['search']['value']) && !empty($requestData['search']['value']) && count($etapas) > 0) {
+            $total = $etapas['rowCount'];
         }
 
-        if(count($etapas) == 0 ){
+        if (count($etapas) == 0) {
             $total = 0;
         }
 
 
         $json_data = array(
-            "draw" => intval( $requestData['draw'] ),//para cada requisição é enviado um número como parâmetro
+            "draw" => intval($requestData['draw']), //para cada requisição é enviado um número como parâmetro
             "recordsTotal" => intval($total),  //Quantidade de registros que há no banco de dados
             "recordsFiltered" => intval($total), //Total de registros quando houver pesquisa
             "data" => $dados   //Array de dados completo dos dados retornados da tabela 
@@ -614,7 +721,8 @@ class ajaxController extends controller
         echo json_encode($json_data);
     }
 
-    public function getEtapaComprabyId($id_etapa){
+    public function getEtapaComprabyId($id_etapa)
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -625,10 +733,10 @@ class ajaxController extends controller
         $data = $a->getEtapasById($id_etapa);
 
         echo json_encode($data);
-
     }
 
-    public function getVariavelEtapa($id_etapa){
+    public function getVariavelEtapa($id_etapa)
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -639,10 +747,10 @@ class ajaxController extends controller
         $data = $a->getVariavelEtapa($id_etapa);
 
         echo json_encode($data);
-
     }
 
-    public function ValidateClienteDouble(){
+    public function ValidateClienteDouble()
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -652,13 +760,13 @@ class ajaxController extends controller
 
         $id = !empty($_POST['id']) ? $_POST['id'] : '';
 
-        $data = $a->validacao($this->user->getCompany(), $_POST['nome'], $id  );
+        $data = $a->validacao($this->user->getCompany(), $_POST['nome'], $id);
 
         echo json_encode($data);
-            
     }
 
-    public function getHistoricoFaturamento(){
+    public function getHistoricoFaturamento()
+    {
         $u = new Users();
         $u->setLoggedUser();
         $data = array();
@@ -691,14 +799,15 @@ class ajaxController extends controller
         echo json_encode($data);
     }
 
-    public function receberFaturamento(){
-        
+    public function receberFaturamento()
+    {
+
         $return = false;
         $u = new Users();
         $u->setLoggedUser();
         $a = new Financeiro('');
         $Parametros = array();
-    
+
         if (isset($_POST['histfa_id']) && !empty($_POST['histfa_id'])) {
 
 
@@ -717,8 +826,5 @@ class ajaxController extends controller
 
         echo json_encode($return);
         exit;
-
-
     }
-
 }

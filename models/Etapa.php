@@ -360,12 +360,14 @@ class Etapa extends model
     }
 
 
-    public function delete_etapa_obra($id_etapa_obra, $id_company)
+    public function delete_etapa_obra($id_etapa_obra, $id_obra = '',$id_company)
     {
         $tipo = 'Deletado';
 
         $Parametros = array(
             'id_etapa_obra' => $id_etapa_obra,
+            'id_obra'=> $id_obra
+            
         );
 
 
