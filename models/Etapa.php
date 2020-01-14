@@ -770,7 +770,7 @@ class Etapa extends model
             if (!empty($arquivos) && isset($Parametros['documento_etapa_nome']) && $Parametros['documento_etapa_nome'] != '') {
                 $d = new Documentos;
 
-                $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'] . '_' . $Parametros['cliente'];
+                $Parametros['documento_etapa_nome'] = $Parametros['documento_etapa_nome'] . '_' . $Parametros['cliente_nome'];
                 $d->addDocumentoEtapa($id_etapa, $arquivos, $Parametros['documento_etapa_nome'], $id_company, $Parametros['id_obra']);
             }
 

@@ -22,223 +22,240 @@ $data_hoje = date('d/m');
                         </div>
 
                         <div class="modal-body">
-                            <div class="box box-default box-solid">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Dados</h3>
+                            <br>
+                           
+
+                            <div id="dados_" style="display: ">
+                                <div class="box box-default box-solid">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Dados</h3>
+                                            </div>
+                                            <div class="box-body" style="">
+
+                                            
+                                        
+
+                                                <input type="hidden" class="form-control" name="tipo" id="tipo" autocomplete="off" value="ADMINISTRATIVA">
+                                                <input type="hidden" class="form-control" name="id_etapa_obra" id="id_etapa_obra" autocomplete="off">
+                                                <input type="hidden" class="form-control" name="id_obra" id="id_obra" autocomplete="off">
+                                                <input type="hidden" class="form-control" name="cliente" id="cliente" autocomplete="off">
+                                                <input type="hidden" class="form-control" name="server" id="server" autocomplete="off">
+                                                <input type="hidden" class="form-control" name="cliente_nome" id="cliente_nome" autocomplete="off">
+
+
+
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Nome Etapa</label>
+                                                        <input type="text" class="form-control" name="nome_etapa_obra" id="nome_etapa_obra" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-md-2">
+                                                    <div class="form-group">
+                                                        <label>Data Meta</label>
+                                                        <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" autocomplete="off">
+                                                    </div>
+                                                </div>
+
+
+                                                <div id="ADMINISTRATIVA" style="display: none">
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Data do Pedido</label>
+                                                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_pedido_administrativo" id="data_pedido_administrativo" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Responsável</label>
+                                                            <input type="text" class="form-control" name="responsavel_administrativo" id="responsavel_administrativo" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+
+
+                                                    <div class="col-md-4">
+                                                        <div class="form-group">
+                                                            <label>Cliente Responsável</label>
+                                                            <input type="text" class="form-control" name="cliente_responsavel_administrativo" id="cliente_responsavel_administrativo" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <div id="COMPRA" style="display: none">
+                                                    <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Quantidade</label>
+                                                            <input type="text" class="form-control" name="quantidade" id="quantidade" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Preço</label>
+                                                            <input type="text" class="form-control" name="preco" id="preco" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Tipo</label>
+                                                            <input type="text" class="form-control" name="tipo_compra" id="tipo_compra" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+
+                                                </div>
+
+                                                <div id="CONCESSIONARIA" style="display: none">
+                                                    <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Data de Abertura</label>
+                                                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_abertura_concessionaria" id="data_abertura_concessionaria" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Nº Nota</label>
+                                                            <input type="text" class="form-control" name="nota_numero_concessionaria" id="nota_numero_concessionaria" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-4">
+                                                        <label>Prazo de Atendimento</label>
+                                                        <div class="input-group">
+                                                            <input type="text" class="form-control" name="prazo_atendimento_concessionaria" id="prazo_atendimento_concessionaria" autocomplete="off">
+                                                            <div class="input-group-btn">
+                                                                <div class="btn btn-default">
+                                                                    <i></i> Dias
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
+                                                        <div class="col-md-12" style="margin-bottom: 13px;margin-top:5px">
+                                                            <div class="input-group">
+                                                                <span class="input-group-addon">
+                                                                    <input class="flat-blue" name="check_nota" type="checkbox" value="1">
+                                                                </span>
+                                                                <span type="text" class="form-control">Salvar como ultima nota</span>
+                                                            </div>
+                                                        </div>
+                                                    <?php endif; ?>
+                                                </div>
+
+                                                <div id="OBRA" style="display: none">
+                                                    <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="OBRA">
+
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Responsável</label>
+                                                            <input type="text" class="form-control" name="responsavel_obra" id="cliente_nome" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Data Programada</label>
+                                                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_programada_obra" id="data_programada_obra" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="col-md-2">
+                                                        <div class="form-group">
+                                                            <label>Data Iniciada </label>
+                                                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_iniciada_obra" id="data_iniciada_obra" autocomplete="off">
+                                                        </div>
+                                                    </div>
+
+
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <label>Tempo de Atividade</label>
+                                                            <input type="text" class="form-control" name="tempo_atividade_obra" id="tempo_atividade_obra" autocomplete="off">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
+                                                    <div class="form-group">
+                                                        <label>Observações</label>
+                                                        <input type="text" class="form-control" name="observacao" id="observacao" autocomplete="off">
+                                                    </div>
+                                                </div>
+                                                <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
+                                                    <div class="col-md-12">
+                                                        <div class="form-group">
+                                                            <label>Observações do sistema</label>
+                                                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"> </textarea>
+                                                        </div>
+                                                    </div>
+                                                <?php endif; ?>
+
+                                            </div>
                                         </div>
-                                        <div class="box-body" style="">
-                                            <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="ADMINISTRATIVA">
-                                            <input type="hidden" class="form-control" name="id_etapa_obra" id="" autocomplete="off">
-                                            <input type="hidden" class="form-control" name="id_obra" autocomplete="off">
-                                            <input type="hidden" class="form-control" name="cliente" autocomplete="off">
-                                            <input type="hidden" class="form-control" name="server" autocomplete="off">
+                                    </div>
+                                </div>
+                            
 
-
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Nome Etapa</label>
-                                                    <input type="text" class="form-control" name="nome_etapa_obra" id="nome_etapa_obra" autocomplete="off">
-                                                </div>
-                                            </div>
-
-                                            <div class="col-md-2">
-                                                <div class="form-group">
-                                                    <label>Data Meta</label>
-                                                    <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" autocomplete="off">
-                                                </div>
-                                            </div>
-
-
-                                            <div id="ADMINISTRATIVA" style="display: none">
-
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>Data do Pedido</label>
-                                                        <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_pedido_administrativo" id="data_pedido_administrativo" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label>Responsável</label>
-                                                        <input type="text" class="form-control" name="responsavel_administrativo" id="responsavel_administrativo" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-
-
-                                                <div class="col-md-4">
-                                                    <div class="form-group">
-                                                        <label>Cliente Responsável</label>
-                                                        <input type="text" class="form-control" name="cliente_responsavel_administrativo" id="cliente_responsavel_administrativo" autocomplete="off">
-                                                    </div>
-                                                </div>
-                                            </div>
-
-                                            <div id="COMPRA" style="display: none">
-                                                <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Quantidade</label>
-                                                        <input type="text" class="form-control" name="quantidade" id="quantidade" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Preço</label>
-                                                        <input type="text" class="form-control" name="preco" id="preco" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Tipo</label>
-                                                        <input type="text" class="form-control" name="tipo_compra" id="tipo_compra" autocomplete="off">
-                                                    </div>
-                                                </div>
-
+                                <div class="box box-default box-solid">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Documentos</h3>
 
                                             </div>
-
-                                            <div id="CONCESSIONARIA" style="display: none">
-                                                <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
-
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>Data de Abertura</label>
-                                                        <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_abertura_concessionaria" id="data_abertura_concessionaria" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Nº Nota</label>
-                                                        <input type="text" class="form-control" name="nota_numero_concessionaria" id="nota_numero_concessionaria" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-4">
-                                                    <label>Prazo de Atendimento</label>
+                                            <div class="box-body" style="">
+                                                <div class="col-md-10" style="margin-bottom:20px">
+                                                    <label>Adicionar novo Documento</label>
                                                     <div class="input-group">
-                                                        <input type="text" class="form-control" name="prazo_atendimento_concessionaria" id="prazo_atendimento_concessionaria" autocomplete="off">
+                                                        <input class="form-control" name="documento_etapa_nome" id="documento_etapa_nome" placeholder="Nome do Documento">
                                                         <div class="input-group-btn">
-                                                            <div class="btn btn-default">
-                                                                <i></i> Dias
+                                                            <div class="btn btn-default btn-file">
+                                                                <i class="fa fa-paperclip"></i> PDF
+                                                                <input type="file" id="file" class="btn btn-success file_doc" name="documento_arquivo">
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-                                                <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                                    <div class="col-md-12" style="margin-bottom: 13px;margin-top:5px">
-                                                        <div class="input-group">
-                                                            <span class="input-group-addon">
-                                                                <input class="flat-blue" name="check_nota" type="checkbox" value="1">
-                                                            </span>
-                                                            <span type="text" class="form-control">Salvar como ultima nota</span>
-                                                        </div>
-                                                    </div>
-                                                <?php endif; ?>
-                                            </div>
-
-                                            <div id="OBRA" style="display: none">
-                                                <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="OBRA">
-
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Responsável</label>
-                                                        <input type="text" class="form-control" name="responsavel_obra" id="cliente_nome" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>Data Programada</label>
-                                                        <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_programada_obra" id="data_programada_obra" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-                                                <div class="col-md-2">
-                                                    <div class="form-group">
-                                                        <label>Data Iniciada </label>
-                                                        <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="data_iniciada_obra" id="data_iniciada_obra" autocomplete="off">
-                                                    </div>
-                                                </div>
-
-
-                                                <div class="col-md-3">
-                                                    <div class="form-group">
-                                                        <label>Tempo de Atividade</label>
-                                                        <input type="text" class="form-control" name="tempo_atividade_obra" id="tempo_atividade_obra" autocomplete="off">
+                                                <div class="col-md-10">
+                                                    <div class="etapa_documento">
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-12">
-                                                <div class="form-group">
-                                                    <label>Observações</label>
-                                                    <input type="text" class="form-control" name="observacao" id="observacao" autocomplete="off">
-                                                </div>
-                                            </div>
-                                            <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                                <div class="col-md-12">
-                                                    <div class="form-group">
-                                                        <label>Observações do sistema</label>
-                                                        <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"> </textarea>
-                                                    </div>
-                                                </div>
-                                            <?php endif; ?>
-
                                         </div>
                                     </div>
                                 </div>
 
+
+                                <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
+                                    <div class="modal-footer">
+                                        <button type="submit" class="btn btn-primary">Salvar</button>
+
+
+                                        <div class="btn btn-danger btn-flat pull-left delete_etapa" data-toggle="popover" title="Remover Etapa?" data-content="">
+                                            <i class="fa fa-trash"></i>
+                                        </div>
+
+                                    </div>
+                                <?php endif; ?>
 
 
                             </div>
 
-                            <div class="box box-default box-solid">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Documentos</h3>
-
-                                        </div>
-                                        <div class="box-body" style="">
-                                            <div class="col-md-10" style="margin-bottom:20px">
-                                                <label>Adicionar novo Documento</label>
-                                                <div class="input-group">
-                                                    <input class="form-control" name="documento_etapa_nome" id="documento_etapa_nome" placeholder="Nome do Documento">
-                                                    <div class="input-group-btn">
-                                                        <div class="btn btn-default btn-file">
-                                                            <i class="fa fa-paperclip"></i> PDF
-                                                            <input type="file" id="file" class="btn btn-success file_doc" name="documento_arquivo">
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-10">
-                                                <div class="etapa_documento">
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
+                            <div class="overlay" style="display:none">
+                              <i class="fa fa-refresh fa-spin"></i>
                             </div>
-                            <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                <div class="modal-footer">
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
-
-
-                                    <div class="btn btn-danger btn-flat pull-left delete_etapa" data-toggle="popover" title="Remover Etapa?" data-content="">
-                                        <i class="fa fa-trash"></i>
-                                    </div>
-
-                                </div>
-                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
@@ -273,20 +290,24 @@ $data_hoje = date('d/m');
             tipo = getCookie('select_etapas');
 
             id_etapa_obra = $('[name="id_etapa_obra"]').val()
+            id_obra = $('[name="id_obra"]').val();
 
             $.ajax({
                 url: BASE_URL + 'obras/editEtapaObra/' + id_etapa_obra,
                 type: 'POST',
                 data: data,
                 dataType: 'json',
+                beforeSend: function ( xhr ) {
+                    $('.overlay').toggle();
+                    $('#dados_').toggle();
+                },
                 success: function(json) {
                     toastr.success('Editado com sucesso');
                     $('#documento_etapa_nome').val('');
                     $('#file').val('');
 
-                    $(document).ready(gethistorico);
-                    $(document).ready(checkDocumentoEtapa(id_etapa_obra, $('[name="id_obra"]').val()));
-                    $(document).ready(edit_etapa(id_etapa_obra));
+                    window.location.href = BASE_URL + 'obras/edit/'+id_obra;
+                    
 
                 },
                 cache: false,
@@ -298,6 +319,9 @@ $data_hoje = date('d/m');
                         myXhr.upload.addEventListener('progress', function() {}, false);
                     }
                     return myXhr;
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    toastr.error('Erro contate o administrador, Codigo XXDOC_1');
                 }
             });
         });
@@ -414,9 +438,14 @@ $data_hoje = date('d/m');
 
     function edit_etapa(id) {
         save_method = 'update';
+
+
         $('#form_update')[0].reset();
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
+
+        
+        $(".etapa_documento").css("display", "none");
 
         $("#CONCESSIONARIA").css("display", "none");
         $("#OBRA").css("display", "none");
@@ -432,6 +461,7 @@ $data_hoje = date('d/m');
             dataType: "JSON",
             success: function(data) {
 
+                checkDocumentoEtapa(id, data.id_obra);
 
 
                 $("#" + data.nome).css("display", "");
@@ -443,6 +473,8 @@ $data_hoje = date('d/m');
 
                 $('[name="id_obra"]').val(data.id_obra);
                 $('[name="cliente"]').val('<?php echo $obr['id_cliente']; ?>');
+                $('[name="cliente_nome"]').val('<?php echo $obr['cliente_nome']; ?>');
+
                 $('[name="server"]').val(data.tipo);
 
                 if (data.nome == 'ADMINISTRATIVA') {
@@ -486,7 +518,7 @@ $data_hoje = date('d/m');
                 $('#modal_form').modal('show');
 
 
-                checkDocumentoEtapa(id, data.id_obra);
+               
 
 
             },

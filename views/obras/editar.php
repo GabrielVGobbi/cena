@@ -157,9 +157,9 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 	Dropzone.autoDiscover = false;
 	var submitButton = document.querySelector('#submit-all');
 
-	list_image();
 	$(document).ready(function() {
 
+		list_image();
 
 
 		var myDropzone = new Dropzone(".dropzone", {
@@ -245,4 +245,12 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			}
 		});
 	}
+
+	$(function() {
+
+		$("#formobra").click(function() {
+			$("#obra").submit();
+		});
+
+	})
 </script>

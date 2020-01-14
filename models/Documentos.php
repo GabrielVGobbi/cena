@@ -106,7 +106,7 @@ class Documentos extends model
 
 		$nome_documento = strtolower($nome_documento);
 
-		$type = str_replace('application/','',$arquivos['documento_arquivo']['type']);
+		$type = '.'.str_replace('application/','',$arquivos['documento_arquivo']['type']);
 		
 		if (is_dir("assets/documentos/")) {
 			$subiu = move_uploaded_file($arquivos['documento_arquivo']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);
@@ -150,8 +150,6 @@ class Documentos extends model
 
 		$nome_documento = strtolower($nome_documento);
 
-	
-		
 		
 		if (is_dir("assets/documentos/")) {
 			$subiu = move_uploaded_file($arquivos['file']['tmp_name'], 'assets/documentos/' . '/' . $nome_documento . $type);

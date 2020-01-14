@@ -67,10 +67,10 @@ class homeController extends controller
 
         if ($this->user->usr_info() === 'cliente') {
 
-            $this->dataInfo['titlePage'] = 'Bem-vindo';
+            $this->dataInfo['titlePage'] = '';
             $this->dataInfo['obr'] = $this->obra->getInfoObraCliente($id, $this->user->getCompany(), $this->user->getIdCliente());
 
-            $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'] != '' ? $this->dataInfo['obr']['obra_nota_numero'] : 'Bem-Vindo';
+            $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'] != '' ? $this->dataInfo['obr']['obra_nota_numero'] : '';
 
             if ($this->dataInfo['obr']) {
 

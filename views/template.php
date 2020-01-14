@@ -1,5 +1,5 @@
 <?php 
-$title = 'Admin';
+$title = ucfirst($viewData['titlePage']);
 if(isset($viewData['tableDados']['obr_razao_social'])){
   $title = $viewData['tableDados']['obr_razao_social'];
 } else if(isset($viewData['tableInfo']['obr_razao_social'])){

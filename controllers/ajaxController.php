@@ -596,11 +596,17 @@ class ajaxController extends controller
 
             //ADD
             if (!empty($_FILES)) {
-                $name = strstr($_FILES['file']['name'],'.',true).'_cli_'.$nome_cliente;
-                $type = explode('.',$_FILES['file']['name']);
-                $type = '.'.$type[1];
-                $d->addByDropeZone($_FILES, $id_company, $id_obra, $name, $type);
 
+                $_FILES['file']['name'] = str_replace('-', '', $_FILES['file']['name']);
+                $_FILES['file']['name'] = str_replace(' - ', '_', $_FILES['file']['name']);
+                $_FILES['file']['name'] = str_replace(' ', '_', $_FILES['file']['name']);
+
+                $name = $_FILES['file']['name']. '_cli_' . $nome_cliente;
+
+                $type = explode('.', $_FILES['file']['name']);
+                $type = '.' . $type[1];
+                
+                $d->addByDropeZone($_FILES, $id_company, $id_obra, $name, $type);
             }
 
 
@@ -618,36 +624,59 @@ class ajaxController extends controller
 
                 foreach ($Arraydocumento as $doc) {
                     $scanDir[] = $doc;
-
                 }
             }
 
             $output = '<div class="row">';
 
             if (isset($scanDir) && false !== $scanDir) {
-                
+
                 foreach ($scanDir as $file) {
 
 
                     if ('.' !=  $file && '..' != $file) {
 
-                        $type = explode('.',$file['docs_nome']);
-                        $type = isset($type[1]) ? mb_strtoupper($type[1],'UTF-8') : '??';
+                        $type = explode('.', $file['docs_nome']);
+                        $type = isset($type[1]) ? mb_strtoupper($type[1], 'UTF-8') : '??';
+
+                        switch ($type) {
+                            case 'PDF':
+                                $icon =  "fa fa-file-pdf-o";
+                                break;
+                            case 'XLSX':
+                                $icon =  "fa fa-fw fa-file-excel-o";
+                                break;
+                            case 'DWG':
+                                $icon =  "fa fa-fw fa-file-picture-o";
+                                break;
+                            case 'DOCX':
+                                $icon =  "fa fa-fw fa-file-word-o";
+                                break;
+                            case 'PNG':
+                                $icon =  "fa fa-fw fa-file-image-o";
+                                break;
+                            case 'JPG':
+                                $icon =  "fa fa-fw fa-file-image-o";
+                                break;
+                            default;
+                            $icon =  "fa fa-file-pdf-o";
+                            break;
+                        }
 
                         $fileName = mb_strimwidth($file['docs_nome'], 0, 90, "...");
                         $output .= '
                             <li>
-                                <span class="mailbox-attachment-icon"><i class="fa fa-file-pdf-o"></i></span>
+                                <span class="mailbox-attachment-icon"><i class="' . $icon . '"></i></span>
 
                                 <div class="mailbox-attachment-info"  style="max-width: 29ch;
                                 overflow: hidden;
                                 text-overflow: ellipsis;
                                 white-space: nowrap;">
-                                    <a href="' . BASE_URL . 'assets/documentos/' . $fileName . '" target="_blank" class="mailbox-attachment-name">' . $fileName . '</a>
+                                    <a href="' . BASE_URL . 'assets/documentos/' . $file['docs_nome'] . '" target="_blank" class="mailbox-attachment-name">' . $fileName . '</a>
                                     <span class="mailbox-attachment-size">
                                         ' . $type . '
                                         <a download href="' . BASE_URL . 'assets/documentos/' . $fileName . '" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                                        <a download onclick="toastAlertDelete('. $file['id_documento']. ', '. $id_obra. ')" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i></a>
+                                        <a download onclick="toastAlertDelete(' . $file['id_documento'] . ', ' . $id_obra . ')" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i></a>
 
                                         </span>
                                 </div>
@@ -655,8 +684,7 @@ class ajaxController extends controller
                         ';
                     }
                 }
-
-            }else {
+            } else {
                 $output .= '<p class="lead">obra sem documento</p>';
             }
 
