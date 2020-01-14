@@ -9,7 +9,7 @@ class Painel extends model
         $this->retorno = array();
     }
 
-    public function insert($arr, $tabela, $id_company)
+    public function insert_painel($arr, $tabela, $id_company)
     {
         $certo = true;
         $nome_tabela = $tabela;

@@ -294,7 +294,7 @@ $data_hoje = date('d/m');
 
     function gethistorico() {
 
-        var id_obra = <?php echo $obr[0]; ?>;
+        var id_obra = <?php echo $obr['id_obra']; ?>;
 
         var tipo = $("#select-etapas option:selected").val();
 
@@ -377,7 +377,7 @@ $data_hoje = date('d/m');
 
     function checkEtapa(id_etapa, tipo) {
         tipo = (tipo == 1 ? '0' : '1');
-        idobra = <?php echo $obr[0]; ?>;
+        idobra = <?php echo $obr['id_obra']; ?>;
 
         $.ajax({
 

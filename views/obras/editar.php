@@ -1,12 +1,13 @@
 <?php
 
-$documento_obra = $this->documento->getDocumentoObra($obr[0]);
+$documento_obra = $this->documento->getDocumentoObra($obr['id_obra']);
+error_log(print_r($obr,1));
 $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '0';
 ?>
 <section class="content-header">
 	<ol class="breadcrumb" style="    top: -17px;">
-		<li><a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr[0]; ?> ">Financeiro</a></li>
-		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr[0]; ?> ">Comercial</a></li>
+		<li><a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr['id_obra']; ?> ">Financeiro</a></li>
+		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr['id_obra']; ?> ">Comercial</a></li>
 	</ol>
 </section>
 <div class="col-md-12">
@@ -14,8 +15,8 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		<div class="tab-content">
 			<div class="box box-default box-solid">
 				<div class="row">
-					<form id="obra" method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>obras/edit_action/<?php echo $obr[0]; ?>">
-						<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr[0]; ?>">
+					<form id="obra" method="POST" enctype="multipart/form-data" action="<?php echo BASE_URL ?>obras/edit_action/<?php echo $obr['id_obra']; ?>">
+						<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr['id_obra']; ?>">
 
 						<div class="col-md-12">
 							<div class="box-header with-border">
@@ -121,7 +122,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 									<i class="fa fa-wrench"></i>
 								</button>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="<?php echo BASE_URL; ?>obras/gerar/<?php echo $obr[0]; ?>">Gerar Winrar</a></li>
+									<li><a href="<?php echo BASE_URL; ?>obras/gerar/<?php echo $obr['id_obra']; ?>">Gerar Winrar</a></li>
 								</ul>
 							</div>
 						</div>
@@ -169,7 +170,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			dictRemoveFile: "Remover",
 			addRemoveLinks: true,
 			parallelUploads: 100,
-			url: BASE_URL + "ajax/getPreview/<?php echo $obr[0]; ?>/<?php echo $obr['id_cliente']; ?>",
+			url: BASE_URL + "ajax/getPreview/<?php echo $obr['id_obra']; ?>/<?php echo $obr['id_cliente']; ?>",
 			init: function() {
 				var submitButton = document.querySelector('#submit-all');
 				this.on("addedfile", function(event) {
@@ -239,7 +240,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 	function list_image() {
 		$.ajax({
-			url: "<?php echo BASE_URL; ?>ajax/getPreview/<?php echo $obr[0]; ?>/<?php echo $obr['id_cliente']; ?>",
+			url: "<?php echo BASE_URL; ?>ajax/getPreview/<?php echo $obr['id_obra']; ?>/<?php echo $obr['id_cliente']; ?>",
 			success: function(data) {
 				$('#preview').html(data);
 			}

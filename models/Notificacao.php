@@ -68,7 +68,7 @@ class Notificacao extends model
 		}
 	}
 
-	public function insert($id_company, $Parametros)
+	public function insert_noti($id_company, $Parametros)
 	{
 
 		$encoding = 'UTF-8'; // ou ISO-8859-1...

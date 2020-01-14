@@ -34,8 +34,8 @@ require_once("cadastrar.php");
 		<?php if (count($tableDados) > 0) : ?>
 			<?php foreach ($tableDados as $obr) : ?>
 			<?php 
-				$etapas 		  = $this->obra->getEtapas($obr[0], ''); 
-				$etapasConcluidas = $this->obra->getEtapasConcluidas($obr[0]);
+				$etapas 		  = $this->obra->getEtapas($obr['id_obra'], ''); 
+				$etapasConcluidas = $this->obra->getEtapasConcluidas($obr['id_obra']);
 				$soma = (100) / count($etapas);
 				$soma_etapa = $etapasConcluidas != 0 ? ($soma * $etapasConcluidas) : '0';
 			?>
@@ -43,7 +43,7 @@ require_once("cadastrar.php");
 				<div class="col-md-4" style="margin-top:20px;">
 
 					<div class="box box-default">
-						<a data-toggle="modal" href="<?php echo BASE_URL; ?>obras/edit/<?php echo $obr[0]; ?>" style="color: #000;    cursor: pointer; ">
+						<a data-toggle="modal" href="<?php echo BASE_URL; ?>obras/edit/<?php echo $obr['id_obra']; ?>" style="color: #000;    cursor: pointer; ">
 							<div class="box-header with-border">
 								<i class="fa fa-building-o"></i>
 
@@ -69,18 +69,18 @@ require_once("cadastrar.php");
 						</a>
 						<div class="box-footer clearfix">
 							<?php if ($obr['atv'] == 1) : ?>
-								<a href="<?php echo BASE_URL; ?>obras/concluir/<?php echo $obr[0]; ?>" class="btn btn-sm btn-info btn-flat pull-left">Concluir Obra</a>
+								<a href="<?php echo BASE_URL; ?>obras/concluir/<?php echo $obr['id_obra']; ?>" class="btn btn-sm btn-info btn-flat pull-left">Concluir Obra</a>
 							<?php else : ?>
-								<a href="<?php echo BASE_URL; ?>obras/desconcluir/<?php echo $obr[0]; ?>" class="btn btn-sm btn-warning btn-flat pull-left">Desconcluir Obra</a>
+								<a href="<?php echo BASE_URL; ?>obras/desconcluir/<?php echo $obr['id_obra']; ?>" class="btn btn-sm btn-warning btn-flat pull-left">Desconcluir Obra</a>
 							<?php endif; ?>
 
 							<?php if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_delete')) : ?>
-								<button class="btn btn-sm btn-danger btn-flat pull-right" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL; ?>obras/delete/<?php echo $obr[0]; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
+								<button class="btn btn-sm btn-danger btn-flat pull-right" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL; ?>obras/delete/<?php echo $obr['id_obra']; ?>' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
 									Excluir Obra
 								</button>
 							<?php endif; ?>
 							<?php if ($this->user->hasPermission('financeiro_view')) : ?>
-								<a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr[0]; ?>" class="btn btn-sm btn-warning btn-flat text-center" style="    left: 10%;position: relative;">
+								<a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $obr['id_obra']; ?>" class="btn btn-sm btn-warning btn-flat text-center" style="    left: 10%;position: relative;">
 									Financeiro
 								</a>
 							<?php endif; ?>
