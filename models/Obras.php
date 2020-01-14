@@ -524,6 +524,35 @@ class Obras extends model
 		if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
 
+			
+		}
+
+		return $this->array;
+	}
+
+	public function getEtapasByTipoId($id_obra, $tipo)
+	{
+
+
+		if ($tipo == '' || $tipo == '0') {
+			$tipo = '1,2,3,4';
+		}
+
+		$sql = "SELECT *, obrt.quantidade AS quantidade_obra, obrt.preco AS preco_obra, obrt.tipo_compra AS tipo_compra FROM  
+			obra_etapa obrt
+			INNER JOIN etapa etp ON (obrt.id_etapa = etp.id)
+		WHERE  obrt.id_obra = :id_obra AND tipo IN ($tipo) ORDER BY tipo not in ('2'),ordem ASC, id_etapa_obra ASC,  tipo ASC, `check` not in('1') ASC";
+
+		$sql = $this->db->prepare($sql);
+		$sql->bindValue(":id_obra", $id_obra);
+
+
+
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$this->array = $sql->fetchAll();
+
 			for ($q = 0; $q < count($this->array); $q++) {
 				$doc = new Documentos();
 				$arrayDoc = array();
@@ -537,6 +566,7 @@ class Obras extends model
 					$this->array[$q]['documento'] = ($docNome);
 				}
 			}
+			
 		}
 
 		return $this->array;

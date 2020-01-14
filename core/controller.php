@@ -30,7 +30,6 @@ class controller
 		extract($viewData);
 
 
-
 		include 'views/' . $viewName . '.php';
 	}
 

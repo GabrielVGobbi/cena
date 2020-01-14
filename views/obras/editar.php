@@ -1,7 +1,6 @@
 <?php
 
 $documento_obra = $this->documento->getDocumentoObra($obr['id_obra']);
-error_log(print_r($obr,1));
 $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '0';
 ?>
 <section class="content-header">

@@ -511,7 +511,7 @@ class ajaxController extends controller
         $Parametros = array();
 
         if (isset($_REQUEST['id_obra']) && !empty($_REQUEST['id_obra'])) {
-            $array = $a->getEtapas($_REQUEST['id_obra'], $_REQUEST['tipo']);
+            $array = $a->getEtapasByTipoId($_REQUEST['id_obra'], $_REQUEST['tipo']);
         }
 
         echo json_encode($array);
@@ -605,7 +605,7 @@ class ajaxController extends controller
 
                 $type = explode('.', $_FILES['file']['name']);
                 $type = '.' . $type[1];
-                
+
                 $d->addByDropeZone($_FILES, $id_company, $id_obra, $name, $type);
             }
 
