@@ -128,7 +128,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 						<div class="box-body">
 
 							<div id="new_obra" style="display:none">
-								<form action="<?php echo BASE_URL; ?>ajax/getPreview/<?php echo $obr['0']; ?>/<?php echo $obr['id_cliente']; ?>" class="dropzone" id="dropzoneFrom"></form>
+								<form action="" class="dropzone" id="dropzoneFrom"></form>
 
 
 								<br>
