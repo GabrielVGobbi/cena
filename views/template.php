@@ -1,10 +1,10 @@
-<?php 
+<?php
 $title = ucfirst($viewData['titlePage']);
-if(isset($viewData['tableDados']['obr_razao_social'])){
+if (isset($viewData['tableDados']['obr_razao_social'])) {
   $title = $viewData['tableDados']['obr_razao_social'];
-} else if(isset($viewData['tableInfo']['obr_razao_social'])){
+} else if (isset($viewData['tableInfo']['obr_razao_social'])) {
   $title = $viewData['tableInfo']['obr_razao_social'];
-}else if (isset($viewData['obr']['obr_razao_social'])){
+} else if (isset($viewData['obr']['obr_razao_social'])) {
   $title = $viewData['obr']['obr_razao_social'];
 }
 
@@ -17,10 +17,10 @@ if(isset($viewData['tableDados']['obr_razao_social'])){
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><?php echo $title; ?></title>
-  
 
 
-  
+
+
   <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
 
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/jquery/dist/jquery.min.js"></script>
@@ -254,7 +254,6 @@ if(isset($viewData['tableDados']['obr_razao_social'])){
     <footer class="main-footer">
       <div class="container">
         <div class="pull-right hidden-xs">
-          <b>Version</b> 0.0.1
         </div>
         <strong></strong> All rights reserved.
       </div>
@@ -327,6 +326,7 @@ if(isset($viewData['tableDados']['obr_razao_social'])){
     }
 
     $(function() {
+
       //setInterval(verificarNotificacao, 2000);
       //verificarNotificacao();
 
@@ -367,6 +367,12 @@ if(isset($viewData['tableDados']['obr_razao_social'])){
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/dist/js/demo.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/select2/dist/js/select2.full.min.js"></script>
   <script src="<?php echo BASE_URL; ?>assets/css/AdminLTE-2.4.5/bower_components/moment/min/moment.min.js"></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.css">
+  <script src="https://cdn.jsdelivr.net/jquery.webui-popover/1.2.1/jquery.webui-popover.min.js"></script>
+
+
+
+
   <script type="text/javascript">
     var BASE_URL = '<?php echo BASE_URL; ?>';
     var temporiza;
@@ -513,6 +519,11 @@ if(isset($viewData['tableDados']['obr_razao_social'])){
           stateLoadCallback: function(settings) {
             return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance))
           },
+          createdRow: function(row, data,index) {
+              if(data[7] == 1){
+                $(row).css('background', 'rgba(247, 161, 161, 0.78)');
+              }
+            },
           "processing": true,
           "serverSide": true,
           "autoWidth": false,

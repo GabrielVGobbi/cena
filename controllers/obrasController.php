@@ -52,7 +52,7 @@ class obrasController extends controller
     public function getAll()
     {
 
-        $tabela = $this->obra->getAll($_REQUEST, $this->user->getCompany());
+        $tabela = $this->obra->getAll($_REQUEST, $this->user->getCompany(), $this->user->getId());
 
         $data = array();
 
@@ -138,7 +138,7 @@ class obrasController extends controller
                                 <div class="progress-bar progress-bar-green" style="width:  ' . $soma_etapa . '%;"></div>
                             </div>';
 
-                    #$row[] = ($list['cliente_email']);
+                    $row[] = isset($list['urgencia']) ? $list['urgencia'] : '';
                     $data[] = $row;
                 }
             }
@@ -190,7 +190,7 @@ class obrasController extends controller
 
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_edit')) {
 
-            $this->dataInfo['obr'] = $this->obra->getInfo($id, $this->user->getCompany());
+            $this->dataInfo['obr'] = $this->obra->getInfo($id, $this->user->getCompany(),$this->user->getId() );
 
             if($this->dataInfo['obr'] && count($this->dataInfo['obr'])>0){
                 

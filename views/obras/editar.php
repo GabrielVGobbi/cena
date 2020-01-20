@@ -9,6 +9,31 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		<li><a href="<?php echo BASE_URL; ?>comercial/edit/<?php echo $obr['id_obra']; ?> ">Comercial</a></li>
 	</ol>
 </section>
+<!-- <div class="col-md-2">
+	<div class="box box-solid">
+		<div class="box-header with-border">
+			<h3 class="box-title">Folders</h3>
+
+			<div class="box-tools">
+				<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i>
+				</button>
+			</div>
+		</div>
+		<div class="box-body no-padding">
+			<ul class="nav nav-pills nav-stacked">
+				<li class="active"><a href="#"><i class="fa fa-inbox"></i> Inbox
+						<span class="label label-primary pull-right">12</span></a></li>
+				<li><a href="#"><i class="fa fa-envelope-o"></i> Sent</a></li>
+				<li><a href="#"><i class="fa fa-file-text-o"></i> Drafts</a></li>
+				<li><a href="#"><i class="fa fa-filter"></i> Junk <span class="label label-warning pull-right">65</span></a>
+				</li>
+				<li><a href="#"><i class="fa fa-trash-o"></i> Trash</a></li>
+			</ul>
+		</div>
+		 /.box-body 
+	</div>
+</div>-->
+
 <div class="col-md-12">
 	<div class="nav-tabs-custom">
 		<div class="tab-content">
@@ -64,9 +89,9 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 											</div>
 											<div class="box-body" style="">
 												<div class="row">
-													<div class="col-md-3">
+													<div class="col-md-12">
 														<div class="form-group">
-															<textarea type="text" class="form-control" name="obra_infor" id="obra_infor" style="margin: 0px -772px 0px 0px; width: 1004px; height: 138px;"> <?php echo $obr['obr_informacoes']; ?> </textarea>
+															<textarea type="text" style="width: 100%; height: 150px; resize: none;" class="form-control" name="obra_infor" id="obra_infor"> <?php echo $obr['obr_informacoes']; ?> </textarea>
 														</div>
 													</div>
 												</div>
@@ -128,7 +153,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 						<div class="box-body">
 
 							<div id="new_obra" style="display:none">
-								<form action="" class="dropzone" id="dropzoneFrom"></form>
+								<form action="<?php echo BASE_URL ?>ajax/getPreview/<?php echo $obr['id_obra']; ?>/<?php echo $obr['id_cliente']; ?>" class="dropzone" id="dropzoneFrom"></form>
 
 
 								<br>
@@ -148,7 +173,32 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		<div class="modal-footer">
 			<div type="submit" id="formobra" class="btn btn-primary">Salvar</div>
 			<a href="<?php echo BASE_URL; ?>obras" class="btn btn-danger">Voltar</a>
+
+			<div class="pull-left">
+				<?php error_log(print_r($obr, 1)); ?>
+				<label class="popver_urgencia" style="margin-right: 17px;">
+					<input type="checkbox" id="checkUrgenciaObra" <?php echo isset($obr['urgencia']) && $obr['urgencia'] == '1' ? 'checked' : ''; ?> class="checkbox_desgn" name="timeline-photo" value="">
+					<span>
+						<span class="icon unchecked">
+							<span class="mdi mdi-check"></span>
+						</span>
+						Marcar Urgencia
+					</span>
+				</label>
+
+				<label class="popver_myList" style="margin-right: 17px;">
+					<input type="checkbox" id="checkMyListObra"  class="checkbox_desgn" name="timeline-photo" value="">
+					<span>
+						<span class="icon unchecked">
+							<span class="mdi mdi-check"></span>
+						</span>
+						Adicionar a minha lista
+					</span>
+				</label>
+
+			</div>
 		</div>
+
 
 	</div>
 </div>
@@ -159,17 +209,31 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 	$(document).ready(function() {
 
+		$('.popver_urgencia').webuiPopover({
+			content: 'Quando selecionada, essa obra passa a ter prioridades',
+			trigger: 'hover',
+			placement: 'top'
+		});
+
+		$('.popver_myList').webuiPopover({
+			content: 'Quando selecionada, essa obra é adicionada a sua Lista de Obras',
+			trigger: 'hover',
+			placement: 'top'
+		});
+
 		list_image();
+		getListObra();
+
 
 
 		var myDropzone = new Dropzone(".dropzone", {
+			url: BASE_URL + "ajax/getPreview/<?php echo $obr['id_obra']; ?>/<?php echo $obr['id_cliente']; ?>",
 			autoProcessQueue: false,
 			dictDefaultMessage: "Arraste seus arquivos para cá!",
 			acceptedFiles: ".png,.jpg,.gif,.bmp,.jpeg,.pdf,.docx,.xls,.xlsx,.zip,.dwg",
 			dictRemoveFile: "Remover",
 			addRemoveLinks: true,
 			parallelUploads: 100,
-			url: BASE_URL + "ajax/getPreview/<?php echo $obr['id_obra']; ?>/<?php echo $obr['id_cliente']; ?>",
 			init: function() {
 				var submitButton = document.querySelector('#submit-all');
 				this.on("addedfile", function(event) {
@@ -195,28 +259,28 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		});
 
 		function toastAlertDelete(id_documento, id_obra) {
-        	href = BASE_URL + 'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento
+			href = BASE_URL + 'documentos/delete/' + id_documento + '/' + id_obra + '/' + id_documento
 
-        	toastr.options = {
-        	    "closeButton": true,
-        	    "debug": false,
-        	    "newestOnTop": false,
-        	    "progressBar": false,
-        	    "positionClass": "toast-top-right",
-        	    "preventDuplicates": true,
-        	    "onclick": null,
-        	    "showDuration": "300",
-        	    "hideDuration": "1000",
-        	    "timeOut": 0,
-        	    "extendedTimeOut": 0,
-        	    "showEasing": "swing",
-        	    "hideEasing": "linear",
-        	    "showMethod": "fadeIn",
-        	    "hideMethod": "fadeOut",
-        	    "tapToDismiss": true
-        	}
-        	toastr.warning("<br><a type='button' href='" + href + "' class='btn btn-danger btn-flat'>Sim</a>", "Deseja deletar esse documento")
-    	}
+			toastr.options = {
+				"closeButton": true,
+				"debug": false,
+				"newestOnTop": false,
+				"progressBar": false,
+				"positionClass": "toast-top-right",
+				"preventDuplicates": true,
+				"onclick": null,
+				"showDuration": "300",
+				"hideDuration": "1000",
+				"timeOut": 0,
+				"extendedTimeOut": 0,
+				"showEasing": "swing",
+				"hideEasing": "linear",
+				"showMethod": "fadeIn",
+				"hideMethod": "fadeOut",
+				"tapToDismiss": true
+			}
+			toastr.warning("<br><a type='button' href='" + href + "' class='btn btn-danger btn-flat'>Sim</a>", "Deseja deletar esse documento")
+		}
 
 
 
@@ -246,11 +310,80 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		});
 	}
 
+	$('#checkUrgenciaObra').click(function() {
+		var checked = ($('#checkUrgenciaObra').is(':checked')) ? '1' : '0';
+		var id_obra = <?php echo $obr['id_obra']; ?>;
+		$.ajax({
+			url: BASE_URL + "ajax/checkUrgenceObra",
+			method: "POST",
+			dataType: 'json',
+
+			data: {
+				checked: checked,
+				id_obra: id_obra
+			},
+			success: function(data) {
+				checked == 1 ? toastr.success('obra marcada como urgencia') : toastr.warning('obra desmarcada como urgencia');
+
+			},
+			error: function() {
+				toastr.warning('Essa obra não esta em sua lista, primeiro adicione ela, depois marque urgencia');
+				$("#checkUrgenciaObra").prop('checked', false);
+
+			}
+		})
+	});
+
+	$('#checkMyListObra').click(function() {
+		var checked = ($('#checkMyListObra').is(':checked')) ? '1' : '0';
+		var id_obra = <?php echo $obr['id_obra']; ?>;
+		$.ajax({
+			url: BASE_URL + "ajax/checkMyListObra",
+			method: "POST",
+			dataType: 'json',
+
+			data: {
+				checked: checked,
+				id_obra: id_obra
+			},
+			success: function(data) {
+				checked == 1 ? toastr.success('obra adicionada a sua lista') : toastr.warning('obra excluida da sua lista');
+
+			},
+			error: function() {
+				toastr.error('Contate o administrador do sistema, Erro ADLISTO1');
+				$("#checkMyListObra").prop('checked', false);
+
+
+			}
+		})
+	});
+
+	function getListObra() {
+		var id_obra = <?php echo $obr['id_obra']; ?>;
+		$.ajax({
+			url: BASE_URL + "ajax/getListObra",
+			method: "GET",
+			dataType: 'json',
+			data: {
+				id_obra: id_obra
+			},
+			success: function(data) {
+				
+				data.urgencia == 1 ? $("#checkUrgenciaObra").prop('checked', true) : $("#checkUrgenciaObra").prop('checked', false);
+				data.atv == 1 ? $("#checkMyListObra").prop('checked', true) : $("#checkMyListObra").prop('checked', false);
+			},
+			error: function() {
+
+			}
+		})
+	};
+
 	$(function() {
 
 		$("#formobra").click(function() {
 			$("#obra").submit();
 		});
 
-	})
+	});
 </script>

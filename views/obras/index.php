@@ -1,9 +1,9 @@
-<?php 
+<?php
 
-require_once("cadastrar.php");  
+require_once("cadastrar.php");
 
 
-												
+
 ?>
 
 <div class="col-xs-12">
@@ -33,12 +33,12 @@ require_once("cadastrar.php");
 		?>
 		<?php if (count($tableDados) > 0) : ?>
 			<?php foreach ($tableDados as $obr) : ?>
-			<?php 
-				$etapas 		  = $this->obra->getEtapas($obr['id_obra'], ''); 
+				<?php
+				$etapas 		  = $this->obra->getEtapas($obr['id_obra'], '');
 				$etapasConcluidas = $this->obra->getEtapasConcluidas($obr['id_obra']);
 				$soma = (100) / count($etapas);
 				$soma_etapa = $etapasConcluidas != 0 ? ($soma * $etapasConcluidas) : '0';
-			?>
+				?>
 
 				<div class="col-md-4" style="margin-top:20px;">
 
@@ -59,7 +59,7 @@ require_once("cadastrar.php");
 									<div class="progress-group" style="margin-top: 14px;">
 										<span class="progress-text">Etapas Concluidas</span>
 										<span class="progress-number"><b><?php echo ($etapasConcluidas) ?></b>/<?php echo count($etapas) ?></span>
-										
+
 										<div class="progress sm">
 											<div class="progress-bar progress-bar-green" style="width: <?php echo $soma_etapa; ?>%"></div>
 										</div>
@@ -111,8 +111,8 @@ require_once("cadastrar.php");
 			$('#lista').on('click', function() {
 
 				setCookie('obras', 'obras', 25);
-				window.location.href = BASE_URL+'obras';
+				window.location.href = BASE_URL + 'obras';
 
-			});			
+			});
 		});
 	</script>

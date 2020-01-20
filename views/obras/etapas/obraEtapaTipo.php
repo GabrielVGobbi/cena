@@ -23,7 +23,7 @@ $data_hoje = date('d/m');
 
                         <div class="modal-body">
                             <br>
-                           
+
 
                             <div id="dados_" style="display: ">
                                 <div class="box box-default box-solid">
@@ -34,8 +34,8 @@ $data_hoje = date('d/m');
                                             </div>
                                             <div class="box-body" style="">
 
-                                            
-                                        
+
+
 
                                                 <input type="hidden" class="form-control" name="tipo" id="tipo" autocomplete="off" value="ADMINISTRATIVA">
                                                 <input type="hidden" class="form-control" name="id_etapa_obra" id="id_etapa_obra" autocomplete="off">
@@ -206,7 +206,7 @@ $data_hoje = date('d/m');
                                         </div>
                                     </div>
                                 </div>
-                            
+
 
                                 <div class="box box-default box-solid">
                                     <div class="row">
@@ -237,6 +237,75 @@ $data_hoje = date('d/m');
                                     </div>
                                 </div>
 
+                               <!-- <div class="direct-chat-messages">
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+
+                                    <div class="direct-chat-msg">
+                                        <div class="direct-chat-info clearfix">
+                                            <span class="direct-chat-name pull-left">Luana Varella</span>
+                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
+                                        </div>
+                                   
+                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
+                                            Solicitado ao Emanuel (LOCK)
+                                        </div>
+                                    </div>
+                               
+                                </div>-->
+
 
                                 <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
                                     <div class="modal-footer">
@@ -254,7 +323,7 @@ $data_hoje = date('d/m');
                             </div>
 
                             <div class="overlay" style="display:none">
-                              <i class="fa fa-refresh fa-spin"></i>
+                                <i class="fa fa-refresh fa-spin"></i>
                             </div>
                         </div>
                     </div>
@@ -297,7 +366,7 @@ $data_hoje = date('d/m');
                 type: 'POST',
                 data: data,
                 dataType: 'json',
-                beforeSend: function ( xhr ) {
+                beforeSend: function(xhr) {
                     $('.overlay').toggle();
                     $('#dados_').toggle();
                 },
@@ -306,8 +375,8 @@ $data_hoje = date('d/m');
                     $('#documento_etapa_nome').val('');
                     $('#file').val('');
 
-                    window.location.href = BASE_URL + 'obras/edit/'+id_obra;
-                    
+                    window.location.href = BASE_URL + 'obras/edit/' + id_obra;
+
 
                 },
                 cache: false,
@@ -444,7 +513,7 @@ $data_hoje = date('d/m');
         $('.form-group').removeClass('has-error');
         $('.help-block').empty();
 
-        
+
         $(".etapa_documento").css("display", "none");
 
         $("#CONCESSIONARIA").css("display", "none");
@@ -518,7 +587,7 @@ $data_hoje = date('d/m');
                 $('#modal_form').modal('show');
 
 
-               
+
 
 
             },

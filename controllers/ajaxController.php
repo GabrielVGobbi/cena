@@ -542,6 +542,60 @@ class ajaxController extends controller
         exit;
     }
 
+    public function checkUrgenceObra()
+    {
+
+        $o = new Obras();
+
+        if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
+
+            $id = $o->checkUrgenceObra($_POST['checked'],$_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
+        }
+        if($id != false){
+            echo json_encode($id);
+        }
+
+        exit;
+        
+    }
+
+    public function checkMyListObra()
+    {
+
+        $o = new Obras();
+
+        if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
+
+            $id = $o->checkMyListObra($_POST['checked'],$_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
+        }
+        if($id != false){
+            echo json_encode($id);
+        }
+
+        exit;
+        
+    }
+
+    public function getListObra()
+    {
+
+        $o = new Obras();
+        $id = false;
+        if (isset($_GET['id_obra']) && !empty($_GET['id_obra'])) {
+
+            $id = $o->getListObra($_GET['id_obra'], $this->user->getId());
+        }
+
+        if($id != false){
+            echo json_encode($id);
+        }
+
+        exit;
+        
+    }
+
+    
+
     public function gerarWinrar()
     {
 

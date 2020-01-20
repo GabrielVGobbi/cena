@@ -17,21 +17,44 @@ class Obras extends model
 		$this->documento = new Documentos();
 	}
 
-	public function getAll($filtro, $id_company)
+	public function getAll($filtro, $id_company, $id_user)
 	{
+
+		$order = [];
+
+		if (isset($_COOKIE['minha_lista']) && $_COOKIE['minha_lista'] == 'checked') {
+			#$order[] = 'obr.id ASC,obr_razao_social';
+		}
 
 		$length = isset($filtro['length']) ? $filtro['length'] : '10';
 
 		$start = isset($filtro['start']) ? $filtro['start'] : '0';
 
-		$order =  !empty($this->column[$filtro['order'][0]['column']]) ? " ORDER BY " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : ' ORDER BY obr.obr_razao_social';
-
 		$where = $this->buildWhere($filtro, $id_company);
 
-		$sql = (" SELECT 
-					obr.obr_razao_social, cle.cliente_nome, cle.cliente_apelido,
-					sev.sev_nome,con.razao_social, obr.atv, obr.obra_nota_numero, obr.id as id_obra FROM 
+		if (isset($_COOKIE['minha_lista']) && $_COOKIE['minha_lista'] == 'checked') {
+			$sql = ("SELECT * FROM obra_usuario_lista obr_us_li 
+						INNER JOIN obra obr ON (obr_us_li.id_obra = obr.id)");
+			$where[] = 'obr_us_li.id_usuario = ' . $id_user;
+			$where[] = 'obr_us_li.atv = 1';
+
+
+			if (isset($_COOKIE['urgencia_lista']) && $_COOKIE['urgencia_lista'] == 'checked') {
+				$order[] = 'obr_us_li.urgencia DESC';
+			}
+		} else {
+			$sql = ("SELECT 
+				obr.obr_razao_social, cle.cliente_nome, cle.cliente_apelido,
+				sev.sev_nome,con.razao_social, obr.atv, obr.obra_nota_numero, obr.id as id_obra FROM 
 				obra obr
+			");
+		}
+
+		$order[] =  !empty($this->column[$filtro['order'][0]['column']]) ? " " . $this->column[$filtro['order'][0]['column']] . " " . $filtro['order'][0]['dir'] : ' obr.obr_razao_social';
+
+		$order = ' ORDER BY ' . implode(' , ', $order);
+
+		$sql .= (" 
 				INNER JOIN servico sev ON(obr.id_servico = sev.id)
 				INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 				INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
@@ -39,10 +62,10 @@ class Obras extends model
 				WHERE " . implode(' AND ', $where) . '  GROUP BY obr.id ' . $order . " LIMIT " . $start . " ," . $length);
 
 		$sql = $this->db->prepare($sql);
-
 		$this->bindWhere($filtro, $sql);
 
 		$sql->execute();
+
 
 		$this->retorno = ($sql->rowCount() > 0) ? $sql->fetchAll() : '';
 
@@ -263,14 +286,28 @@ class Obras extends model
 
 
 	//Selecionar por ID
-	public function getInfo($id, $id_company)
+	public function getInfo($id, $id_company, $id_user = 0)
 	{
 		$array = array();
 
-		$sql = $this->db->prepare("
-		
-		SELECT * FROM  
-			obra obr
+
+		if (isset($_COOKIE['minha_lista']) && $_COOKIE['minha_lista'] == 'checked') {
+			$sql = ("SELECT * FROM obra_usuario_lista obr_us_li 
+						INNER JOIN obra obr ON (obr_us_li.id_obra = obr.id)");
+			$where[] = 'obr_us_li.id_usuario = ' . $id_user;
+			$where[] = 'obr_us_li.atv = 1';
+
+
+			if (isset($_COOKIE['urgencia_lista']) && $_COOKIE['urgencia_lista'] == 'checked') {
+				$order[] = 'obr_us_li.urgencia DESC';
+			}
+		} else {
+			$sql = ("SELECT * FROM 
+				obra obr
+			");
+		}
+
+		$sql .= ("
 			INNER JOIN servico sev ON(obr.id_servico = sev.id)
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
@@ -278,8 +315,10 @@ class Obras extends model
 			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)	
 			
 			WHERE obr.id = :id AND obr.id_company = :id_company");
+		$sql = $this->db->prepare($sql);
 		$sql->bindValue(':id', $id);
 		$sql->bindValue(':id_company', $id_company);
+
 		$sql->execute();
 
 
@@ -523,8 +562,6 @@ class Obras extends model
 
 		if ($sql->rowCount() > 0) {
 			$this->array = $sql->fetchAll();
-
-			
 		}
 
 		return $this->array;
@@ -566,7 +603,6 @@ class Obras extends model
 					$this->array[$q]['documento'] = ($docNome);
 				}
 			}
-			
 		}
 
 		return $this->array;
@@ -847,4 +883,90 @@ class Obras extends model
 
 		return $this->array;
 	}
+
+	public function checkUrgenceObra($checked, $id, $id_company, $id_user)
+	{
+		$Parametros = [
+			'id' => $id
+		];
+
+		if ($this->getListObra($id, $id_user)) {
+			$sql = $this->db->prepare("UPDATE obra_usuario_lista SET 
+				urgencia = :checked
+				
+				WHERE id_obra = :id_obra AND id_usuario = :id_usuario
+        	");
+
+			$sql->bindValue(":id_obra", $id);
+			$sql->bindValue(":id_usuario", $id_user);
+			$sql->bindValue(":checked", $checked);
+			if ($sql->execute())
+				controller::setLog($Parametros, 'obra_urgence', 'obra_urgencia');
+			return $id;
+		} else {
+		}
+	}
+
+	public function checkMyListObra($checked, $id, $id_company, $id_user)
+	{
+		$Parametros = [
+			'id' => $id,
+			'id_user' => $id_user
+		];
+
+		$sql = $this->db->prepare("SELECT * FROM obra_usuario_lista  
+				WHERE id_obra = :id_obra AND id_usuario = :id_user LIMIT 1
+        ");
+
+		$sql->bindValue(":id_obra", $id);
+		$sql->bindValue(":id_user", $id_user);
+		$sql->execute();
+
+		if($sql->rowCount() == 1){
+
+			$sql = $this->db->prepare("UPDATE obra_usuario_lista SET 
+				atv = :checked
+				
+				WHERE id_obra = :id_obra AND id_usuario = :id_usuario
+        	");
+
+			$sql->bindValue(":id_obra", $id);
+			$sql->bindValue(":id_usuario", $id_user);
+			$sql->bindValue(":checked", $checked);
+			if ($sql->execute())
+				controller::setLog($Parametros, 'obra_lista_insert', 'obra_lista');
+			return $id;
+		} else {
+
+			$sql = $this->db->prepare("INSERT INTO obra_usuario_lista SET 
+				id_usuario = :id_usuario,
+				id_obra = :id_obra
+			");
+
+			$sql->bindValue(":id_obra", $id);
+			$sql->bindValue(":id_usuario", $id_user);
+			if ($sql->execute())
+				controller::setLog($Parametros, 'obra', 'obra_lista');
+
+			return $id;
+		}
+	}
+
+	public function getListObra($id_obra, $id_user)
+	{
+
+		$array = [];
+
+		$sql = $this->db->prepare("SELECT * FROM obra_usuario_lista  
+				WHERE id_obra = :id_obra AND id_usuario = :id_user AND atv = 1 LIMIT 1
+        ");
+
+		$sql->bindValue(":id_obra", $id_obra);
+		$sql->bindValue(":id_user", $id_user);
+		$sql->execute();
+
+		return $sql->rowCount() == 1 ? $sql->fetch() : false;
+	}
+
+
 }

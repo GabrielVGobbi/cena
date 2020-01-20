@@ -177,3 +177,88 @@ body {
     -o-animation: fa-blink .75s linear infinite;
     animation: fa-blink .75s linear infinite;
 }
+
+.checkbox_desgn {
+    display: none;
+}
+
+.checkbox_desgn+span {
+    position: relative;
+    display: inline-block;
+    padding: 2px 0 2px 32px;
+    font-size: 12px;
+    line-height: 20px;
+    cursor: pointer;
+    color: #9b9b9b;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.checkbox_desgn:checked+span .icon {
+    color: #3b7cff;
+    border-color: #3b7cff;
+}
+
+.checkbox_desgn+span .icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #9b9b9b;
+    border-radius: 4px;
+    -webkit-transition: border-color ease 0.2s;
+    -moz-transition: border-color ease 0.2s;
+    transition: border-color ease 0.2s;
+}
+
+.checkbox_desgn:checked+span .icon span {
+    visibility: visible;
+    opacity: 1;
+}
+
+.checkbox_desgn+span .icon span {
+    position: absolute;
+    top: 0px;
+    left: 0;
+    visibility: hidden;
+    width: 100%;
+    font-size: 20px;
+    line-height: 1;
+    text-align: center;
+    opacity: 0;
+    -webkit-transition: all ease 0.2s;
+    -moz-transition: all ease 0.2s;
+    transition: all ease 0.2s;
+}
+
+.checkbox:checked+span .icon {
+    color: #3b7cff;
+    border-color: #3b7cff;
+}
+
+.checkbox+span .icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #9b9b9b;
+    border-radius: 4px;
+    -webkit-transition: border-color ease 0.2s;
+    -moz-transition: border-color ease 0.2s;
+    transition: border-color ease 0.2s;
+}
+
+textarea {
+    resize: none;
+}
+
+.mdi-check:before {
+    content: "\2714";
+}
