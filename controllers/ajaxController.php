@@ -71,6 +71,21 @@ class ajaxController extends controller
         echo json_encode($etapa);
     }
 
+    function deleteObservacaoByObra()
+    {
+
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $e = new Etapa('');
+
+        $observacao = $e->deleteObservacaoByObra($_POST['id_obs'], $u->getId());
+
+        echo json_encode($observacao);
+    }
+
+    
+
     function saveNotepad()
     {
 
@@ -592,6 +607,21 @@ class ajaxController extends controller
 
         exit;
         
+    }
+
+    public function observacoesByObra(){
+
+        $o = new Obras();
+
+        if (isset($_GET['id_obra']) && !empty($_GET['id_obra'])) {
+
+            $id = $o->observacoesByObra($_GET['id_obra'], $_GET['id_etapa']);
+        }
+        
+        echo json_encode($id);
+        exit;
+
+
     }
 
     

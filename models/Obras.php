@@ -968,5 +968,24 @@ class Obras extends model
 		return $sql->rowCount() == 1 ? $sql->fetch() : false;
 	}
 
+	public function observacoesByObra($id_obra, $id_etapa){
+
+
+		$sql = ('SELECT * FROM observacao_usuario obsus
+			INNER JOIN observacao obs ON (obs.id_observacao = obsus.id_observacao)
+			INNER JOIN users user ON (user.id = obsus.id_user)
+			WHERE id_obra = :id_obra AND id_etapa = :id_etapa
+		');
+
+		$sql = $this->db->prepare($sql);
+		$sql->bindValue("id_obra", $id_obra);
+		$sql->bindValue("id_etapa", $id_etapa);
+
+		$sql->execute();
+
+		return $sql->rowCount() > 0 ? $sql->fetchALL() : '';
+
+	}
+
 
 }

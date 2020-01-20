@@ -194,13 +194,24 @@ $data_hoje = date('d/m');
                                                     </div>
                                                 </div>
                                                 <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
-                                                    <div class="col-md-12">
+                                                    <div class="col-md-12" id="observacao_sistema_desconsiderar">
                                                         <div class="form-group">
                                                             <label>Observações do sistema</label>
-                                                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"> </textarea>
+                                                            <textarea type="text" class="form-control" readonly name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"> </textarea>
                                                         </div>
                                                     </div>
                                                 <?php endif; ?>
+                                                <div class="col-md-12">
+                                                    <div class="box-footer">
+                                                        <div class="input-group">
+                                                            <input type="text" name="message" id="textObservacao" placeholder="Nova Observação" class="form-control">
+                                                            <span class="input-group-btn">
+                                                                <div id="newObservacao" class="btn btn-primary btn-flat">Enviar</div>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
 
                                             </div>
                                         </div>
@@ -237,89 +248,19 @@ $data_hoje = date('d/m');
                                     </div>
                                 </div>
 
-                               <!-- <div class="direct-chat-messages">
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
 
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
+                                <div id="observacoes">
 
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
-
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
-
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
-
-                                    <div class="direct-chat-msg">
-                                        <div class="direct-chat-info clearfix">
-                                            <span class="direct-chat-name pull-left">Luana Varella</span>
-                                            <span class="direct-chat-timestamp pull-right">23 Jan 2:00 pm</span>
-                                        </div>
-                                   
-                                        <div class="direct-chat-text" style="margin: 5px 0 0 15px">
-                                            Solicitado ao Emanuel (LOCK)
-                                        </div>
-                                    </div>
-                               
-                                </div>-->
-
+                                </div>
 
                                 <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
                                     <div class="modal-footer">
                                         <button type="submit" class="btn btn-primary">Salvar</button>
-
-
                                         <div class="btn btn-danger btn-flat pull-left delete_etapa" data-toggle="popover" title="Remover Etapa?" data-content="">
                                             <i class="fa fa-trash"></i>
                                         </div>
-
                                     </div>
                                 <?php endif; ?>
-
-
                             </div>
 
                             <div class="overlay" style="display:none">
@@ -341,6 +282,27 @@ $data_hoje = date('d/m');
 
         $(document).ready(gethistorico);
 
+        $("#observacao_sistema").on('mouseover', function() {
+
+            $('#observacao_sistema').webuiPopover({
+                content: 'Observação do sistema foi desconsidera, adicione uma nova observação abaixo',
+                trigger: 'hover',
+                placement: 'bottom'
+            });
+
+            $("#textObservacao").focus();
+
+        });
+
+
+        $("#textObservacao").focus(function() {
+            $(this).webuiPopover({
+                content: 'Não se preocupe, seu nome e data vão ser salvos automaticamente',
+                trigger: 'hover',
+                placement: 'bottom'
+            });
+        });
+
 
         var cookie = getCookie('select_etapas');
         var tipo = $("#select-etapas option:selected").val();
@@ -350,6 +312,10 @@ $data_hoje = date('d/m');
             var tipo = $("#select-etapas option:selected").val();
             setCookie('select_etapas', tipo, 25)
             $(document).ready(gethistorico);
+        });
+
+        $("#newObservacao").click(function() {
+            $("#newObservacao").submit();
         });
 
         $("#form_update").on("submit", function(event) {
@@ -376,7 +342,6 @@ $data_hoje = date('d/m');
                     $('#file').val('');
 
                     window.location.href = BASE_URL + 'obras/edit/' + id_obra;
-
 
                 },
                 cache: false,
@@ -521,8 +486,6 @@ $data_hoje = date('d/m');
         $("#COMPRA").css("display", "none");
         $("#ADMINISTRATIVA").css("display", "none");
 
-
-
         //Ajax Load data from ajax
         $.ajax({
             url: BASE_URL + 'ajax/getIdEtapaObra/' + id,
@@ -531,7 +494,6 @@ $data_hoje = date('d/m');
             success: function(data) {
 
                 checkDocumentoEtapa(id, data.id_obra);
-
 
                 $("#" + data.nome).css("display", "");
 
@@ -575,10 +537,19 @@ $data_hoje = date('d/m');
 
                 }
 
+                getComentarioObra(data.id_obra, id);
+
                 observacao_sistema = data.observacao_sistema != null ? data.observacao_sistema : '';
 
                 $('[name="meta_etapa"]').val(data.meta_etapa);
                 $('[name="observacao"]').val(data.observacao);
+
+                if (observacao_sistema == '' || observacao_sistema == null || observacao_sistema == undefined) {
+                    observacao_sistema_desconsiderar
+                    $("#observacao_sistema_desconsiderar").css("display", "none");
+
+                }
+
                 $('[name="observacao_sistema"]').val(observacao_sistema);
 
                 $(".delete_etapa").attr("data-content", "<a  href='" + BASE_URL + 'obras/obra_etapa_delete/' + data.id_etapa_obra + '/' + data.id_obra + "' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>");
@@ -586,13 +557,10 @@ $data_hoje = date('d/m');
 
                 $('#modal_form').modal('show');
 
-
-
-
-
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
+                toastr.error('Erro contate o administrador');
+
             },
         });
 
@@ -700,7 +668,8 @@ $data_hoje = date('d/m');
 
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error get data from ajax');
+                toastr.error('Erro contate o administrador');
+
             },
         });
 
@@ -754,5 +723,87 @@ $data_hoje = date('d/m');
         var ano = data.getFullYear();
 
         return ano + "-" + mes + "-" + dia;
+    }
+
+    function getComentarioObra(id_obra, id_etapa) {
+
+        $.ajax({
+            url: BASE_URL + 'ajax/observacoesByObra/' + id_obra,
+            type: "GET",
+            data: {
+                id_etapa: id_etapa,
+                id_obra: id_obra
+            },
+            dataType: "JSON",
+            success: function(j) {
+                var options = '<h3> Observações do Sistema </h3>';
+                options += ' <div class="direct-chat-messages" id="observacoes">';
+
+                if (j.length != 0) {
+                    for (var i = 0; i < j.length; i++) {
+
+
+                        //options += '<a href="' + BASE_URL + 'assets/documentos/' + j[i].docs_nome + '" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">'
+
+                        var data = moment(j[i].data_criacao).format('DD MMM, h:mm:ss');
+
+
+                        options += '<div class="direct-chat-msg">'
+                        options += '<div class="direct-chat-info clearfix">'
+                        options += '<span class="direct-chat-name pull-left">' + j[i].login + '</span>'
+                        options += '<span class="direct-chat-timestamp pull-right">' + data + '</span>'
+                        options += '</div>'
+                        options += '<div class="direct-chat-text" style="margin: 3px 0 0 6px">'
+                        options += '' + j[i].obs_texto + ''
+                        options += '<div class="tools pull-right">'
+                        options += '<i onclick="delete_observacao_obra(' + j[i].id_obs_user + ', ' + id_obra + ', ' + id_etapa + ')" class="fa fa-trash-o"></i>'
+                        options += '</div>'
+                        options += '</div>'
+
+                        options += '</div>'
+
+                    }
+
+
+                    options += '</div>';
+                    $('#observacoes').html(options).show();
+                } else {
+                $("#observacoes").css("display", "none");
+                    
+                }
+
+
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                toastr.error('Erro contate o administrador');
+
+            },
+        });
+
+    }
+
+    function delete_observacao_obra(id_obs, id_obra, id_etapa) {
+
+        $.ajax({
+
+            url: BASE_URL + 'ajax/deleteObservacaoByObra',
+            type: 'POST',
+            data: {
+                id_etapa: id_etapa,
+                id_obra: id_obra,
+                id_obs: id_obs,
+                
+            },
+            dataType: 'json',
+            success: function(json) {
+                getComentarioObra(id_obra, id_etapa);
+                toastr.success('Deletado com sucesso!!');
+               
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                toastr.error('Erro contate o administrador');
+            }
+        });
+
     }
 </script>

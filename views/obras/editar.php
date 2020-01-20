@@ -175,7 +175,6 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			<a href="<?php echo BASE_URL; ?>obras" class="btn btn-danger">Voltar</a>
 
 			<div class="pull-left">
-				<?php error_log(print_r($obr, 1)); ?>
 				<label class="popver_urgencia" style="margin-right: 17px;">
 					<input type="checkbox" id="checkUrgenciaObra" <?php echo isset($obr['urgencia']) && $obr['urgencia'] == '1' ? 'checked' : ''; ?> class="checkbox_desgn" name="timeline-photo" value="">
 					<span>

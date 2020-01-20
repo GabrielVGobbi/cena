@@ -280,7 +280,7 @@ class obrasController extends controller
 
         if ($this->user->hasPermission('obra_view') && $this->user->hasPermission('obra_delete')) {
             
-            $result = $this->etapa->editEtapaObra($id_etapa_obra, $_POST, $_FILES, $this->user->getCompany(), $this->user->getName());
+            $result = $this->etapa->editEtapaObra($id_etapa_obra, $_POST, $_FILES, $this->user->getCompany(), $this->user->getName(), $this->user->getId());
         
             echo json_encode($result);
             exit();
@@ -393,6 +393,7 @@ class obrasController extends controller
     {
         $this->documento->gerarWinrarObra($id);
     }
+
 
     public function Lista()
     {
