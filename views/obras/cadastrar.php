@@ -11,112 +11,112 @@
                             <h2 class="modal-title fc-center" align="center" id="">Cadastro de Obra</h2>
                         </div>
                         <?php if ($this->concessionaria->getCount($this->userInfo['user']->getCompany()) == 0) : ?>
-                        <div>
-                            <h3 class="text-center text-red">Para fazer o cadastro de obra, precisa ter uma concessionaria Cadastrada</h3>
-                            <div class="modal-footer">
-                                <a href="<?php echo BASE_URL;?>concessionarias/?modalcadastro=true" class="btn btn-primary btn-salvar">Cadastrar</a>
+                            <div>
+                                <h3 class="text-center text-red">Para fazer o cadastro de obra, precisa ter uma concessionaria Cadastrada</h3>
+                                <div class="modal-footer">
+                                    <a href="<?php echo BASE_URL; ?>concessionarias/?modalcadastro=true" class="btn btn-primary btn-salvar">Cadastrar</a>
+                                </div>
                             </div>
-                        </div>
                         <?php else : ?>
-                        <div class="modal-body">
-                            <div class="box box-default box-solid">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <div class="box-header with-border">
-                                            <h3 class="box-title">Dados</h3>
-                                        </div>
-                                        <div class="box-body" style="">
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Nome da Obra</label>
-                                                    <input type="text" class="form-control" name="obra_nome" id="obra_nome" autocomplete="off" required>
-                                                </div>
-
+                            <div class="modal-body">
+                                <div class="box box-default box-solid">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="box-header with-border">
+                                                <h3 class="box-title">Dados</h3>
                                             </div>
+                                            <div class="box-body" style="">
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Nome da Obra</label>
+                                                        <input type="text" class="form-control" name="obra_nome" id="obra_nome" autocomplete="off" required>
+                                                    </div>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Concessionaria</label>
-                                                    <select class="form-control select2 concessionaria_select" style="width: 100%;" name="concessionaria" id="id_concessionaria" aria-hidden="true" required>
-                                                        <option value="">selecione</option>
-                                                        <?php foreach ($viewData['concessionaria'] as $com) : ?>
-                                                        <option value="<?php echo $com['id']; ?>"><?php echo $com['razao_social'] ?></option>
-                                                        <?php endforeach; ?>
-                                                    </select>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-4">
-                                                <div class="form-group">
-                                                    <label>Tipo de Obra/Serviço</label>
-                                                    <select class="form-control select2 service_select" style="width: 100%;" name="servico" id="id_servico" required>
-                                                        <option value="">selecione a concessionaria</option>
-                                                    </select>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Concessionaria</label>
+                                                        <select class="form-control select2 concessionaria_select" style="width: 100%;" name="concessionaria" id="id_concessionaria" aria-hidden="true" required>
+                                                            <option value="">selecione</option>
+                                                            <?php foreach ($viewData['concessionaria'] as $com) : ?>
+                                                                <option value="<?php echo $com['id']; ?>"><?php echo $com['razao_social'] ?></option>
+                                                            <?php endforeach; ?>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12" style="margin-bottom:6px;">
-                                                <label>Cliente</label>
-                                                <div class="input-group">
-                                                    <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
-                                                    <input type="text" class="form-control" name="cliente" id="cliente" required data-type="search_cliente" required="" autocomplete="off">
-                                                    <span onclick="add_cliente()" style="cursor: pointer;border-color: #f00;border-left: 1%;" class="input-group-addon span-cliente"><i class="fa fa-check has-error"></i></span>
+                                                <div class="col-md-4">
+                                                    <div class="form-group">
+                                                        <label>Tipo de Obra/Serviço</label>
+                                                        <select class="form-control select2 service_select" style="width: 100%;" name="servico" id="id_servico" required>
+                                                            <option value="">selecione a concessionaria</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
-                                                <div id="art" type="hidden">
 
-                                                    <span class="span-dropdown">
-                                                        <span class="span-dropdown-2">
-                                                            <ul class="ul-span-dropdown">
-                                                                <div class="searchresultscliente">
+                                                <div class="col-md-12" style="margin-bottom:6px;">
+                                                    <label>Cliente</label>
+                                                    <div class="input-group">
+                                                        <input type="hidden" name="id_cliente" id="id_cliente" class="form-control">
+                                                        <input type="text" class="form-control" name="cliente" id="cliente" required data-type="search_cliente" required="" autocomplete="off">
+                                                        <span onclick="add_cliente()" style="cursor: pointer;border-color: #f00;border-left: 1%;" class="input-group-addon span-cliente"><i class="fa fa-check has-error"></i></span>
+                                                    </div>
+                                                    <div id="art" type="hidden">
 
-                                                                </div>
-                                                            </ul>
+                                                        <span class="span-dropdown">
+                                                            <span class="span-dropdown-2">
+                                                                <ul class="ul-span-dropdown">
+                                                                    <div class="searchresultscliente">
+
+                                                                    </div>
+                                                                </ul>
+                                                            </span>
                                                         </span>
-                                                    </span>
 
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="col-md-12">
-                                                <div class="box box-primary span_etapa" style="display:none;">
-                                                    <div class="box-header">
-                                                        <i class="ion ion-clipboard"></i>
-                                                        <h3 class="box-title tarefas-tittle">Tarefas de ""</h3>
-                                                    </div>
-                                                    <div class="box-body">
-                                                        <ul class="todo-list">
+                                                <div class="col-md-12">
+                                                    <div class="box box-primary span_etapa" style="display:none;">
+                                                        <div class="box-header">
+                                                            <i class="ion ion-clipboard"></i>
+                                                            <h3 class="box-title tarefas-tittle">Tarefas de ""</h3>
+                                                        </div>
+                                                        <div class="box-body">
+                                                            <ul class="todo-list">
 
-                                                            <div class="" id="id_sub_etapas">
-                                                            </div>
+                                                                <div class="" id="id_sub_etapas">
+                                                                </div>
 
-                                                        </ul>
-                                                    </div>
-                                                    <!--<div class="box-footer clearfix no-border">
+                                                            </ul>
+                                                        </div>
+                                                        <!--<div class="box-footer clearfix no-border">
                                                         <button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> Add item</button>
                                                     </div>-->
-                                                </div>
-
-                                                <div class="box box-primary result_null" style="display:none;">
-                                                    <div class="box-header">
-
                                                     </div>
-                                                    <div class="box-body">
-                                                        <div style="text-align: center;">
-                                                            <span class="" id="result_null"> </span>
+
+                                                    <div class="box box-primary result_null" style="display:none;">
+                                                        <div class="box-header">
+
                                                         </div>
-                                                    </div>
+                                                        <div class="box-body">
+                                                            <div style="text-align: center;">
+                                                                <span class="" id="result_null"> </span>
+                                                            </div>
+                                                        </div>
 
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="modal-footer">
-                            <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
-                        </div>
+                            <div class="modal-footer">
+                                <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+                            </div>
                         <?php endif; ?>
                     </div>
                 </div>

@@ -789,6 +789,10 @@ class Etapa extends model
     public function newObservacaoObra($mensagem, $id_user, $id_obra, $id_etapa, $id_observacao = '')
     {
 
+        setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+
+        date_default_timezone_set('America/Sao_Paulo');
+
         if (isset($id_observacao) && !empty($id_observacao)) {
 
             $sql = $this->db->prepare("UPDATE `cliente_endereco` SET  
@@ -821,6 +825,8 @@ class Etapa extends model
             #: controller::alert('error', 'Ops!! deu algum erro');
         } else {
 
+            $datenow = date('Y-m-d H:i:s', strtotime('-1 Hours'));
+
             $sql = $this->db->prepare("INSERT INTO observacao SET 
 				obs_texto = :obs_texto
 			");
@@ -834,7 +840,7 @@ class Etapa extends model
                 $sql = $this->db->prepare("INSERT INTO observacao_usuario SET 
 				    id_observacao = :id_observacao,
                     id_user = :id_user,
-                    data_criacao = NOW(),
+                    data_criacao = :datenow,
                     id_obra = :id_obra,
                     id_etapa = :id_etapa
 			    ");
@@ -843,6 +849,8 @@ class Etapa extends model
                 $sql->bindValue(":id_user", $id_user);
                 $sql->bindValue(":id_obra", $id_obra);
                 $sql->bindValue(":id_etapa", $id_etapa);
+                $sql->bindValue(":datenow", $datenow);
+
 
                 $sql->execute();
             }
@@ -857,7 +865,7 @@ class Etapa extends model
             'id_observacao' => $id_observacao,
             'id_user' => $id_user
         );
-        
+
 
         if (isset($id_observacao) && $id_observacao != '') {
 

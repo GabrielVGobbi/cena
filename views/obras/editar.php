@@ -72,6 +72,11 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 									<label>Data de Criação</label>
 									<input type="text" class="form-control" name="data_obra" id="data_obra" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" value="<?php echo $obr['data_obra']; ?>" autocomplete="off" required>
 								</div>
+
+								<div class="col-md-12" style="margin-bottom:6px;">
+									<label>Descrição da Obra</label>
+									<input type="text" class="form-control" name="descricao" id="descricao" value="<?php echo $obr['descricao']; ?>" autocomplete="off" >
+								</div>
 							</div>
 
 							<?php include_once('include/departamento.php');

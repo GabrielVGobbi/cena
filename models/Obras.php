@@ -403,6 +403,8 @@ class Obras extends model
 		$date = strftime('%d-%m-%Y', strtotime('today'));
 		$data = ucwords($date);
 
+		$descricao =  isset($Parametros['descricao']) ?  $Parametros['descricao'] : '';
+
 		try {
 			$sql = $this->db->prepare("INSERT INTO obra SET 
 					id_company = :id_company,
@@ -411,6 +413,7 @@ class Obras extends model
 					id_concessionaria = :id_concessionaria,
 					obr_razao_social = :razao_social,
 					data_obra 		= :data_obra,
+					descricao = :descricao,
 					id_status =	3
 
 			");
@@ -420,6 +423,8 @@ class Obras extends model
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
 			$sql->bindValue(":data_obra", $data);
 			$sql->bindValue(":id_concessionaria", $Parametros['concessionaria']);
+			$sql->bindValue(":descricao",$descricao);
+
 
 
 
@@ -639,6 +644,8 @@ class Obras extends model
 
 			$obr_informacoes = isset($Parametros['obra_infor']) ? $Parametros['obra_infor'] : '';
 
+			$descricao =  isset($Parametros['descricao']) ?  $Parametros['descricao'] : '';
+
 			$id_endereco = isset($Parametros['id_endereco'])
 				? $this->setEnderecoObra($Parametros, $id_company, $Parametros['id_endereco'])
 				: $this->setEnderecoObra($Parametros, $id_company);
@@ -650,7 +657,8 @@ class Obras extends model
 				cnpj_obra = :obra_cnpj,
 				razao_social_obra_cliente = :razao_social_obra_cliente,
 				id_departamento = :id_departamento,
-				obr_informacoes = :obr_informacoes
+				obr_informacoes = :obr_informacoes,
+				descricao = :descricao
 
 				
 				
@@ -665,6 +673,8 @@ class Obras extends model
 			$sql->bindValue(":razao_social_obra_cliente", $razao_social);
 			$sql->bindValue(":id_departamento", $id_departamento);
 			$sql->bindValue(":obr_informacoes", $obr_informacoes);
+			$sql->bindValue(":descricao", $descricao);
+			
 
 			$sql->execute();
 
@@ -974,7 +984,7 @@ class Obras extends model
 		$sql = ('SELECT * FROM observacao_usuario obsus
 			INNER JOIN observacao obs ON (obs.id_observacao = obsus.id_observacao)
 			INNER JOIN users user ON (user.id = obsus.id_user)
-			WHERE id_obra = :id_obra AND id_etapa = :id_etapa
+			WHERE id_obra = :id_obra AND id_etapa = :id_etapa ORDER BY obsus.id_obs_user DESC
 		');
 
 		$sql = $this->db->prepare($sql);

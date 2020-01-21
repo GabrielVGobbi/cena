@@ -202,6 +202,11 @@ $data_hoje = date('d/m');
                                                     </div>
                                                 <?php endif; ?>
                                                 <div class="col-md-12">
+                                                    <div id="observacoes">
+
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-12">
                                                     <div class="box-footer">
                                                         <div class="input-group">
                                                             <input type="text" name="message" id="textObservacao" placeholder="Nova Observação" class="form-control">
@@ -249,9 +254,7 @@ $data_hoje = date('d/m');
                                 </div>
 
 
-                                <div id="observacoes">
 
-                                </div>
 
                                 <?php if ($this->userInfo['user']->hasPermission('obra_edit')) : ?>
                                     <div class="modal-footer">
@@ -340,8 +343,13 @@ $data_hoje = date('d/m');
                     toastr.success('Editado com sucesso');
                     $('#documento_etapa_nome').val('');
                     $('#file').val('');
+                    $(document).ready(gethistorico);
+                    getComentarioObra(id_obra, id_etapa_obra)
+                    $("#textObservacao").val('');
 
-                    window.location.href = BASE_URL + 'obras/edit/' + id_obra;
+                    $('.overlay').toggle();
+                    $('#dados_').toggle();
+
 
                 },
                 cache: false,
@@ -768,8 +776,8 @@ $data_hoje = date('d/m');
                     options += '</div>';
                     $('#observacoes').html(options).show();
                 } else {
-                $("#observacoes").css("display", "none");
-                    
+                    $("#observacoes").css("display", "none");
+
                 }
 
 
@@ -792,13 +800,13 @@ $data_hoje = date('d/m');
                 id_etapa: id_etapa,
                 id_obra: id_obra,
                 id_obs: id_obs,
-                
+
             },
             dataType: 'json',
             success: function(json) {
                 getComentarioObra(id_obra, id_etapa);
                 toastr.success('Deletado com sucesso!!');
-               
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 toastr.error('Erro contate o administrador');

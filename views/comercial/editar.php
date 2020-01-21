@@ -52,9 +52,14 @@
 									<input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $tableInfo['cliente_nome']; ?>" autocomplete="off">
 								</div>
 
-								<div class="col-md-2" style="margin-bottom:6px;">
+								<div class="col-md-2" style="margin-bottom:10px;">
 									<label>Data de Criação</label>
 									<input type="text" class="form-control" name="data_obra" id="data_obra" value="<?php echo $tableInfo['data_obra'] == '' ? date('d-m-Y') : $tableInfo['data_obra']; ?>" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask autocomplete="off">
+								</div>
+
+								<div class="col-md-12" style="margin-bottom:6px;">
+									<label>Descrição da Obra</label>
+									<input type="text" class="form-control" name="descricao" id="descricao" value="<?php echo $tableInfo['descricao']; ?>" autocomplete="off" >
 								</div>
 							</div>
 						</div>
