@@ -162,7 +162,7 @@ class Users extends model
 
 			return $this->userInfo['id_cliente'];
 		} else
-			return 0;
+			return false;
 	}
 
 	public function getEmail()
@@ -235,7 +235,7 @@ class Users extends model
 		$sql = "SELECT * FROM users usr 
 
         
-		WHERE " . implode(' AND ', $where) . " ORDER BY usr.usr_info,usr.login LIMIT $offset, 10";
+		WHERE " . implode(' AND ', $where) . " ORDER BY usr.usr_info,usr.login";
 
 
 		$sql = $this->db->prepare($sql);
@@ -258,7 +258,8 @@ class Users extends model
 
 		$where = array(
 			'usr.id_company=' . $id,
-			'usr_info <> "cliente"'
+			'usr_info <> "cliente"',
+			'usu_ativo=1'
 		);
 
 

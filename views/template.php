@@ -259,6 +259,42 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
       </div>
     </footer>
   </div>
+<?php if(!$this->user->cliente()): ?>
+  <div style="    position: fixed;z-index: 999999;right: 12px;bottom: 3px;">
+    <div id="chat" class="" style=" width: 70px;    display: block;;">
+      <div id="colapse" class="box box-info direct-chat direct-chat-info collapsed-box" style="margin-bottom: 31px;">
+        <div class="box-header with-border">
+          <h3 class="box-title chat-title"></h3>
+
+          <div class="box-tools pull-right">
+            <span data-toggle="tooltip" title="" class="badge bg-info titlemensagem" data-original-title=""></span>
+            <button type="button" onclick="openChat(this)" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-plus"></i>
+            </button>
+          </div>
+        </div>
+        <div class="box-body">
+          <br>
+          <div class="direct-chat-messages" style="overflow: auto; display: flex;flex-direction: column-reverse; height:250px;margin-bottom: 0px;">
+
+            <div id="chatFor"></div>
+
+          </div>
+          <div class="box-footer">
+            <form action="<?php echo BASE_URL; ?>ajax/newMensageChat" id="newMensageChat" method="post">
+              <div class="input-group">
+                <input type="text" name="message" placeholder="nova mensagem" class="form-control">
+                <span class="input-group-btn">
+                  <button type="submit" id="buttonChat" class="btn btn-info btn-flat">Enviar</button>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+<?php endif; ?>
+
 
   <aside class="control-sidebar control-sidebar-dark" id="notepad" style="background: #f1f1f1;">
 
@@ -327,12 +363,11 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 
     $(function() {
 
-      //setInterval(verificarNotificacao, 2000);
+      //setInterval(verificarNotificacao, 50000);
       //verificarNotificacao();
 
       $('.drop-notific').on('click', function() {
         $('.notificacao-mensagem').removeClass('fa-blink');
-
 
       });
 
@@ -495,6 +530,9 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 
     $(function() {
 
+      setInterval("getMensageNaoLidas()", 10000)
+      setInterval("getMensage()", 10000)
+
       $('#table').on('length.dt', function(e, settings, len) {
         localStorage.setItem('max_obras', len);
       });
@@ -504,6 +542,8 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
         var info = table.page.info();
       });
 
+      $(document).ready(getMensage());
+      $(document).ready(getMensageNaoLidas());
       $(document).ready(function() {
 
         var filtro = <?php echo json_encode($_GET); ?>;
@@ -519,11 +559,11 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
           stateLoadCallback: function(settings) {
             return JSON.parse(localStorage.getItem('DataTables_' + settings.sInstance))
           },
-          createdRow: function(row, data,index) {
-              if(data[7] == 1){
-                $(row).css('background', 'rgba(247, 161, 161, 0.78)');
-              }
-            },
+          createdRow: function(row, data, index) {
+            if (data[7] == 1) {
+              $(row).css('background', 'rgba(247, 161, 161, 0.78)');
+            }
+          },
           "processing": true,
           "serverSide": true,
           "autoWidth": false,

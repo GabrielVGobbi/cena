@@ -759,7 +759,6 @@ class Etapa extends model
 
             controller::setLog($Parametros, 'etapa', 'obra_etapa');
 
-            controller::alert('success', 'Editado com sucesso!!');
 
             if (isset($Parametros['message']) && !empty($Parametros['message'])) {
 

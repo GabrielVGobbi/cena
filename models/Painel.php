@@ -9,6 +9,7 @@ class Painel extends model
         $this->retorno = array();
     }
 
+    
     public function insert_painel($arr, $tabela, $id_company)
     {
         $certo = true;
@@ -310,7 +311,6 @@ class Painel extends model
             }
 
         }
-
 
     }
 

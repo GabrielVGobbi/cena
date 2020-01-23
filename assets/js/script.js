@@ -37,6 +37,9 @@ $(function () {
         $('.popover').popover('hide');
     });
 
+
+
+
 });
 
 function formata(v) {
@@ -174,6 +177,29 @@ function openFiltro($name) {
 }
 
 $(function () {
+
+
+    $("#newMensageChat").on("submit", function (event) {
+        event.preventDefault();
+        var data = $(this).serialize();
+
+        $.ajax({
+            url: BASE_URL + 'ajax/newMensageChat/',
+            type: 'POST',
+            data: data,
+            dataType: 'json',
+            
+            success: function (json) {
+               getMensage();
+               $('input[name="message"]').val('')
+
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                toastr.error('Erro contate o administrador, Codigo MSGE123');
+            }
+        });
+    });
+
 
     $('.new_servico').on('click', function (e) {
 
@@ -518,6 +544,53 @@ function getCookie(cname) {
     }
     return "";
 }
+
+function openChat(v) {
+
+    if ($("#colapse").hasClass("collapsed-box")) {
+        $('#chat').width('300');
+        $('.chat-title').html('Chat');
+
+
+        $.ajax({
+            url: BASE_URL + "ajax/lerMensagesALL",
+            success: function (data) {
+                $('.titlemensagem').html('0');
+                $('.titlemensagem').attr('data-original-title', '0 Nova(s) Mensagen(s)');
+
+            }
+        });
+
+    } else {
+        setTimeout(function () { $('#chat').width('70'); $('.chat-title').html(''); }, 300);
+    }
+
+}
+function getMensage() {
+
+    $.ajax({
+        url: BASE_URL + "ajax/getMensage",
+        success: function (data) {
+            $('#chatFor').html(data);
+        }
+    });
+}
+
+function getMensageNaoLidas() {
+
+    $.ajax({
+        url: BASE_URL + "ajax/getMensageNaoLidas",
+        success: function (data) {
+            
+            $('.titlemensagem').html(data);
+            $('.titlemensagem').attr('data-original-title', data+' Nova(s) Mensagen(s)');
+
+        }
+    });
+}
+
+
+
 
 
 

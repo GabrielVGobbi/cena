@@ -103,12 +103,11 @@ class Obras extends model
 		$where = $this->buildWhere($filtro, $id_company, $id_cliente);
 
 		$sql = "
-		SELECT * FROM  
+		SELECT *, obr.id as id_obra FROM  
 			obra obr
 			INNER JOIN servico sev ON(obr.id_servico = sev.id)
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
-			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)		
 		WHERE " . implode(' AND ', $where) . " GROUP BY obr.id";
 		$sql = $this->db->prepare($sql);
 
@@ -336,12 +335,11 @@ class Obras extends model
 
 		$sql = $this->db->prepare("
 		
-		SELECT * FROM  
+		SELECT *, obr.id as id_obra  FROM  
 			obra obr
 			INNER JOIN servico sev ON(obr.id_servico = sev.id)
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
-			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)	
 			
 			WHERE obr.id = :id AND obr.id_company = :id_company AND obr.id_cliente = :id_cliente");
 		$sql->bindValue(':id', $id);

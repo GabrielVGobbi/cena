@@ -84,7 +84,92 @@ class ajaxController extends controller
         echo json_encode($observacao);
     }
 
-    
+    public function getMensage()
+    {
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $c = new Chat();
+
+        $chat = $c->getMensage();
+
+        $output = '';
+
+        if (isset($chat) && false !== $chat) {
+
+            foreach ($chat as $chat) {
+               
+                setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
+
+                date_default_timezone_set('America/Sao_Paulo');
+
+                $date = new DateTime($chat['created_date']);
+
+                $data = date_format($date, 'd,M H:i:s');
+                
+                $right = $chat['id_user'] == $this->user->getId() ? 'right' : '';
+
+                $output .= '
+                <div class="direct-chat-msg '.$right.'" style="margin-bottom:0px">
+                    <div class="direct-chat-info clearfix">
+                    <span class="direct-chat-name pull-left" style="margin-top:10px"> '. $chat['login'] .'</span>
+                    <span class="direct-chat-timestamp pull-right" style="margin-top:10px"> '.$data.'</span>
+                </div>
+                <div class="direct-chat-text" style="margin: 1px 1px 1px 1px">
+                '. $chat['chat_mensagem'].'
+                </div>
+                ';
+            }
+        } else {
+            $output .= '<p class="lead">sem mensagem</p>';
+        }
+
+        $output .= '';
+
+        echo ($output);
+    }
+
+    function newMensageChat(){
+
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $c = new Chat();
+
+        $newChat = $c->newMensage($_POST, $u->getId());
+
+        echo json_decode($newChat);
+        exit();
+    }
+
+    function getMensageNaoLidas(){
+
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $c = new Chat();
+
+        $newChat = $c->getMensageNaoLidas($u->getId());
+
+        echo json_decode($newChat);
+        exit();
+    }
+
+    function lerMensagesALL(){
+       
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $c = new Chat();
+
+        $newChat = $c->lerMensagesALL($u->getId());
+
+        echo json_decode($newChat);
+        exit();
+
+    }
+
+
 
     function saveNotepad()
     {
@@ -564,14 +649,13 @@ class ajaxController extends controller
 
         if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
 
-            $id = $o->checkUrgenceObra($_POST['checked'],$_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
+            $id = $o->checkUrgenceObra($_POST['checked'], $_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
         }
-        if($id != false){
+        if ($id != false) {
             echo json_encode($id);
         }
 
         exit;
-        
     }
 
     public function checkMyListObra()
@@ -581,14 +665,13 @@ class ajaxController extends controller
 
         if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
 
-            $id = $o->checkMyListObra($_POST['checked'],$_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
+            $id = $o->checkMyListObra($_POST['checked'], $_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
         }
-        if($id != false){
+        if ($id != false) {
             echo json_encode($id);
         }
 
         exit;
-        
     }
 
     public function getListObra()
@@ -601,15 +684,15 @@ class ajaxController extends controller
             $id = $o->getListObra($_GET['id_obra'], $this->user->getId());
         }
 
-        if($id != false){
+        if ($id != false) {
             echo json_encode($id);
         }
 
         exit;
-        
     }
 
-    public function observacoesByObra(){
+    public function observacoesByObra()
+    {
 
         $o = new Obras();
 
@@ -617,14 +700,12 @@ class ajaxController extends controller
 
             $id = $o->observacoesByObra($_GET['id_obra'], $_GET['id_etapa']);
         }
-        
+
         echo json_encode($id);
         exit;
-
-
     }
 
-    
+
 
     public function gerarWinrar()
     {
@@ -685,7 +766,7 @@ class ajaxController extends controller
                 $_FILES['file']['name'] = str_replace(' - ', '_', $_FILES['file']['name']);
                 $_FILES['file']['name'] = str_replace(' ', '_', $_FILES['file']['name']);
 
-                $name = $_FILES['file']['name']. '_cli_' . $nome_cliente;
+                $name = $_FILES['file']['name'] . '_cli_' . $nome_cliente;
 
                 $type = explode('.', $_FILES['file']['name']);
                 $type = '.' . $type[1];
@@ -743,8 +824,8 @@ class ajaxController extends controller
                                 $icon =  "fa fa-fw fa-file-image-o";
                                 break;
                             default;
-                            $icon =  "fa fa-file-pdf-o";
-                            break;
+                                $icon =  "fa fa-file-pdf-o";
+                                break;
                         }
 
                         $fileName = mb_strimwidth($file['docs_nome'], 0, 90, "...");

@@ -13,7 +13,7 @@ class controller
 		$u->setLoggedUser();
 		$p = new Painel;
 		$this->financeiro = new Financeiro('');
-
+		$this->chat = new Chat();
 
 		$this->array = array();
 
@@ -24,6 +24,7 @@ class controller
 			'notificacao'   => $u->getNotificacao($u->getId(), $u->getCompany())
 		);
 	}
+
 
 	public function loadView($viewName, $viewData = array())
 	{
@@ -42,7 +43,8 @@ class controller
 		$total_recebido = 0;
 
 		$recebido = $this->financeiro->getPendentesRecebido();
-		
+
+
 		if($recebido){
 			$total_recebido = count($recebido);
 		}

@@ -2,9 +2,6 @@
 class homeController extends controller
 {
 
-    private $user;
-
-
     public function __construct()
     {
         parent::__construct();
@@ -53,8 +50,9 @@ class homeController extends controller
         if ($this->user->usr_info() === 'cliente') {
 
             $this->dataInfo['titlePage'] = '';
-            $this->dataInfo['tableDados'] = $this->obra->getObraCliente($this->user->cliente(), '', $this->user->getCompany());
 
+            $this->dataInfo['tableDados'] = $this->obra->getObraCliente($this->user->getIdCliente(), '', $this->user->getCompany());
+error_log(print_r($this->dataInfo['tableDados'],1));
             $this->loadTemplate('obrasClientes' . "/index", $this->dataInfo);
         } else {
 
@@ -68,6 +66,7 @@ class homeController extends controller
         if ($this->user->usr_info() === 'cliente') {
 
             $this->dataInfo['titlePage'] = '';
+
             $this->dataInfo['obr'] = $this->obra->getInfoObraCliente($id, $this->user->getCompany(), $this->user->getIdCliente());
 
             $this->dataInfo['titlePage'] = $this->dataInfo['obr']['obra_nota_numero'] != '' ? $this->dataInfo['obr']['obra_nota_numero'] : '';
@@ -75,6 +74,7 @@ class homeController extends controller
             if ($this->dataInfo['obr']) {
 
                 $this->loadTemplate('obrasClientes' . "/visualizar", $this->dataInfo);
+
             } else {
 
                 header('Location:' . BASE_URL . 'home');
