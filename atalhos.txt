@@ -1,0 +1,12 @@
+//Bloquear tamanho da fonte com 3 ...
+display: block;
+font-size: 14px;
+white-space: nowrap;
+overflow: hidden;
+text-overflow: ellipsis;
+
+//quando tem um espaço impossivel de tirar
+str_replace('Â ','', $valor_proposta);
+
+//remover o check 
+$("#checkUrgenciaObra").prop('checked', false); 

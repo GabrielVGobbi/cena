@@ -330,6 +330,9 @@ class Obras extends model
 
 	public function getInfoObraCliente($id, $id_company, $id_cliente)
 	{
+		error_log(print_r($id,1));
+		error_log(print_r($id_cliente,1));
+		
 
 		$array = array();
 

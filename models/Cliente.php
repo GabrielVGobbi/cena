@@ -137,9 +137,9 @@ class Cliente extends model
 	public function edit($Parametros, $id_company)
 	{
 
-		$id_endereco = isset($Parametros['id_endereco'])
-			? $this->setEnderecoCliente($Parametros, $id_company, $Parametros['id_endereco'])
-			: $this->setEnderecoCliente($Parametros, $id_company);
+		#$id_endereco = isset($Parametros['id_endereco'])
+			#? $this->setEnderecoCliente($Parametros, $id_company, $Parametros['id_endereco'])
+			#: $this->setEnderecoCliente($Parametros, $id_company);
 
 		$cliente_nome = controller::ReturnValor($Parametros['cliente_nome']);
 		$cliente_apelido = controller::ReturnValor($Parametros['cliente_apelido']);
@@ -155,8 +155,7 @@ class Cliente extends model
 				cliente_apelido = :cliente_apelido,
 				cliente_cnpj = :cliente_cnpj,
 				created_at = NOW(),
-				id_company = :id_company,
-				clend_id = :id_endereco
+				id_company = :id_company
 
 
 				WHERE id = :id_cliente AND id_company = :id_company;
@@ -167,14 +166,18 @@ class Cliente extends model
 			$sql->bindValue(":id_company", $id_company);
 			$sql->bindValue(":cliente_cnpj", $cliente_cnpj);
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
-			$sql->bindValue(":id_endereco", $id_endereco);
 
 			$sql->execute()
 				? controller::alert('success', 'Editado com sucesso')
 				: controller::alert('error', 'Ops!! deu algum erro');
+			
+			if(isset($Parametros['id_usuario']) && !empty($Parametros['id_usuario'])){
+				$u = new Users();
+				$u->edit($id_company, $Parametros);
+			}
 
 			#if (!empty($Parametros['dep_responsavel']))
-				$this->setDepartamentoCliente($Parametros, $id_company, $Parametros['id_cliente'], $id_departamento);
+			$this->setDepartamentoCliente($Parametros, $id_company, $Parametros['id_cliente'], $id_departamento);
 
 			controller::setLog($Parametros, 'cliente', 'edit');
 		}

@@ -52,7 +52,6 @@ class homeController extends controller
             $this->dataInfo['titlePage'] = '';
 
             $this->dataInfo['tableDados'] = $this->obra->getObraCliente($this->user->getIdCliente(), '', $this->user->getCompany());
-error_log(print_r($this->dataInfo['tableDados'],1));
             $this->loadTemplate('obrasClientes' . "/index", $this->dataInfo);
         } else {
 

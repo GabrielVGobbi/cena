@@ -20,6 +20,8 @@
 		<form method="POST">
 			<div class="tab-content">
 				<input type="hidden" class="form-control" name="id_usuario" id="id_usuario" autocomplete="off" value="<?php echo $tableInfo['id']; ?>">
+				<input type="hidden" class="form-control" name="token" id="token" autocomplete="off" value="<?php echo $tableInfo['password']; ?>">
+
 				<div class="tab-pane active" id="dados">
 					<div class="box box-default box-solid">
 						<div class="row">

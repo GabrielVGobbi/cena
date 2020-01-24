@@ -347,13 +347,26 @@ class Users extends model
 	public function edit($id_company, $Parametros)
 	{
 		$certo = true;
-		$pass = 'admin';
-		$sql = $this->db->prepare("UPDATE users SET login = :login, email = :email WHERE id = :id AND id_company = :id_company");
+		
+		$passUser = $this->getInfo($Parametros['id_usuario'], $id_company);
+
+		$pass = isset($Parametros['token']) && !empty($Parametros['token'])  ? $Parametros['token'] : $passUser['password'];
+		$email = isset($Parametros['email']) ? $Parametros['email'] : '';
+		$login = isset($Parametros['login']) ? $Parametros['login'] : '';
+
+		if($passUser['password'] == $pass){
+			$pass = $pass;
+		} else {
+			$pass = md5($pass);
+		}
+
+		$sql = $this->db->prepare("UPDATE users us SET login = :login, email = :email, us.password = :token WHERE id = :id AND id_company = :id_company");
 
 		$sql->bindValue(":id_company", $id_company);
-		$sql->bindValue(":login", strtolower($Parametros['login']));
-		$sql->bindValue(":email", strtolower($Parametros['email']));
+		$sql->bindValue(":login", strtolower($login));
+		$sql->bindValue(":email", strtolower($email));
 		$sql->bindValue(":id", $Parametros['id_usuario']);
+		$sql->bindValue(":token", $pass);
 
 		$sql->execute();
 
@@ -598,5 +611,22 @@ class Users extends model
 			$array = $sql->fetchAll();
 		}
 		return $array;
+	}
+
+	public function getUserCliente($id_cliente, $id_company){
+
+		$array = array();
+		$sql = $this->db->prepare("SELECT * FROM users WHERE id_cliente = :id_cliente AND id_company = :id_company LIMIT 1");
+
+		$sql->bindValue(':id_company', $id_company);
+		$sql->bindValue(':id_cliente', $id_cliente);
+		$sql->execute();
+
+		if ($sql->rowCount() == 1) {
+			$array = $sql->fetch();
+		}
+
+		return $array;
+
 	}
 }
