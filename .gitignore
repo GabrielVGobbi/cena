@@ -2,3 +2,10 @@ node_modules
 assets/backup_dados
 config
 error_log
+vendor
+email.php
+error_log
+views/obras_backup
+.vscode
+.vs
+assets/documentos
