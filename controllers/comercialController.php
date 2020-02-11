@@ -12,6 +12,8 @@ class ComercialController extends controller
         $this->painel = new Painel();
         $this->user->setLoggedUser();
 
+        $this->etapa = new Etapa('etp');
+
         
         $this->cliente = new Cliente();
         $this->concessionaria = new Concessionaria();
@@ -104,9 +106,8 @@ class ComercialController extends controller
 
         if ($this->user->hasPermission('comercial_view') && $this->user->hasPermission('comercial_edit')) {
 
-            
-
             $this->dataInfo['tableInfo']            = $this->comercial->getcomercialById($id, $this->user->getCompany());
+            $this->dataInfo['compras']              = $this->etapa->getEtapasByTipoByObra($this->dataInfo['tableInfo']['id_obra']);
 
             if (isset($_POST['nome_obra']) && isset($_POST['id_obra'])) {
 
@@ -151,6 +152,20 @@ class ComercialController extends controller
             $result = $this->comercial->deleteHistorico($id_obra,$id_historico, $this->user->getCompany());
 
             header("Location: " . BASE_URL . "comercial/edit/".$id_obra);
+            exit();
+
+        } else {
+            $this->loadViewError();
+        }
+    }
+
+    public function deleteEtapa($id_obra, $id_etapa_obra)
+    {
+        if ($this->user->hasPermission('comercial_view') && $this->user->hasPermission('comercial_delete')) {
+
+            $result = $this->comercial->deleteEtapaObra($id_obra,$id_etapa_obra, $this->user->getCompany());
+
+            header("Location: " . BASE_URL . "comercial/edit/".$id_obra.'?list');
             exit();
 
         } else {

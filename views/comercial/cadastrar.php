@@ -41,7 +41,7 @@
                             <div class="col-md-4">
                                 <div class="form-group">
                                     <label>Tipo de Obra/Serviço</label>
-                                    <select class="form-control select2 service_select" style="width: 100%;" name="servico" data-tipo="true" id="id_servico" required>
+                                    <select class="form-control select2 service_select" style="width: 100%;" name="servico" data-tipo="cadastrar" id="id_servico" required>
                                         <option value="">selecione a concessionaria</option>
                                     </select>
                                 </div>
@@ -72,9 +72,6 @@
                     </div>
                 </div>
             </div>
-            <!--
-            
-            -->
 
             <div class="box box-primary span_etapa" style="display:none;">
                 <div class="box-header">
@@ -87,8 +84,7 @@
                             <thead>
                                 <tr>
                                     <th>Nome</th>
-                                    <th>Variavel</th>
-                                    <th>Quantidade</th>
+                                    <th >Quantidade</th>
                                     <th>Tipo</th>
                                     <th>Preço Uni.</th>
                                     <th>Sub-Total</th>
@@ -97,7 +93,7 @@
                             <tbody id="id_sub_etapas">
                             </tbody>
                             <tr>
-                                <td colspan="4">Total </td>
+                                <td colspan="3">Total </td>
                                 <td colspan="1" id="total"> </td>
                                 <td id="totalSub"> </td>
                             </tr>
@@ -152,7 +148,6 @@
                         </div>
                     </div>
                 </div>
-
             </div>
 
             <div class="box box-primary result_null" style="display:none;">

@@ -32,10 +32,12 @@
                             <tbody>
                                 <?php foreach ($etapasConcessionaria as $etpObra) : ?>
                                     <?php include('modalEditarEtapa.php'); ?>
-
+                                   
                                     <tr>
                                         <td>
-                                            <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpObra['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/obra"><i class="ion ion-trash-a"></i></a>
+                                        <button class="btn btn-danger" data-toggle="popover" title="Remover?" data-content="<a href='<?php echo BASE_URL ?>concessionarias/delete_etapa/<?php echo $etpObra['id']; ?>/<?php echo $tableInfo['id_concessionaria']; ?>/<?php echo $tableInfo['id_servico']; ?>/obra  ' class='btn btn-danger'>Sim</a> <button type='button' class='btn btn-default pop-hide'>Não</button>">
+                                            <i class="ion ion-trash-a"></i>
+                                        </button>
                                             <a type="button" class="btn btn-info" onclick="modalEditar(<?php echo $etpObra['id']; ?>, 'Obr')"><i class="ion-android-create"></i></a>
                                         </td>
                                         <td><?php echo $etpObra['etp_nome']; ?></td>

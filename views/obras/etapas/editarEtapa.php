@@ -1,6 +1,11 @@
 <?php
 $check = 'danger';
 $msg = 'prazo';
+$nome = $this->user->getName();
+            
+$Iniciais = controller::Iniciais($nome);
+$data_hoje = date('d/m');
+
 ?>
 
 <div class="modal fade" id="editarEtapa<?php echo $array[0]['id_etapa_obra']; ?>" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
@@ -11,8 +16,6 @@ $msg = 'prazo';
         <input type="hidden" class="form-control" name="id_obra" autocomplete="off" value="<?php echo $array[0]['id_obra']; ?>">
         <input type="hidden" class="form-control" name="server" autocomplete="off" value="<?php echo (isset($_GET['tipo']) ? $_GET['tipo'] : '0') ?>">
         <input type="hidden" class="form-control" name="cliente" autocomplete="off" value="<?php echo $cliente; ?>">
-
-
 
         <div class="modal-dialog modal-lg">
           <div class="modal-content">
@@ -57,6 +60,13 @@ $msg = 'prazo';
                           </div>
                         </div>
 
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
                         <div class="col-md-4">
                           <div class="form-group">
                             <label>Cliente Responsável</label>
@@ -70,13 +80,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
                           </div>
                         </div>
-
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
                         <div class="col-md-12">
                           <div class="form-group">
                             <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?> </textarea>
                           </div>
                         </div>
+                        <?php endif;?>
 
 
                       <?php elseif ($array[0]['nome'] === 'COMPRA') : ?>
@@ -110,14 +121,20 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-
-
-                        <div class="col-md-12">
+                        <div class="col-md-3">
                           <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
                           </div>
                         </div>
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Observações do sistema</label>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
+                            </div>
+                          </div>
+                        <?php endif; ?>
 
                       <?php elseif ($array[0]['nome'] === 'CONCESSIONARIA') : ?>
                         <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
@@ -143,8 +160,15 @@ $msg = 'prazo';
                           </div>
                         </div>
 
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
 
-                        <div class="col-md-6">
+
+                        <div class="col-md-4">
                           <label>Prazo de Atendimento</label>
                           <div class="input-group">
                             <input type="text" class="form-control" value="<?php echo $array[0]['prazo_atendimento']; ?>" name="prazo_atendimento_concessionaria" id="prazo_atendimento_concessionaria" autocomplete="off">
@@ -155,7 +179,7 @@ $msg = 'prazo';
                             </div>
                           </div>
                         </div>
-
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
                         <div class="col-md-12" style="margin-bottom: 13px;margin-top:5px">
                           <div class="input-group">
                             <span class="input-group-addon">
@@ -166,22 +190,7 @@ $msg = 'prazo';
                           </div>
                           <!-- /input-group -->
                         </div>
-
-
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações</label>
-                            <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
-                          </div>
-                        </div>
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
-                          </div>
-                        </div>
+                        <?php endif; ?>
 
 
 
@@ -195,7 +204,7 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label>Responsável</label>
                             <input type="text" class="form-control" name="responsavel_obra" id="cliente_nome" value="<?php echo $array[0]['responsavel']; ?>" autocomplete="off">
@@ -216,7 +225,14 @@ $msg = 'prazo';
                           </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-2">
+                          <div class="form-group">
+                            <label>Data Meta</label>
+                            <input type="text" class="form-control" data-inputmask="'alias': 'dd/mm/yyyy'" data-mask="" name="meta_etapa" id="meta_etapa" value="<?php echo $array[0]['meta_etapa']; ?>" autocomplete="off">
+                          </div>
+                        </div>
+
+                        <div class="col-md-3">
                           <div class="form-group">
                             <label>Tempo de Atividade</label>
                             <input type="text" class="form-control" name="tempo_atividade_obra" id="tempo_atividade_obra" value="<?php echo $array[0]['tempo_atividade']; ?>" autocomplete="off">
@@ -229,13 +245,14 @@ $msg = 'prazo';
                             <input type="text" class="form-control" value="<?php echo $array[0]['observacao']; ?>" name="observacao" id="observacao" autocomplete="off">
                           </div>
                         </div>
-
-                        <div class="col-md-12">
-                          <div class="form-group">
-                            <label>Observações do sistema</label>
-                            <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?></textarea>
+                        <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+                          <div class="col-md-12">
+                            <div class="form-group">
+                              <label>Observações do sistema</label>
+                              <textarea type="text" class="form-control" name="observacao_sistema" id="observacao_sistema" autocomplete="off" rows="5" cols="33"><?php echo $array[0]['observacao_sistema']; ?>&#10;<?php echo $data_hoje.' ('.($Iniciais).')'; ?></textarea>
+                            </div>
                           </div>
-                        </div>
+                        <?php endif; ?>
 
 
                       <?php endif; ?>
@@ -285,7 +302,7 @@ $msg = 'prazo';
                           <div class="input-group-btn">
                             <div class="btn btn-default btn-file">
                               <i class="fa fa-paperclip"></i> PDF
-                              <input type="file" class="btn btn-success file_doc" name="documento_arquivo">
+                              <input type="file"  class="btn btn-success file_doc" name="documento_arquivo">
                             </div>
                           </div>
                         </div>
@@ -295,9 +312,11 @@ $msg = 'prazo';
                 </div>
               </div>
             </div>
-            <div class="modal-footer">
-              <button type="submit" class="btn btn-primary">Salvar</button>
-            </div>
+            <?php if($this->userInfo['user']->hasPermission('obra_edit')): ?>
+              <div class="modal-footer">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+              </div>
+            <?php endif; ?>
           </div>
         </div>
     </div>
@@ -317,5 +336,5 @@ $msg = 'prazo';
 
     });
 
-  })
+  });
 </script>

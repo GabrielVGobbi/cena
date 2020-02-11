@@ -41,10 +41,11 @@ class financeiroController extends controller
     {
         if ($this->user->hasPermission('financeiro_view')) {
             
-
-            $this->dataInfo['tableInfo'] = $this->financeiro->getFinanceirobyObra($id, $this->user->getCompany()); 
+       
+            $this->dataInfo['tableInfo'] = $this->financeiro->getFinanceirobyObra($id, $this->user->getCompany());
 
             if(count($this->dataInfo['tableInfo']) == 0){
+                
                 $_SESSION['form']['success'] = 'Oops!!';
                 $_SESSION['form']['type'] = 'error';
                 $_SESSION['form']['mensagem'] = "Não consta um financeiro desta obra, deseja criar?";
@@ -56,7 +57,18 @@ class financeiroController extends controller
                 exit();
             
             }else {
-                
+
+                $this->dataInfo['etapasFinanceiro'] = $this->financeiro->getEtapasFinanceiro($id);
+
+                $faturar = $this->financeiro->totalFaturamento($id, $this->user->getCompany(), FATURAR);
+
+                $this->dataInfo['totalFaturado'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), FATURADO);
+            
+                $this->dataInfo['totalFaturar'] =  intval($faturar);
+
+                $this->dataInfo['recebido'] = $this->financeiro->totalFaturado($id, $this->user->getCompany(), RECEBIDO);
+
+
                 $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
             }
             
@@ -66,103 +78,75 @@ class financeiroController extends controller
         }
     }
 
-    
-    public function edit($id)
-    {
+    public function deleteHistoricoFaturamento($id_historico, $id_his, $id_obra){
 
-        if ($this->user->hasPermission('financeiro_view') && $this->user->hasPermission('documento_edit')) {
+        if ($this->user->hasPermission('financeiro_view')) {
 
-            $this->dataInfo['tableInfo'] = $this->documento->getInfo($id, $this->user->getCompany());
+            
+            $result = $this->financeiro->deleteHistoricoFaturamento($id_historico, $this->user->getId(), $id_obra);
+            
+            header("Location: " . BASE_URL . "financeiro/obra/".$id_obra.'?hist='.$id_his);
+            exit();
 
-            if (isset($_POST['doc_nome']) && isset($_POST['id'])) {
-
-                $result = $this->painel->edit($_POST, $this->dataInfo['nome_tabela'], $this->user->getCompany());
-                $this->addValicao($result);
-
-                header('Location:' . BASE_URL . $this->dataInfo['pageController']);
-                exit();
-            }
-            $this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
         } else {
-
             $this->loadViewError();
         }
+
     }
 
-    public function add($id)
+    public function add($id_obra = 0)
     {
 
-        if ($this->user->hasPermission('financeiro_view') && $this->user->hasPermission('documento_edit')) {
+        if ($this->user->hasPermission('financeiro_view')) {
+            
+            $this->dataInfo['titlePage'] = 'Financeiro Adicionar';
 
-            $this->dataInfo['titlePage'] = 'Cadastro Financeiro/Obra';
+            $this->dataInfo['id_obra'] = $id_obra != 0 ? $id_obra : '0';
 
-            $this->dataInfo['tableInfo'] = $this->obra->getInfo($id, $this->user->getCompany());
+            if($this->dataInfo['id_obra'] != 0){
+                $verify = $this->financeiro->verifyFinanceiroObra($id_obra);
 
-            if (isset($_POST['doc_nome']) && isset($_POST['id'])) {
-
-                header('Location:' . BASE_URL . $this->dataInfo['pageController']);
-                exit();
+                if($verify){
+                    header('Location:' . BASE_URL . $this->dataInfo['nome_tabela'].'/obra/'.$this->dataInfo['id_obra']);
+                    exit(); 
+                }
             }
+
+            $this->dataInfo['obras'] = $this->obra->getAllByClear($this->user->getCompany());
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/cadastrar", $this->dataInfo);
-        } else {
 
+        } else {
+            $this->loadViewError();
+        }   
+
+    }
+
+    public function add_action(){
+        
+        if (isset($_POST['id_obra']) && $_POST['id_obra'] != '') {
+
+            $verify = $this->financeiro->verifyFinanceiroObra($_POST['id_obra']);
+
+            if($verify){
+                header('Location:' . BASE_URL . $this->dataInfo['pageController'].'/obra/'.$_POST['id_obra']);
+                exit(); 
+            }
+
+            $result = $this->financeiro->add($this->user->getCompany(), $_POST);
+
+            header('Location:' . BASE_URL . 'comercial/edit/'.$_POST['id_obra']);
+            exit();
+        
+        } else {
+            
             $this->loadViewError();
         }
     }
 
-    public function delete($id)
-    {
-
-        if ($this->user->hasPermission('financeiro_view') && $this->user->hasPermission('documento_delete')) {
-
-            $result = $this->documento->delete($id, $this->user->getCompany());
-
-            header("Location: " . BASE_URL . $this->dataInfo['pageController']);
-
-            if ($result) {
-                $this->dataInfo['success'] = 'true';
-                $this->dataInfo['mensagem'] = "Exclusão feita com sucesso!!";
-            } else {
-                $this->dataInfo['error'] = 'true';
-                $this->dataInfo['mensagem'] = "Não foi possivel excluir!";
-            }
-        } else {
-            $this->loadViewError();
-        }
-    }
-
-    public function importar(){
-
-        if(isset($_POST)){
-
-            $id = [];
-
-            foreach ($_POST['documentos'] as $doc) {
-                $id[] = $doc;
-            }
+    
 
 
-            $this->documento->gerarWinrarEmail($id);
-
-        }
-
-    }
 
 
-    public function addValicao($result)
-    {
-
-        if ($result == 'sucess') {
-            $_SESSION['form']['success'] = 'Success';
-            $_SESSION['form']['type'] = 'success';
-            $_SESSION['form']['mensagem'] = "Efetuado com sucesso!!";
-        } elseif ($result == 'error') {
-            $_SESSION['form']['success'] = 'Oops!!';
-            $_SESSION['form']['type'] = 'error';
-            $_SESSION['form']['mensagem'] = "Algo deu Errado, Contate o administrador do sistema";
-        }
-
-        return $_SESSION['form'];
-    }
 }

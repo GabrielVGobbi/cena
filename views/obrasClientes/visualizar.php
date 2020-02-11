@@ -1,6 +1,6 @@
 <?php
 
-$documento_obra = $this->documento->getDocumentoObra($obr[0]);
+$documento_obra = $this->documento->getDocumentoObra($obr['id_obra']);
 
 ?>
 
@@ -8,7 +8,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 	<div class="nav-tabs-custom">
 
 			<div class="tab-content">
-				<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr[0]; ?>">
+				<input type="hidden" class="form-control" name="id" id="id" autocomplete="off" value="<?php echo $obr['id_obra']; ?>">
 				<div class="box box-default box-solid">
 					<div class="row">
 						<div class="col-md-12">
@@ -106,7 +106,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 										<i class="fa fa-wrench"></i>
 									</button>
 									<ul class="dropdown-menu" role="menu">
-										<li><a href="<?php echo BASE_URL;?>obras/gerar/<?php echo $obr[0];?>">Gerar Winrar</a></li>
+										<li><a href="<?php echo BASE_URL;?>obras/gerar/<?php echo $obr['id_obra'];?>">Gerar Winrar</a></li>
 
 									</ul>
 								</div>
@@ -153,7 +153,7 @@ $documento_obra = $this->documento->getDocumentoObra($obr[0]);
 	$('#select-etapas').on('change', function() {
 		var tipo = $("#select-etapas option:selected").val();
 
-		window.location.href = BASE_URL + 'home/visualizar/<?php echo $obr[0]; ?>?tipo=' + tipo;
+		window.location.href = BASE_URL + 'home/visualizar/<?php echo $obr['id_obra']; ?>?tipo=' + tipo;
 
 
 	});

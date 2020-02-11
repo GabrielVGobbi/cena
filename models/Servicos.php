@@ -224,9 +224,9 @@ class Servicos extends model
 
 
 			if ($sql->execute()) {
-				controller::alert('success', 'Excel Foi importado!!');
+				controller::alert('success', 'ok');
 			} else {
-				controller::alert('error', 'Não foi possivel fazer o cadastro da obra, Contate o administrador do sistema!!');
+				controller::alert('error', 'erro');
 			}
 		} catch (PDOExecption $e) {
 			$sql->rollback();
@@ -239,16 +239,16 @@ class Servicos extends model
 
 	public function updateEtapa($Parametros, $id_company, $id_user)
 	{
-
 		if ($Parametros['checked'] == 1) {
 
 			$check = 1;
 			$status = 6;
+		
 		} else {
 			$status = 5;
-
 			$check = 0;
 		}
+
 
 		$sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
@@ -264,12 +264,26 @@ class Servicos extends model
 		$sql->bindValue(':id_obra',   $Parametros['id_obra']);
 		$sql->bindValue(':id_status',   $status);
 
-
 		$sql->execute();
 
 		if ($check == 1) {
 
 			$array = array();
+
+			$sql = $this->db->prepare("UPDATE historico_financeiro  SET
+
+				histf_id_status 		= :id_status
+
+				WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+
+			");
+
+			$sql->bindValue(':id',   $Parametros['id_etapa']);
+			$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+			$sql->bindValue(':id_status',   $status);
+
+
+			$sql->execute();
 
 			$sql = $this->db->prepare("SELECT * FROM 
 				obra_etapa obrt 
@@ -297,9 +311,30 @@ class Servicos extends model
 					'link' => BASE_URL . 'obras/edit/' . $Parametros['id_obra']
 				);
 
+				return true;
+
 				//$this->notificacao->insert($id_company, $ParametrosNotificacao);
 			}
+		} else {
+
+			$sql = $this->db->prepare("UPDATE historico_financeiro  SET
+
+				histf_id_status 		= :id_status
+
+				WHERE (id_etapa = :id) AND (id_obra = :id_obra)
+
+			");
+
+			$sql->bindValue(':id',   $Parametros['id_etapa']);
+			$sql->bindValue(':id_obra',   $Parametros['id_obra']);
+			$sql->bindValue(':id_status',   $status);
+
+			$sql->execute();
+
+			return true;
+
 		}
+		$this->db = null;
 	}
 
 	public function validacao($id_company, $nome)

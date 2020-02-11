@@ -12,6 +12,8 @@ class controller
 		$u = new Users;
 		$u->setLoggedUser();
 		$p = new Painel;
+		$this->financeiro = new Financeiro('');
+		$this->chat = new Chat();
 
 		$this->array = array();
 
@@ -23,9 +25,12 @@ class controller
 		);
 	}
 
+
 	public function loadView($viewName, $viewData = array())
 	{
 		extract($viewData);
+
+
 		include 'views/' . $viewName . '.php';
 	}
 
@@ -33,6 +38,18 @@ class controller
 	{
 		extract($viewData);
 
+		$recebido = array();
+
+		$total_recebido = 0;
+
+		$recebido = $this->financeiro->getPendentesRecebido();
+
+
+		if($recebido){
+			$total_recebido = count($recebido);
+		}
+
+			
 		include 'views/template.php';
 	}
 
@@ -53,7 +70,7 @@ class controller
 		$_SESSION['alert']['mensagem'] = $mensagem;
 		$_SESSION['alert']['tipo'] = $tipo;
 
-		return $_SESSION['alert'];
+		return $_SESSION;
 	}
 
 	public static function ReturnValor($valor)
@@ -68,6 +85,7 @@ class controller
 	public static function PriceSituation($valor)
 	{
 
+		$valor = ltrim($valor);
 		$valor = trim($valor);
 		$valor = str_replace(' ', '', $valor);
 		$valor = str_replace('R$', '', $valor);
@@ -80,9 +98,14 @@ class controller
 
 	public static function returnDate($valor)
 	{
+		if($valor != '' ){
 
-		$valor = trim($valor);
-		$valor = str_replace('/', '-', $valor);
+			$valor = trim($valor);
+			$valor = str_replace('/', '-', $valor);
+			$valor = date_create($valor);
+			$valor = date_format($valor, 'd-m-Y');
+		}
+
 
 
 		return $valor;
@@ -118,8 +141,12 @@ class controller
 		return $mobile;
 	}
 
-	public  static function SomarData($data, $dias, $meses = 0, $ano = 0)
+	public  static function SomarData($data, $dias = 0, $meses = 0, $ano = 0)
 	{
+		if($dias == ''){
+			$dias = 0;
+		}
+
 		if ($data != '') {
 			//passe a data no formato dd-mm-yyyy
 			//yyyy-mm-dd
@@ -130,21 +157,42 @@ class controller
 		}
 	}
 
-	public function loadEtapaByTipo($id, $cliente)
+	public function loadEtapaByTipo($id, $cliente, $variavel = array(), $verify = array())
 	{
 		$etp = new Etapa('etapas');
 
-		$array = $etp->getIdEtapaObra($id);
 
+		$array = $etp->getIdEtapaObra($id);
+		
+		$variavel = $variavel;
+
+		$verify = $verify;
+		
 		$nome_tela = strtolower($array[0]['nome']);
 
 		include 'views/obras/etapas/' . $nome_tela . '.php';
+
 		include "views/obras/etapas/editarEtapa.php";
+	}
+
+	public function getVariavelbtEtapa($id_etapa, $id_obra){
+
+		$etp = new Etapa('etapas');
+
+		return $etp->getVariavelByEtapa($id_etapa, $id_obra);	
+
+	}
+
+	public function getVerifyComercial($id_etapa, $id_obra){
+
+		$etp = new Etapa('etapas');
+
+		return $etp->getVerifyComercial($id_etapa, $id_obra);	
+
 	}
 
 	public function loadEtapaCheck($id_etapa,$ordem, $id_obra, $tipo, $etp)
 	{
-
 
 		$check = $this->etapa->check($ordem, $id_obra, $tipo);
 
@@ -209,15 +257,15 @@ class controller
 				
 			}else {
 			
-				$check = 'warning';
-				$msg = 'não foi definido prazo';
+				$check = 'none';
+				$msg = '';
 				
 			}
 			
 			include 'views/obras/tempo.php';
 
 		}else {
-	
+	 
 			
 		}
 
@@ -316,4 +364,31 @@ class controller
 		return $valor != '' ? number_format($valor, 2, ',', '.') : '';
 
 	}
+
+	public function getVariavelByEtapa($id_etapa, $id_obra){
+
+		$etp = new Etapa('');
+		$array = array();
+
+		$array = $etp->getVariavelByEtapa($id_etapa, $id_obra);
+
+		return $array;
+
+	}
+
+	public function getVariavelByIdEtapa($id_etapa){
+
+
+	}
+
+	public function Iniciais($nome,$minusculas = true){
+		$nome = ucWords(strtolower($nome)); #ESSA LINHA
+        preg_match_all('/\s?([A-Z])/',$nome,$matches);
+        $ret = implode('',$matches[1]);
+        return $minusculas?
+		strtoupper($ret) :
+                $ret;
+	}
+
+	
 }

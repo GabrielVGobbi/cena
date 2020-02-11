@@ -73,8 +73,6 @@ class concessionariasController extends controller
                 unset($_SESSION['formError']);
             }
 
-            
-
             $this->dataInfo['servico']    = $this->servico->getAll('0', '', $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = 'Cadastro de Concessionaria';
@@ -131,11 +129,19 @@ class concessionariasController extends controller
         if ($this->user->hasPermission('concessionaria_view') && $this->user->hasPermission('concessionaria_edit')) {
 
             
-            $this->dataInfo['tableInfo']                    = $this->concessionaria->getConcessionariaByService($id, $id_servico, $this->user->getCompany());
+            $this->dataInfo['tableInfo'] = $this->concessionaria->getConcessionariaByService($id, $id_servico, $this->user->getCompany());
 
             $this->dataInfo['titlePage'] = $this->dataInfo['tableInfo']['razao_social'] . ' x ' . $this->dataInfo['tableInfo']['sev_nome'];
 
             $this->dataInfo['fluid'] = true;
+
+            if(isset($_POST['nome_etapa'])){
+                $this->etapa->edit($this->user->getCompany(), $_POST);
+
+                header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/editService' . '/' . $_POST['id_concessionaria'] . '/' . $_POST['id_servico'] . '?tipo=' . 'compra');
+                exit();
+                
+            }
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/edit_servico", $this->dataInfo);
         } else {
@@ -244,4 +250,19 @@ class concessionariasController extends controller
             $this->loadViewError();
         }
     }
+
+    public function duplicarEtapa(){
+
+		$etp = new Etapa('');
+        $array = array();
+        
+        if(isset($_POST)){
+            $Parametros = $_POST;
+        }
+
+        $etp->duplicarEtapaByServicoxConcessionaria($Parametros);
+        
+        header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit' . '/' . $Parametros['id_concessionaria']);
+        exit();
+	}
 }

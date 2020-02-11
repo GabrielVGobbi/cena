@@ -29,7 +29,7 @@
 												<th style="width: 10%;">Ações</th>
 												<th>ID</th>
 												<th>Nome da Obra</th>
-												<th>Responsável</th>
+												<th>Cliente</th>
 												<th>Concessionaria</th>
 												<th>Serviço</th>
 												<th style="width: 10%;" class="text-center">Status</th>
@@ -43,7 +43,7 @@
 													</td>
 													<td><?php echo $inf['id_obra'] ?></td>
 													<td><?php echo $inf['obr_razao_social'] ?></td>
-													<td><?php echo $inf['cliente_responsavel'] ?></td>
+													<td><?php echo $inf['cliente_nome'] ?></td>
 													<td><?php echo $inf['razao_social'] ?></td>
 													<td><?php echo $inf['sev_nome'] ?></td>
 													<td class="text-center">

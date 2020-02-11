@@ -29,7 +29,6 @@ class ClientesController extends controller
 
     public function index()
     {
-
         if ($this->user->hasPermission('cliente_view')) {
 
             if (isset($_GET['filtros'])) {
@@ -47,7 +46,7 @@ class ClientesController extends controller
             $offset = (10 * ($this->dataInfo['p'] - 1));
 
             $this->dataInfo['tableDados'] = $this->cliente->getAll($offset, $this->filtro, $this->user->getCompany());
-            $this->dataInfo['getCount']   = !empty($this->dataInfo['tableDados']) ? $this->cliente->getCount($this->user->getCompany()) : '0';            
+            $this->dataInfo['getCount']   = !empty($this->dataInfo['tableDados']) ? $this->cliente->getCount($this->filtro,$this->user->getCompany()) : '0';            
             $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
             $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);
@@ -77,15 +76,11 @@ class ClientesController extends controller
 
             if(!$validator){
                 
-                $result = $this->cliente->add($_POST,$this->user->getCompany());
-                
-                $this->addValicao($result);
-
+                $this->cliente->add($_POST,$this->user->getCompany());
+            
             }else {
                 controller::alert('warning', 'Já existe um cliente com esse nome');
-
             }
-
 
             header('Location:' . BASE_URL . 'clientes');
             exit();
@@ -103,6 +98,7 @@ class ClientesController extends controller
             $this->dataInfo['tableInfo'] = $this->cliente->getClienteById($id, $this->user->getCompany());
 
             if (isset($_POST['cliente_nome']) && isset($_POST['id_cliente'])) {
+
 
                 $result = $this->cliente->edit($_POST, $this->user->getCompany());
                 

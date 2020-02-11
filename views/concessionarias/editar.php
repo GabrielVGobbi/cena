@@ -41,7 +41,7 @@
 										<table class="table table-striped">
 											<thead>
 												<tr>
-													<th style="width: 10%">Ações</th>
+													<th style="width: 15%">Ações</th>
 													<th>#</th>
 													<th>Nome do Serviço</th>
 													<th style="width: 240px">&nbsp;</th>
@@ -49,15 +49,21 @@
 											</thead>
 											<tbody>
 												<?php foreach ($servicos_concessionaria as $scon) : ?>
+													<?php include("modalDuplicar.php"); ?>
 													<tr>
 														<td>
 															<a type="button" data-toggle="tooltip" title="" data-original-title="Tarefas" class="btn btn-info" href="<?php echo BASE_URL; ?>concessionarias/editService/<?php echo $tableInfo['id']; ?>/<?php echo $scon['id']; ?>"><i class="ion ion-clipboard"></i></a>
-															<a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL ?>servicos/delete/<?php echo $scon['id']; ?>"><i class="ion ion-trash-a"></i></a>
+															<!-- <a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php #echo BASE_URL 
+																																												?>servicos/delete/<?php #echo $scon['id']; 
+																																																						?>"><i class="ion ion-trash-a"></i></a>-->
+
 														</td>
 														<td><?php echo $scon['id']; ?></td>
 														<td><?php echo $scon['sev_nome']; ?></td>
 														<td></td>
 													</tr>
+
+
 												<?php endforeach; ?>
 											</tbody>
 										</table>
@@ -86,11 +92,17 @@
 				<button type="submit" class="btn btn-primary">Salvar</button>
 				<a href="<?php echo BASE_URL; ?>concessionarias" class="btn btn-danger">Voltar</a>
 			</div>
-
+		</form>
 	</div>
-	</form>
-
-
 </div>
 
 </div>
+
+
+
+<script>
+	function openImport(id) {
+
+		$('#modalImportar' + id).modal('toggle');
+	}
+</script>

@@ -9,7 +9,8 @@ class Painel extends model
         $this->retorno = array();
     }
 
-    public function insert($arr, $tabela, $id_company)
+    
+    public function insert_painel($arr, $tabela, $id_company)
     {
         $certo = true;
         $nome_tabela = $tabela;
@@ -110,8 +111,12 @@ class Painel extends model
 
 
             if($sql->execute()){
+                $this->db = null;
+
                 return true;
             }else { 
+                $this->db = null;
+               
                 return false;
             }
         
@@ -271,6 +276,41 @@ class Painel extends model
         }
 
        
+
+    }
+
+    public function scriptdata(){
+
+        $array = array();
+        $sql = $this->db->prepare(
+            "    SELECT data_vencimento FROM historico_faturamento
+            
+            ");
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $array = $sql->fetchALL();
+
+        
+            foreach($array as $k){
+
+                $data_vencimento = str_replace('/', '-', $k['data_vencimento']);
+
+                $data_vencimento =  date('Y-d-m', strtotime($data_vencimento));
+
+                $sql = $this->db->prepare(
+                    "UPDATE historico_faturamento  SET
+							data_vencimento = :dat
+				");
+                $sql->bindValue(":dat",$data_vencimento);
+
+
+                $sql->execute();
+                   
+            }
+
+        }
 
     }
 

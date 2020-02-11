@@ -9,15 +9,8 @@
 					<button class="btn btn-sm btn-info pop" onclick="openFiltro('<?php echo $viewData['pageController']; ?>')">
 						<i class="glyphicon glyphicon-search"></i>
 					</button>
-					<?php if ($this->user->hasPermission('documento_view') && $this->user->hasPermission('documento_add')) : ?>
-						<button class="btn btn-sm btn-info pop" data-toggle="modal" data-target="#modalCadastro">
-							<i class="fa fa-fw fa-plus-circle"></i>
-						</button>
-					<?php endif; ?>
+					
 					<a href="<?php echo BASE_URL; ?>documentos" type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></a>
-					<a data-toggle="modal" data-target="#modalImportar" class="btn btn-default btn-sm"><i class="fa fa-fw fa-file-code-o"></i></a>
-
-
 				</div>
 			</div>
 		</div>
@@ -61,14 +54,12 @@
 						</tbody>
 					<?php else : ?>
 						<tr>
-							<td style="width: 50%;text-align: center;"> Não foram encontrados resultados </td>
+							<td style="width: 50%;text-align: center;"> Selecione a obra ou cliente </td>
 						</tr>
 					<?php endif; ?>
 				</table>
 			</div>
-			<div class="pull-left" style="right: 10px;">
-				<p> Quantidade de documentos: <?php echo $getCount; ?> </p>
-			</div>
+		
 		</div>
 		<div class="box-footer no-padding">
 			<div class="mailbox-controls">
