@@ -17,6 +17,7 @@ class Chat extends model
 		if ($sql->rowCount() > 0) {
 			$this->chat = $sql->fetchALL();
 		}
+		#11
 	}
 
 	public function getMensage()
