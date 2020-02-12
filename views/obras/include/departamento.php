@@ -3,16 +3,13 @@
         <div class="row">
             <div class="col-md-12">
                 <div class="box-header with-border">
-                    <h3 class="box-title">Cliente</h3>
+                    <h3 class="box-title">Cliente "<?php echo $obr['cliente_apelido']; ?>"</h3>
                 </div>
                 <?php if (($obr['id_departamento'] != 0)) : ?>
 
                     <div class="box-body" style="">
-                        <div class="col-md-3" style="margin-bottom:6px;">
-                            <label>Cliente</label>
-                            <input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $obr['cliente_apelido']; ?>" autocomplete="off">
-                        </div>
-                        <div class="col-md-3" style="margin-bottom:6px;">
+                        
+                        <div class="col-md-3" style="margin-bottom:6px;margin-top:2px">
                             <div class="form-group">
                                 <label>Departamento</label>
 
@@ -28,8 +25,13 @@
                         </div>
 
                         <div class="col-md-3" style="margin-bottom:6px;">
-                            <label>Telefone</label>
-                            <input type="text" class="form-control" disabled name="departamento_telefone" id="departamento_telefone" autocomplete="off">
+                            <label>Telefone Fixo</label>
+                            <input type="text" class="form-control" disabled name="departamento_telefone_fixo" id="departamento_telefone_fixo" autocomplete="off">
+                        </div>
+
+                        <div class="col-md-3" style="margin-bottom:6px;">
+                            <label>Telefone Celular</label>
+                            <input type="text" class="form-control" disabled name="departamento_telefone_celular" id="departamento_telefone_celular" autocomplete="off">
                         </div>
 
                         <div class="col-md-3" style="margin-bottom:6px;">
@@ -42,11 +44,8 @@
                     </div>
                 <?php else : ?>
 
-                    <div class="col-md-3" style="margin-bottom:6px;">
-                        <label>Cliente</label>
-                        <input type="text" class="form-control" disabled name="cliente_nome" id="cliente_nome" value="<?php echo $obr['cliente_apelido']; ?>" autocomplete="off">
-                    </div>
-                    <div class="col-md-3" style="margin-bottom:6px;">
+                   
+                    <div class="col-md-3" style="margin-bottom:6px;margin-top:2px">
                         <div class="form-group">
                             <label>Departamento</label>
 
@@ -78,10 +77,16 @@
                     </div>
 
 
-                    <div class="col-md-3" style="margin-bottom:6px; ">
-                        <label>Telefone</label>
-                        <input type="text" class="form-control" disabled name="departamento_telefone" id="departamento_telefone" autocomplete="off">
+                    <div class="col-md-3" style="margin-bottom:6px;">
+                        <label>Telefone Fixo</label>
+                        <input type="text" class="form-control" disabled name="departamento_telefone_fixo" id="departamento_telefone_fixo" autocomplete="off">
                     </div>
+
+                    <div class="col-md-3" style="margin-bottom:6px;">
+                        <label>Telefone Celular</label>
+                        <input type="text" class="form-control" disabled name="departamento_telefone_celular" id="departamento_telefone_celular" autocomplete="off">
+                    </div>
+
 
                     <div class="col-md-3" style="margin-bottom:6px; ">
                         <label>Email</label>
@@ -103,9 +108,12 @@
 
         $('#cliente_departamento').change(function() {
             $('#departamento_email').val('');
-            $('#departamento_telefone').val('');
+            $('#departamento_telefone_celular').val('');
+            $('#departamento_telefone_fixo').val('');
 
-            $("#departamento_telefone").css("display", "none");
+
+            $("#departamento_telefone_celular").css("display", "none");
+            $("#departamento_telefone_fixo").css("display", "none");
             $("#departamento_email").css("display", "none");
 
             getDep();
@@ -115,7 +123,7 @@
 
             var departamento_selecionado = $('.deptSelecionado').select2('data');
 
-            if(departamento_selecionado)
+            if (departamento_selecionado)
                 var id_departamento = departamento_selecionado[0].id;
 
             if (id_departamento != '') {
@@ -130,11 +138,15 @@
                     dataType: 'json',
                     success: function(json) {
 
-                        $("#departamento_telefone").css("display", "flex");
+                        $("#departamento_telefone_celular").css("display", "flex");
+                        $("#departamento_telefone_fixo").css("display", "flex");
+
                         $("#departamento_email").css("display", "flex");
 
                         $('#departamento_email').val(json.dep_email);
-                        $('#departamento_telefone').val(json.dep_telefone_celular);
+                        $('#departamento_telefone_celular').val(json.dep_telefone_celular);
+                        $('#departamento_telefone_fixo').val(json.dep_telefone_fixo);
+
                     },
                 });
             }

@@ -14,18 +14,18 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 <html>
 
 <head>
-<!-- Global site tag (gtag.js) - Google Analytics -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=UA-93575432-1"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-93575432-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
 
-  function gtag() {
-    dataLayer.push(arguments);
-  }
-  gtag('js', new Date());
+    function gtag() {
+      dataLayer.push(arguments);
+    }
+    gtag('js', new Date());
 
-  gtag('config', 'UA-93575432-1');
-</script>
+    gtag('config', 'UA-93575432-1');
+  </script>
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title><?php echo $title; ?></title>
@@ -327,6 +327,31 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
       </div>
 
   </aside>
+
+
+
+  <aside class=" control-sidebar-dark control-sidebar-open" style="display:none;position: absolute;top: 0;right: 5px;width: 21%;margin-top: 100px;max-height: 531px;">
+    <ul class="nav nav-tabs nav-justified control-sidebar-tabs">
+      <li><a href="#control-sidebar-settings-tab" data-toggle="tab"><i class="fa fa-gears"></i></a></li>
+    </ul>
+    <div class="tab-content">
+      <div class="tab-pane" id="control-sidebar">
+        
+      </div>
+    </div>
+  </aside>
+
+
+
+
+
+
+
+
+
+
+
+
 
   <?php if (isset($_SESSION['alert']) && !empty($_SESSION['alert'])) : ?>
     <script>
