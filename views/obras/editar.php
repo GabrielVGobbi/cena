@@ -75,7 +75,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 								<div class="col-md-12" style="margin-bottom:6px;">
 									<label>Descrição da Obra</label>
-									<input type="text" class="form-control" name="descricao" id="descricao" value="<?php echo $obr['descricao']; ?>" autocomplete="off" >
+									<input type="text" class="form-control" name="descricao" id="descricao" value="<?php echo $obr['descricao']; ?>" autocomplete="off">
 								</div>
 							</div>
 
@@ -175,7 +175,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 				</div>
 			</div>
 		</div>
-		<div class="modal-footer">
+		<div class="modal-footer" id="visto">
 			<div type="submit" id="formobra" class="btn btn-primary">Salvar</div>
 			<a href="<?php echo BASE_URL; ?>obras" class="btn btn-danger">Voltar</a>
 
@@ -191,7 +191,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 				</label>
 
 				<label class="popver_myList" style="margin-right: 17px;">
-					<input type="checkbox" id="checkMyListObra"  class="checkbox_desgn" name="timeline-photo" value="">
+					<input type="checkbox" id="checkMyListObra" class="checkbox_desgn" name="timeline-photo" value="">
 					<span>
 						<span class="icon unchecked">
 							<span class="mdi mdi-check"></span>
@@ -200,6 +200,17 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 					</span>
 				</label>
 
+				<?php if (isset($_GET['notId']) && $_GET['notId'] != '') : ?>
+					<label class="popver_visto" style="margin-right: 17px;">
+						<input type="checkbox" id="checkvistoObra" class="checkbox_desgn" name="timeline-photo" value="">
+						<span>
+							<span class="icon unchecked">
+								<span class="mdi mdi-check"></span>
+							</span>
+							Visto
+						</span>
+					</label>
+				<?php endif; ?>
 			</div>
 		</div>
 
@@ -225,9 +236,17 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			placement: 'top'
 		});
 
+		$('.popver_visto').webuiPopover({
+			content: 'Marque para visualizar a obra',
+			trigger: 'hover',
+			placement: 'top'
+		});
+
 		list_image();
 		getListObra();
-
+		<?php if (isset($_GET['notId']) && ($_GET['notId']) != '') : ?>
+			getVistoObra();
+		<?php endif; ?>
 
 
 		var myDropzone = new Dropzone(".dropzone", {
@@ -362,6 +381,32 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			}
 		})
 	});
+	<?php if (isset($_GET['notId']) && $_GET['notId'] != '') : ?>
+		$('#checkvistoObra').click(function() {
+			var checked = ($('#checkvistoObra').is(':checked')) ? '1' : '0';
+			var notId = <?php echo $_GET['notId']; ?>;
+			$.ajax({
+				url: BASE_URL + "ajax/checkvistoObra",
+				method: "POST",
+				dataType: 'json',
+
+				data: {
+					checked: checked,
+					notId: notId
+				},
+				success: function(data) {
+					checked == 1 ? toastr.success('obra vista') : toastr.warning('obra desvista');
+
+				},
+				error: function() {
+					toastr.error('Contate o administrador do sistema, Erro CHECKVISTO1');
+					$("#checkMyListObra").prop('checked', false);
+
+
+				}
+			})
+		});
+	<?php endif; ?>
 
 	function getListObra() {
 		var id_obra = <?php echo $obr['id_obra']; ?>;
@@ -373,7 +418,7 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 				id_obra: id_obra
 			},
 			success: function(data) {
-				
+
 				data.urgencia == 1 ? $("#checkUrgenciaObra").prop('checked', true) : $("#checkUrgenciaObra").prop('checked', false);
 				data.atv == 1 ? $("#checkMyListObra").prop('checked', true) : $("#checkMyListObra").prop('checked', false);
 			},
@@ -382,6 +427,31 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 			}
 		})
 	};
+	<?php if (isset($_GET['notId']) && $_GET['notId'] != '') : ?>
+
+		function getVistoObra() {
+			var id_obra = <?php echo $obr['id_obra']; ?>;
+			var notId = <?php echo $_GET['notId']; ?>;
+
+			$.ajax({
+				url: BASE_URL + "ajax/getVistoObra",
+				method: "GET",
+				dataType: 'json',
+				data: {
+					id_obra: id_obra,
+					notId: notId
+				},
+				success: function(data) {
+
+					data.lido == 1 ? $("#checkvistoObra").prop('checked', true) : $("#checkvistoObra").prop('checked', false);
+
+				},
+				error: function() {
+
+				}
+			})
+		};
+	<?php endif; ?>
 
 	$(function() {
 
@@ -390,4 +460,23 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 		});
 
 	});
+
+	<?php if (isset($_GET['visto'])) : ?>
+
+
+		$(document).ready(rolar_para);
+
+		function rolar_para() {
+
+			$('html, body').animate({
+				scrollTop: 50000,
+
+			}, 1200);
+
+			setTimeout(function() {
+				$('.popver_visto').webuiPopover('show')
+			}, 1100);
+
+		}
+	<?php endif; ?>
 </script>

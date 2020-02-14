@@ -516,6 +516,19 @@ class ajaxController extends controller
         echo json_encode($data);
         exit;
     }
+    public function getToDo()
+    {
+
+        $u = new Users();
+        $u->setLoggedUser();
+        $data = array();
+
+        $not = new Notificacao('notificacao');
+
+        $data = $not->getAllTodoByUsuario($this->user->getId());
+
+        echo json_encode($data);
+    }
 
     public function getIdEtapaObra($id_etapa_obra)
     {
@@ -642,6 +655,21 @@ class ajaxController extends controller
         exit;
     }
 
+    public function checkToDo()
+    {
+
+        $a = new Notificacao('notificacao');
+
+
+        if (isset($_POST['id_not_user']) && !empty($_POST['id_not_user'])) {
+
+            $id = $a->checkToDo($_POST['id_not_user'],  $this->id_user,$_POST['lido'] );
+        }
+
+        echo json_encode($id);
+        exit;
+    }
+
     public function checkUrgenceObra()
     {
 
@@ -650,6 +678,22 @@ class ajaxController extends controller
         if (isset($_POST['id_obra']) && !empty($_POST['id_obra'])) {
 
             $id = $o->checkUrgenceObra($_POST['checked'], $_POST['id_obra'], $this->user->getCompany(), $this->user->getId());
+        }
+        if ($id != false) {
+            echo json_encode($id);
+        }
+
+        exit;
+    }
+
+    public function checkvistoObra()
+    {
+
+        $o = new Obras();
+
+        if (isset($_POST['notId']) && !empty($_POST['notId'])) {
+
+            $id = $o->checkvistoObra($_POST['checked'], $_POST['notId'], $this->user->getCompany(), $this->user->getId());
         }
         if ($id != false) {
             echo json_encode($id);
@@ -682,6 +726,23 @@ class ajaxController extends controller
         if (isset($_GET['id_obra']) && !empty($_GET['id_obra'])) {
 
             $id = $o->getListObra($_GET['id_obra'], $this->user->getId());
+        }
+
+        if ($id != false) {
+            echo json_encode($id);
+        }
+
+        exit;
+    }
+
+    public function getVistoObra()
+    {
+
+        $o = new Obras();
+        $id = false;
+        if (isset($_GET['id_obra']) && !empty($_GET['id_obra'])) {
+
+            $id = $o->getVistoObra($_GET['id_obra'],$_GET['notId'], $this->user->getId());
         }
 
         if ($id != false) {

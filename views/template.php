@@ -122,35 +122,11 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
             <div class="navbar-custom-menu">
               <ul class="nav navbar-nav">
                 <li class="dropdown messages-menu">
-                  <a href="#" class="dropdown-toggle drop-notific" data-toggle="dropdown" aria-expanded="false">
+                  <a href="<?php echo BASE_URL;?>notificacao" class="dropdown-toggle drop-notific">
                     <i class="fa fa-bell-o"></i>
                     <span class="label label-success notificacao-mensagem "></span>
                   </a>
-                  <ul class="dropdown-menu" style="width:310px;">
-                    <li class="header notificacao-mensagem-header"></li>
-                    <li>
-                      <ul class="menu">
-                        <?php
-                        foreach ($this->userInfo['notificacao'] as $not) :
-                          $propriedades = json_decode($not['propriedades']);
-                          $tempo = controller::diferenca($not['data_notificacao']);
-
-                        ?>
-                          <li>
-                            <a onclick="lerMensagem('<?php echo $not['id_not_user']; ?>','<?php echo $not['link']; ?>')" style="cursor: pointer">
-                              <h4>
-                                <?php echo $not['notificacao_tipo']; ?>
-                                <small><i class="fa fa-clock-o"></i> <?php echo $tempo; ?></small>
-                              </h4>
-                              <p><?php echo '"' . $propriedades->msg . '"'; ?></p>
-                              <p> <?php echo 'Por ' . $not['nome_usuario']; ?></p>
-                            </a>
-                          </li>
-                        <?php endforeach; ?>
-                      </ul>
-                    </li>
-                    <li class="footer"><a href="<?php echo BASE_URL; ?>notificacao">Ver todas</a></li>
-                  </ul>
+                 
                 </li>
 
                 <li class="dropdown messages-menu">
@@ -380,11 +356,11 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
         type: 'POST',
         dataType: 'json',
         success: function(json) {
-
-
-          if (json['qtn'] > 0) {
-            $('.notificacao-mensagem').html(json['qtn']);
-            $('.notificacao-mensagem-header').html('Você tem ' + json['qtn'] + ' Notificações Pendente<a href="<?php echo BASE_URL; ?>notificacao/lertudo">ler tudo</a>');
+        
+          if (json.quantidade > 0) {
+            $('.notificacao-mensagem').html(json.quantidade);
+            $(".notificacao-mensagem").addClass("fa-blink")
+            
 
 
           } else {
@@ -560,8 +536,12 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 
   <script src="<?php echo BASE_URL; ?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
+<script>
+  <?php if($this->userInfo['notificacao']['quantidade'] != '0' ): ?>
+      setInterval("verificarNotificacao()", 10000);
+  <?php endif; ?>
 
-
+</script>
   <script type="text/javascript">
     var save_method; //for save method string
 
@@ -569,6 +549,10 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 
       setInterval("getMensageNaoLidas()", 10000)
       setInterval("getMensage()", 10000)
+      
+      
+
+
 
       $('#table').on('length.dt', function(e, settings, len) {
         localStorage.setItem('max_obras', len);
@@ -581,6 +565,8 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
 
       $(document).ready(getMensage());
       $(document).ready(getMensageNaoLidas());
+      $(document).ready(verificarNotificacao());
+
       $(document).ready(function() {
 
         var filtro = <?php echo json_encode($_GET); ?>;

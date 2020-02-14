@@ -21,7 +21,7 @@ class controller
 		$this->userInfo = array(
 			'userName' 	  	=> $u->getInfo($u->getId(), $u->getCompany()),
 			'user'			=> $u,
-			'notificacao'   => $u->getNotificacao($u->getId(), $u->getCompany())
+			'notificacao'   => $u->verificarMensagem($u->getCompany(),$u->getId())
 		);
 	}
 

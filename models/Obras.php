@@ -801,6 +801,33 @@ class Obras extends model
 		}
 	}
 
+	public function getNameObra($id)
+	{
+		$Parametros = [
+			'id' => $id
+		];
+
+		$nome = array();
+
+		if (isset($id) && $id != '') {
+
+			$sql = $this->db->prepare("SELECT obr_razao_social FROM obra
+				
+				
+				WHERE id = :id_obra LIMIT 1
+        	");
+
+			$sql->bindValue(":id_obra", $id);
+			$sql->execute();
+
+			if ($sql->rowCount() == 1) {
+				$nome = $sql->fetch();
+			}
+	
+			return $nome['obr_razao_social'];
+		}
+	}
+
 	public function desconcluir($id, $id_company)
 	{
 		$Parametros = [
@@ -961,6 +988,42 @@ class Obras extends model
 
 			return $id;
 		}
+	}
+
+	public function checkvistoObra($checked, $id_not_user, $id_company, $id_user)
+	{
+
+		$sql = $this->db->prepare("UPDATE notificacao_usuario  SET
+
+			lido = :lido
+
+			WHERE (id_user = :id_user) AND (id_not_user = :id_not_user)
+        ");
+
+		$sql->bindValue(":id_not_user", $id_not_user);
+		$sql->bindValue(":id_user", $id_user);
+		$sql->bindValue(":lido", $checked);
+
+		if($sql->execute())
+			return $id_not_user;
+		
+	}
+
+	
+
+	public function getVistoObra($id_obra, $id_not, $id_user)
+	{
+
+		$array = [];
+
+		$sql = $this->db->prepare("SELECT * FROM notificacao_usuario  WHERE
+				id_not_user = :id_not LIMIT 1
+        ");
+
+		$sql->bindValue(":id_not", $id_not);
+		$sql->execute();
+
+		return $sql->rowCount() == 1 ? $sql->fetch() : false;
 	}
 
 	public function getListObra($id_obra, $id_user)

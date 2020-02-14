@@ -46,7 +46,7 @@ class NotificacaoController extends controller
         $this->dataInfo['getCount']   = $this->notificacao->getCount($this->user->getCompany());
         $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
-        $this->dataInfo['toDo'] = $this->notificacao->getAllTodoByUsuario($this->user->getId());
+        
 
 
         $this->loadTemplate($this->dataInfo['pageController'] . "/index", $this->dataInfo);

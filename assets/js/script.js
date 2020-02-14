@@ -188,10 +188,10 @@ $(function () {
             type: 'POST',
             data: data,
             dataType: 'json',
-            
+
             success: function (json) {
-               getMensage();
-               $('input[name="message"]').val('')
+                getMensage();
+                $('input[name="message"]').val('')
 
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -581,12 +581,120 @@ function getMensageNaoLidas() {
     $.ajax({
         url: BASE_URL + "ajax/getMensageNaoLidas",
         success: function (data) {
-            
+
             $('.titlemensagem').html(data);
-            $('.titlemensagem').attr('data-original-title', data+' Nova(s) Mensagen(s)');
+            $('.titlemensagem').attr('data-original-title', data + ' Nova(s) Mensagen(s)');
+
+            if(data > 0 ){
+                $("#chat").addClass("fa-blink")
+
+            }else {
+                $("#chat").removeClass("fa-blink")
+            }
 
         }
     });
+}
+
+function getToDo(id_user) {
+    var id_user = id_user
+    var BASE_URL = 'http://www.landsolucoes.com.br/';
+
+    $.ajax({
+        url: BASE_URL + 'ajax/getToDo',
+        type: "GET",
+        dataType: "JSON",
+        success: function (j) {
+            var options = '';
+
+            if (j.length != 0) {
+                for (var i = 0; i < j.length; i++) {
+
+                    var string = j[i].tar_descricao
+                    var length = 40;
+                    var trimmedString = string != null ? string.substring(0, length) + '' : '';
+
+                    var obj = j[i].tar_dataJson != null ? JSON.parse(j[i].tar_dataJson) : '';
+                    var obra = obj.type != null && obj.type == 'newObra' ? BASE_URL + "obras/edit/" + obj.id_obra : '';
+                    var check = j[i].lido == 1 ? 'checked'  : '';
+                    
+
+                    //$json->type == 'newObra' ? BASE_URL."obras/edit/".$json->id_obra : '#'
+
+                    options += '<li>';
+                    options += ' <label class="popver_urgencia" data-target="">';   
+                    if(obj.type == 'newObra'){
+                        var checked = ($('#checkToDo'+ j[i].id_not_user).is(':checked')) ? 'false' : 'true';
+
+                        options += ' <a href="' + obra + '?visto='+checked+'&notId=' + j[i].id_not_user + '">';
+                    }
+                    
+                    options += '     <input  type="checkbox" id="checkToDo' + j[i].id_not_user + '" '+check+'  onclick="checkToDo(' + j[i].id_not_user + ',' + j[i].id_user + ',' + j[i].lido + ')" class="checkbox_desgn"   ' + j[i].tar_lido + '  name="timeline-photo" value="">';
+                    
+                    options += '     <span style="    display: initial">'
+                    options += '         <span class="icon unchecked">';
+                    options += '             <span class="mdi mdi-check"></span>';
+                    options += '         </span>';
+                    options += '     </span>';
+                    if(obj.type == 'newObra'){
+                        options += ' </a>';
+
+                    }
+
+                    options += ' </label>';
+
+                    options += ' <a href="' + obra + '">';
+                    options += '<span class="text"> ' + j[i].tar_titulo + '  </span>'
+                    options += '</a>';
+                    options += ' <small>  ' + trimmedString + ' </small>';
+
+                    if (j[i].created_by == id_user) {
+                        options += ' <div class="tools">';
+                        options += '     <i class="fa fa-edit"></i>';
+                        options += '     <i class="fa fa-trash-o"></i>';
+                    }
+                    options += ' </div>';
+                    options += '</li>';
+
+                }
+
+                $('#toDoDiv').html(options).show();
+
+            } else {
+
+            }
+            
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            toastr.error('Erro contate o administrador - CODTODOG1');
+        },
+    });
+
+}
+function checkToDo(id_not_user, id_user, lido) {
+    var lido = lido == 1 ? '0' : '1';
+    var checked = ($('#checkToDo'+ id_not_user).is(':checked')) ? '1' : '0';
+    
+    $.ajax({
+
+        url: BASE_URL + 'ajax/checkToDo',
+        type: 'POST',
+        data: {
+            id_not_user: id_not_user,
+            lido: lido
+        },
+        taType: 'json',
+        success: function (json) {
+            $(document).ready(getToDo(id_user));
+            (checked == 1 ? toastr.success('Lista Concluida') : toastr.error('Lista Desconcluida'));
+
+
+        },
+        error: function (xhr, ajaxOptions, thrownError) {
+            toastr.error('Erro contate o administrador CODTODOCHECKLIST1');
+        }
+    });
+
 }
 
 

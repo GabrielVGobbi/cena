@@ -31,7 +31,7 @@ class Chat extends model
 
 		$r = 0;
 
-		$sql = $this->db->prepare("SELECT COUNT(*) AS count FROM notificacao_usuario WHERE id_user = :id_user AND lido = 0");
+		$sql = $this->db->prepare("SELECT COUNT(*) AS count FROM notificacao_usuario WHERE id_user = :id_user AND lido = 0 AND id_notificacao IS NOT NULL");
 		$sql->bindValue(":id_user", $id_user);
 
 		$sql->execute();
@@ -51,7 +51,7 @@ class Chat extends model
 				"UPDATE notificacao_usuario SET 
 							
 					lido = '1'
-					WHERE id_user = :id_user
+					WHERE id_user = :id_user AND id_notificacao IS NOT NULL
 				"
 			);
 
@@ -112,4 +112,6 @@ class Chat extends model
 			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
 		}
 	}
+
+	
 }

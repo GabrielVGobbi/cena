@@ -572,6 +572,32 @@ class Users extends model
 
 	public function verificarMensagem($id_company, $id_user)
 	{
+		$array = array();
+		$sql = $this->db->prepare("SELECT * FROM notificacao_usuario notfu
+		
+			INNER JOIN tarefas tarf ON (tarf.id_tarefa = notfu.id_tarefa)
+			INNER JOIN users usr ON (usr.id = notfu.id_user) 
+
+			WHERE  notfu.lido = '0' AND notfu.id_user = :id_user ORDER BY id_not_user DESC");
+
+		$sql->bindValue(':id_user', $id_user);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+
+			$array = $sql->fetchAll();
+
+			$array += ['quantidade' => $sql->rowCount()];
+
+		} else { 
+			$array += ['quantidade' => 0];
+
+		}
+		return $array;
+	}
+
+	public function getNotificacao($id_user, $id_company)
+	{
 		$sql = $this->db->prepare("SELECT *, notf.id AS id_notific FROM notificacao_usuario notfu
 		INNER JOIN notificacoes notf ON (notf.id = notfu.id_notificacao)
 		INNER JOIN users usr ON (usr.id = notfu.id_user) 
@@ -591,26 +617,7 @@ class Users extends model
 		}
 
 		return $array;
-	}
-
-	public function getNotificacao($id_user, $id_company)
-	{
-		$array = array();
-		$sql = $this->db->prepare("SELECT * FROM notificacao_usuario notfu
 		
-			INNER JOIN notificacoes notf ON (notf.id = notfu.id_notificacao)
-			INNER JOIN users usr ON (usr.id = notfu.id_user) 
-
-			WHERE notf.id_company = :id_company AND notfu.lido = '0' AND notfu.id_user = :id_user ORDER BY notf.id DESC");
-
-		$sql->bindValue(':id_company', $id_company);
-		$sql->bindValue(':id_user', $id_user);
-		$sql->execute();
-
-		if ($sql->rowCount() > 0) {
-			$array = $sql->fetchAll();
-		}
-		return $array;
 	}
 
 	public function getUserCliente($id_cliente, $id_company){

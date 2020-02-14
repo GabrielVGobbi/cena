@@ -10,3 +10,6 @@ str_replace('Â ','', $valor_proposta);
 
 //remover o check 
 $("#checkUrgenciaObra").prop('checked', false); 
+
+//limitar o texto com ...
+mb_strimwidth("Hello World", 0, 10, "...");

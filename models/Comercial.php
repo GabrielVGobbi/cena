@@ -7,6 +7,11 @@ class Comercial extends model
 		$this->array = array();
 		$this->retorno = array();
 		$this->tabela = $nomeTabela;
+
+		$this->user = new Users();
+		$this->notificacao = new Notificacao('notificacao');
+
+
 	}
 	public function getAll($offset, $filtro, $id_company)
 	{
@@ -460,6 +465,9 @@ class Comercial extends model
 
 					if ($id_status == APROVADA) {
 						$this->updateEtapaCompraObra($Parametros['id']);
+
+						$this->notificacao->addToDoNewObra($Parametros, $id_company,  $this->user->getId(), 'newObra');
+
 					}
 
 					return $Parametros['id'];

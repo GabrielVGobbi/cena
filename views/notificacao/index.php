@@ -3,65 +3,65 @@
 $data_hoje = date('Y-m-d h:i:s');
 
 ?>
-<div class="col-xs-7">
-<section class="content">
+<div class="col-xs-7"> <h1> em teste </h1>
+	<section class="content">
 
-      <!-- row -->
-      <div class="row">
-        <div class="col-md-12">
-          <!-- The time line -->
-          <ul class="timeline">
-			
-			
-            <!-- aqui -->
-			
-			<li class="time-label">
-                  <span class="bg-red">
-                    10 Fev. 2014
-                  </span>
-            </li>
-            <li>
-              <i class="fa fa-file-pdf-o bg-blue"></i>
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                <h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-              </div>
-			</li>
+		<!-- row -->
+		<div class="row">
+			<div class="col-md-12">
+				<!-- The time line -->
+				<ul class="timeline">
 
-			<li>
-              <i class="fa fa-file-pdf-o bg-blue"></i>
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                <h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-              </div>
-			</li>
 
-			<li>
-              <i class="fa fa-file-pdf-o bg-blue"></i>
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                <h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-              </div>
-			</li>
+					<!-- aqui -->
 
-			<li>
-              <i class="fa fa-file-pdf-o bg-blue"></i>
-              <div class="timeline-item">
-                <span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-                <h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-              </div>
-			</li>
-			
-			
-            <!-- aqui -->
-            
-          </ul>
-        </div>
-      </div>
+					<li class="time-label">
+						<span class="bg-red">
+							10 Fev. 2014
+						</span>
+					</li>
+					<li>
+						<i class="fa fa-file-pdf-o bg-blue"></i>
+						<div class="timeline-item">
+							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
+						</div>
+					</li>
 
-      
+					<li>
+						<i class="fa fa-file-pdf-o bg-blue"></i>
+						<div class="timeline-item">
+							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
+						</div>
+					</li>
 
-    </section>
+					<li>
+						<i class="fa fa-file-pdf-o bg-blue"></i>
+						<div class="timeline-item">
+							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
+						</div>
+					</li>
+
+					<li>
+						<i class="fa fa-file-pdf-o bg-blue"></i>
+						<div class="timeline-item">
+							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
+							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
+						</div>
+					</li>
+
+
+					<!-- aqui -->
+
+				</ul>
+			</div>
+		</div>
+
+
+
+	</section>
 </div>
 
 
@@ -70,44 +70,29 @@ $data_hoje = date('Y-m-d h:i:s');
 	<div class="box box-primary">
 		<div class="box-header ui-sortable-handle" style="cursor: ;">
 			<i class="ion ion-clipboard"></i>
-			<h3 class="box-title">To Do Lista</h3>
+			<h3 class="box-title">Lista</h3>
 			<div class="box-tools pull-right">
-				<ul class="pagination pagination-sm inline">
+				<!--<ul class="pagination pagination-sm inline">
 					<li><a href="#">«</a></li>
 					<li><a href="#">1</a></li>
 					<li><a href="#">2</a></li>
 					<li><a href="#">3</a></li>
 					<li><a href="#">»</a></li>
-				</ul>
+				</ul>-->
 			</div>
 		</div>
 		<div class="box-body">
-			<ul class="todo-list ui-sortable">
-				<?php foreach ($toDo as $tar ): ?>
-					<li>
-						<span class="handle ui-sortable-handle">
-							<i class="fa fa-ellipsis-v"></i>
-							<i class="fa fa-ellipsis-v"></i>
-						</span>
-						<input type="checkbox" value="">
-						<span class="text"><?php echo $tar['tar_titulo']; ?> </span>
-						<small class="label label-danger"><i class="fa fa-clock-o"> </i> <?php echo $tar['tar_prazo']; ?> dias </small>
-						<div class="tools">
-							<i class="fa fa-edit"></i>
-							<i class="fa fa-trash-o"></i>
-						</div>
-					</li>
-				<?php endforeach; ?>
+			<ul class="todo-list ui-sortable" id="toDoDiv">
+				
 			</ul>
 		</div>
 		<div class="box-footer clearfix no-border">
-			<button type="button" class="btn btn-default pull-right"><i class="fa fa-plus"></i> </button>
 		</div>
 	</div>
 </div>
-
-
-
+<script>
+	$(document).ready(getToDo(<?php echo $this->user->getId() ?>));
+</script>
 
 
 

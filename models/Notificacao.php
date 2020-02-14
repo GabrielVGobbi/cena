@@ -20,10 +20,10 @@ class Notificacao extends model
 	{
 
 		$sql = "SELECT * FROM  
-					tarefas_usuario tafUsu
-				INNER JOIN users usr ON (usr.id = tafUsu.id_user)
-				INNER JOIN tarefas tar ON  (tar.id_tarefa = tafUsu.id_tarefa)
-				WHERE id_user = {$id_user}
+					notificacao_usuario notFi
+				INNER JOIN users usr ON (usr.id = notFi.id_user)
+				INNER JOIN tarefas tar ON  (tar.id_tarefa = notFi.id_tarefa)
+				WHERE id_user = {$id_user} AND notFi.id_tarefa IS NOT NULL AND lido <> 1
 			";
 
 		$sql = $this->db->prepare($sql);
@@ -55,7 +55,6 @@ class Notificacao extends model
 		$sql = $this->db->prepare($sql);
 
 		$this->bindWhere($filtro, $sql);
-
 		$sql->execute();
 
 		if ($sql->rowCount() > 0) {
@@ -70,7 +69,8 @@ class Notificacao extends model
 
 		$where = array(
 			'usr.id_company=' . $id,
-			'notifu.id_user=' . $id_user
+			'notifu.id_user=' . $id_user,
+			'notifu.id_notificacao IS NOT NULL' 
 		);
 
 		if (!empty($filtro['Notificacao'])) {
@@ -192,16 +192,40 @@ class Notificacao extends model
 	public function ler($id_notificao, $id_user)
 	{
 
+
 		$sql = $this->db->prepare(
 			"UPDATE notificacao_usuario SET 
 					
 			lido = '1'
+			WHERE id_not_user = :id AND id_user = :id_user AND id_notificacao IS NOT NULL
+	    "
+		);
+
+		$sql->bindValue(":id", $id_notificao);
+		$sql->bindValue(":id_user", $id_user);
+
+
+		$sql->execute();
+
+		return $id_notificao;
+	}
+
+	public function checkToDo($id_notificao, $id_user, $lido)
+	{
+
+		
+		$sql = $this->db->prepare(
+			"UPDATE notificacao_usuario SET 
+					
+			lido = :lido
 			WHERE id_not_user = :id AND id_user = :id_user
 	    "
 		);
 
 		$sql->bindValue(":id", $id_notificao);
 		$sql->bindValue(":id_user", $id_user);
+		$sql->bindValue(":lido", $lido);
+
 
 
 		$sql->execute();
@@ -216,7 +240,7 @@ class Notificacao extends model
 			"UPDATE notificacao_usuario SET 
 					
 			lido = '1'
-			WHERE id_user = :id_user
+			WHERE id_user = :id_user AND id_notificacao IS NOT NULL 
 	    "
 		);
 
@@ -224,5 +248,102 @@ class Notificacao extends model
 		$sql->execute();
 
 		return true;
+	}
+
+
+	public function addToDoNewObra($Parametros, $id_company, $id_user, $type)
+	{
+
+		$u = new Users();
+		$u->setLoggedUser();
+		$obr = new Obras();
+
+		$json = array();
+		$json['type'] = $type;
+		$json['id_obra'] = $Parametros['id'];
+
+		$nomeObra = $obr->getNameObra($Parametros['id']);
+
+		$tar_titulo = 'Nova Obra';
+		$tar_descricao = $nomeObra .' criado por '.$u->getName();
+		$tar_prioridade = 'ALTA';
+		$tar_prazo = '';
+		$tar_dataJson = json_encode($json,1);
+
+		try {
+			$datenow = date('Y-m-d H:i:s', strtotime('-1 Hours'));
+
+			$sql = $this->db->prepare("INSERT INTO tarefas SET 
+				tar_titulo = :tar_titulo,
+				tar_descricao = :tar_descricao,
+				tar_prazo = :tar_prazo,
+				tar_prioridade = :tar_prioridade,
+				tar_dataJson = :tar_dataJson,
+
+				created_date = :datenow
+			");
+
+			$sql->bindValue(":tar_titulo", 	$tar_titulo);
+			$sql->bindValue(":tar_descricao", $tar_descricao);
+			$sql->bindValue(":tar_prazo", $tar_prazo);
+			$sql->bindValue(":tar_dataJson", $tar_dataJson);
+			$sql->bindValue(":tar_prioridade", $tar_prioridade);
+
+			$sql->bindValue(":datenow", $datenow);
+
+			if ($sql->execute()) {
+
+				$id_tarefa = $this->db->lastInsertId();
+
+				$u = new Users();
+
+				$arrayUsuario = $u->getList(0, '', 1);
+
+				foreach ($arrayUsuario as $usu) {
+
+					$id_user_add = $usu['id'];
+
+					$sql = $this->db->prepare("INSERT INTO notificacao_usuario SET 
+						id_user = :id_user,
+						id_tarefa = :id_tarefa
+					");
+
+					$sql->bindValue(":id_tarefa", $id_tarefa);
+					$sql->bindValue(":id_user", $id_user_add);
+
+					$sql->execute();
+				}
+			}
+
+			return $id_tarefa;
+
+		} catch (PDOExecption $e) {
+
+			$sql->rollback();
+			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+		}
+	}
+
+	public function concluirToDo($Parametros, $id_user){
+
+
+		$lido = $lido;
+
+		$id_obra = '';
+
+		$sql = $this->db->prepare("UPDATE notificacao_usuario  SET
+
+			lido = :lido
+
+			WHERE (id_user = :id_user) AND (id_obra = :id_obra)
+
+		");
+
+		$sql->bindValue(':lido',   $lido);
+		$sql->bindValue(':id_obra',   $id_obra);
+		$sql->bindValue(':id_user',   $id_user);
+		$sql->execute();
+
+
 	}
 }
