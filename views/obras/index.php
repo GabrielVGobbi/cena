@@ -6,7 +6,7 @@ require_once("cadastrar.php");
 
 ?>
 
-<div class="col-xs-12">
+<div class="col-xs-8">
 	<div class="box box-primary">
 		<div class="box-header with-border">
 			<h3 class="box-title"><?php echo ucfirst($viewData['pageController']); ?></h3>
@@ -98,8 +98,34 @@ require_once("cadastrar.php");
 		<?php endif; ?>
 	</div>
 
+	<div class="col-xs-4">
+	<div class="box box-primary">
+		<div class="box-header ui-sortable-handle" style="cursor: ;">
+			<i class="ion ion-clipboard"></i>
+			<h3 class="box-title">Lista</h3>
+			<div class="box-tools pull-right">
+				<!--<ul class="pagination pagination-sm inline">
+					<li><a href="#">«</a></li>
+					<li><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">»</a></li>
+				</ul>-->
+			</div>
+		</div>
+		<div class="box-body">
+			<ul class="todo-list ui-sortable" id="toDoDiv">
+				
+			</ul>
+		</div>
+		<div class="box-footer clearfix no-border">
+		</div>
+	</div>
+</div>
+
 
 	<script>
+	$(document).ready(getToDo(<?php echo $this->user->getId() ?>));
 		<?php if (isset($_GET['id']) && $_GET['id'] != '') : ?>
 
 			$(function() {
@@ -116,3 +142,4 @@ require_once("cadastrar.php");
 			});
 		});
 	</script>
+

@@ -43,7 +43,9 @@ class obrasController extends controller
         if ($this->user->hasPermission('obra_view')) {
             $this->dataInfo['concessionaria'] = $this->concessionaria->getAll('', $this->user->getCompany());
             $this->dataInfo['servico'] = $this->servico->getAll('0', '', $this->user->getCompany());
+            $this->dataInfo['fluid'] = true;
             $this->loadTemplate($this->dataInfo['pageController'] . "/lista", $this->dataInfo);
+            
         } else {
             $this->loadViewError();
         }

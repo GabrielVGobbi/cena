@@ -598,7 +598,7 @@ function getMensageNaoLidas() {
 
 function getToDo(id_user) {
     var id_user = id_user
-    var BASE_URL = 'http://www.landsolucoes.com.br/';
+    var BASE_URL = 'http://www2.cena.com.br/';
 
     $.ajax({
         url: BASE_URL + 'ajax/getToDo',
