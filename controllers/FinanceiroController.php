@@ -32,7 +32,33 @@ class financeiroController extends controller
     public function index()
     {
 
-        $this->loadTemplate('obras', $this->dataInfo);
+        if (isset($_GET['filtros'])) {
+            $this->filtro = $_GET['filtros'];
+        }
+
+        $this->dataInfo['p'] = 1;
+        if (isset($_GET['p']) && !empty($_GET['p'])) {
+            $this->dataInfo['p'] = intval($_GET['p']);
+            if ($this->dataInfo['p'] == 0) {
+                $this->dataInfo['p'] = 1;
+            }
+        }
+
+        $offset = (10 * ($this->dataInfo['p'] - 1));
+
+        $this->dataInfo['tableDados'] = $this->financeiro->getAllObrasFinanceiro($this->user->getCompany(), $offset);
+        
+        $this->dataInfo['getCount']   = $this->financeiro->getAllCountFinanceiroObra($this->user->getCompany());
+        $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
+
+        $this->dataInfo['tableTotal'] = $this->financeiro->totalTudo($this->user->getCompany());
+
+
+
+
+
+
+        $this->loadTemplate('financeiro/index', $this->dataInfo);
 
     }
 

@@ -113,6 +113,10 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
                 <!--<li class="active"><a href="<?php echo BASE_URL; ?>documentos">Documentos <span class="sr-only">(current)</span></a></li>-->
               <?php endif; ?>
 
+              <?php if ($this->userInfo['user']->hasPermission('financeiro_view')) : ?>
+                <li class="active"><a href="<?php echo BASE_URL; ?>financeiro">Financeiro <span class="sr-only">(current)</span></a></li>
+              <?php endif; ?>
+
             </ul>
 
           </div>
@@ -537,7 +541,7 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
   <script src="<?php echo BASE_URL; ?>assets/js/validateJquery/dist/jquery.validate.min.js"></script>
 
 <script>
-  <?php if($this->userInfo['notificacao']['quantidade'] != '0' ): ?>
+  <?php if(isset($this->userInfo['notificacao']['quantidade']) && $this->userInfo['notificacao']['quantidade'] != '0' ): ?>
       setInterval("verificarNotificacao()", 10000);
   <?php endif; ?>
 

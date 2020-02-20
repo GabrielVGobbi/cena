@@ -21,15 +21,15 @@ CREATE SCHEMA IF NOT EXISTS `landsoluces` DEFAULT CHARACTER SET utf8 ;
 -- -----------------------------------------------------
 -- Schema new_schema2
 -- -----------------------------------------------------
-USE `landsoluces` ;
 
 -- -----------------------------------------------------
 -- Table `landsoluces`.`veiculos`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `landsoluces`.`veiculos` (
+CREATE TABLE IF NOT EXISTS `veiculos` (
   `id_veiculo` INT NOT NULL AUTO_INCREMENT,
   `nome_veiculo` VARCHAR(255) NULL,
   `placa_veiculo` VARCHAR(55) NULL,
+  `seguro_veiculo` VARCHAR(3) NULL,
   `observacoes_veiculo` VARCHAR(555) NULL,
   PRIMARY KEY (`id_veiculo`))
 ENGINE = InnoDB;
@@ -38,7 +38,7 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `landsoluces`.`veiculos atividade`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `landsoluces`.`veiculos atividade` (
+CREATE TABLE IF NOT EXISTS `veiculos atividade` (
   `id_vei_atv` INT NOT NULL AUTO_INCREMENT,
   `id_atividade` VARCHAR(255) NULL,
   `id_veiculo` VARCHAR(55) NULL,
@@ -53,9 +53,9 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 -- Table `landsoluces`.`atividade`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `landsoluces`.`atividade` (
+CREATE TABLE IF NOT EXISTS `atividade` (
   `id_atividade` INT NOT NULL AUTO_INCREMENT,
-  `usuario_id` INT NULL DEFAULT ID do funcionario (Tabela Usuario),
+  `usuario_id` INT NULL DEFAULT "ID do funcionario (Tabela Usuario)",
   `km_inicial` VARCHAR(55) NULL,
   `km_final` VARCHAR(55) NULL,
   `data_atividade` DATE NULL,
@@ -67,3 +67,10 @@ ENGINE = InnoDB;
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+INSERT INTO `cena`.`permission_params` (`name`) VALUES ('veiculos_edit');
+INSERT INTO `cena`.`permission_params` (`name`) VALUES ('veiculos_add');
+INSERT INTO `cena`.`permission_params` (`name`) VALUES ('veiculos_delete');
+INSERT INTO `cena`.`permission_params` (`name`) VALUES ('veiculos_view');
+
+

@@ -3,6 +3,8 @@
 class Financeiro extends model
 {
 
+    private $dados;
+
     public function __construct($nomeTabela)
     {
         parent::__construct();
@@ -14,6 +16,26 @@ class Financeiro extends model
         $this->painel = new Painel();
 
         $this->tabela = $nomeTabela;
+    }
+    
+
+    public function getAllCountFinanceiroObra($id_company)
+    {
+
+        $r = 0;
+        $sql = $this->db->prepare("  SELECT COUNT(obr.id) as c FROM financeiro_obra fin
+            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE obr.id_status = 3 AND obr.atv<>2 AND obr.id_company = :id_company
+        ");
+        $sql->bindValue(':id_company', $id_company);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+        }
+
+        $r = $row['c'];
+
+        return $r;
     }
 
 
@@ -36,11 +58,49 @@ class Financeiro extends model
 
         if ($sql->rowCount() == 1) {
             $this->array = $sql->fetch();
-                        
-
-
         }
         return $this->array;
+    }
+
+    public function getAllObrasFinanceiro($id_company, $offset)
+    {
+        $sql = $this->db->prepare("
+            SELECT fin.valor_negociado,obr.obr_razao_social,obr.id as id_obra FROM financeiro_obra fin
+            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE obr.id_status = 3 AND obr.atv<>2 LIMIT {$offset}, 10 
+        ");
+
+        $sql->execute();
+        $total_receber = 0;
+        if ($sql->rowCount() > 0) {
+            $obrT = array();
+            $this->dados = $sql->fetchAll();
+
+            foreach ($this->dados as $obr) {
+
+                $obr['recebido'] = 0;
+                $obr['faturar']  = 0;
+                $obr['receber']  = 0;
+                $obr['faturado'] = 0;
+
+
+
+                $id_obra = $obr['id_obra'];
+
+                $obr['recebido'] += $this->totalFaturado($id_obra, 1, RECEBIDO);
+                $obr['faturar'] += $this->totalFaturamento($id_obra, 1, FATURAR);
+                $obr['receber'] += $this->totalReceber($id_obra);
+                $obr['faturado'] += $this->totalFaturado($id_obra, 1, FATURADO);
+
+
+
+                $obrT[] = $obr;
+            }
+
+
+            $this->dados = $obrT;
+        }
+
+        return $this->dados;
     }
 
     public function edit($id_company, $Parametros)
@@ -94,7 +154,6 @@ class Financeiro extends model
 
         if ($sql->rowCount() > 0) {
             $this->retorno = $sql->fetchAll();
-
         }
 
         return $this->retorno;
@@ -102,23 +161,168 @@ class Financeiro extends model
 
     public function totalFaturamento($id_obra, $id_company, $status)
     {
+        $faturar = 0;
+        $r = 0;
+
+        if ($status == FATURAR) {
+
+            $sql = $this->db->prepare("SELECT * FROM historico_financeiro where histf_id_status = 6 AND id_obra = :id_obra AND id_company = :id_company");
+            $sql->bindValue(':id_company', $id_company);
+            $sql->bindValue(':id_obra', $id_obra);
+            $sql->execute();
+
+            if ($sql->rowCount() > 0) {
+
+                $sql->execute();
+                $ArrayFinanceiro = $sql->fetchALL();
+
+                foreach ($ArrayFinanceiro as $fin) {
+                    $r = 0;
+                    $histf_id = $fin['histf_id'];
+
+                    $valor_receber = $fin['valor_receber'];
+
+                    $sql = $this->db->prepare("SELECT SUM(valor) as faturar FROM historico_faturamento WHERE histf_id = {$histf_id} AND status <> 1");
+                    $sql->execute();
+                    if ($sql->rowCount() == 1) {
+                        $row = $sql->fetch();
+                        $r = $row['faturar'];
+                    }
+
+                    $faturar += $valor_receber - $r;
+                }
+                return $faturar;
+            }
+        } else {
+
+            $r = 0;
+            $sql = $this->db->prepare("SELECT SUM(valor_receber) AS c FROM historico_financeiro WHERE id_company = :id_company AND id_obra = :id_obra AND (histf_id_status = {$status})");
+            $sql->bindValue(':id_company', $id_company);
+            $sql->bindValue(':id_obra', $id_obra);
+
+            $sql->execute();
+
+            if ($sql->rowCount() > 0) {
+                $row = $sql->fetch();
+            }
+
+            $r = $row['c'];
+
+            return $r;
+        }
+    }
+
+    public function totalReceber($id_obra)
+    {
+
 
         $r = 0;
-        $sql = $this->db->prepare("SELECT SUM(valor_receber) AS c FROM historico_financeiro WHERE id_company = :id_company AND id_obra = :id_obra AND (histf_id_status = {$status})");
-        $sql->bindValue(':id_company', $id_company);
+        $sql = $this->db->prepare("SELECT SUM(valor) as c FROM historico_faturamento hisfat WHERE id_obra = :id_obra AND recebido_status = 0 AND hisfat.status <> 1");
         $sql->bindValue(':id_obra', $id_obra);
+        $sql->execute();
 
+        if ($sql->rowCount() == 1) {
+            $row = $sql->fetch();
+        }
+
+        $r = $row['c'];
+
+        return $r;
+    }
+
+    public function totalTudo($id_company)
+    {
+
+        $somaTotal = [
+            'recebido' => 0,
+            'valor_negociado' => 0,
+            'valor_receber' => 0,
+            'liberado_a_faturar' => 0,
+            'saldo' => 0,
+            'faturar' => 0,
+            'faturado' => 0
+
+        ];
+        //faturado
+        $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND histf.status <> 1 ");
+        $sql->bindValue(':id_company', $id_company);
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
             $row = $sql->fetch();
-                        
+            $faturado = $row['c'];
+            $somaTotal['faturado'] = controller::number_format($row['c']);
+        }
+
+        //recebido
+        $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND recebido_status = '1' AND histf.status <> 1 ");
+        $sql->bindValue(':id_company', $id_company);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+            $somaTotal['recebido'] = controller::number_format($row['c']);
+        }
+
+        //a receber
+        $sql = $this->db->prepare("SELECT SUM(valor) as c FROM historico_faturamento hisfat WHERE  recebido_status = 0 AND hisfat.status <> 1");
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+            $somaTotal['valor_receber'] = controller::number_format($row['c']);
+        }
+
+        //faturar 
+        $sql = $this->db->prepare("SELECT * FROM historico_financeiro where histf_id_status = 6 AND id_company = :id_company");
+        $sql->bindValue(':id_company', $id_company);
+        $sql->execute();
+        $faturar = 0;
+        if ($sql->rowCount() > 0) {
+
+            $sql->execute();
+            $ArrayFinanceiro = $sql->fetchALL();
+
+            foreach ($ArrayFinanceiro as $fin) {
+                $r = 0;
+                $histf_id = $fin['histf_id'];
+
+                $valor_receber = $fin['valor_receber'];
+
+                $sql = $this->db->prepare("SELECT SUM(valor) as faturar FROM historico_faturamento WHERE histf_id = {$histf_id} AND status <> 1");
+                $sql->execute();
+                if ($sql->rowCount() == 1) {
+                    $row = $sql->fetch();
+                    $r = $row['faturar'];
+                }
+
+                $faturar += $valor_receber - $r;
+            }
+
+            $somaTotal['faturar'] = controller::number_format($faturar);
+        }
+
+
+        //valor de todos negociado
+        $sql = $this->db->prepare("SELECT SUM(valor_negociado) as c FROM financeiro_obra fin
+        INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE obr.id_status = 3 AND obr.atv<>2 AND obr.id_company = :id_company");
+        $sql->bindValue(':id_company', $id_company);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+
+            $somaTotal['saldo'] = controller::number_format(($row['c'] - $faturado));
+
+            $somaTotal['valor_negociado'] = controller::number_format($row['c']);
 
 
         }
 
-        $r = $row['c'];
-        return $r;
+
+
+
+        return $somaTotal;
     }
 
     public function totalFaturado($id_obra, $id_company, $status)
@@ -126,8 +330,9 @@ class Financeiro extends model
 
         $r = 0;
 
+
         if ($status == RECEBIDO) {
-            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND recebido_status = :recebido_status ");
+            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND recebido_status = :recebido_status AND histf.status <> 1 ");
             $sql->bindValue(':id_company', $id_company);
             $sql->bindValue(':id_obra', $id_obra);
             $sql->bindValue(':recebido_status', 1);
@@ -141,30 +346,25 @@ class Financeiro extends model
 
             $r = $row['c'];
 
-                        
+
 
 
             return $r;
-        }else {
-            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND histf.status <> 1");
+        } else {
+            $sql = $this->db->prepare("SELECT SUM(valor) AS c FROM historico_faturamento histf WHERE id_company = :id_company AND id_obra = :id_obra AND histf.status <> 1 ");
             $sql->bindValue(':id_company', $id_company);
             $sql->bindValue(':id_obra', $id_obra);
-    
+
             $sql->execute();
-    
+
             if ($sql->rowCount() > 0) {
                 $row = $sql->fetch();
-                            
-
-
             }
-    
+
             $r = $row['c'];
-    
+
             return $r;
         }
-
-        
     }
 
     public function faturar($id_etapa, $id_obra, $id_historico)
@@ -204,7 +404,6 @@ class Financeiro extends model
 
 
             return $sql->execute() ? true : false;
-
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -267,7 +466,7 @@ class Financeiro extends model
             }
 
             #return $sql->execute() ? true : false;
-            
+
         } catch (PDOExecption $e) {
             $sql->rollback();
             error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
@@ -418,27 +617,25 @@ class Financeiro extends model
             if ($sql->rowCount() == 1) {
                 $row = $sql->fetch();
 
-                
-                if($row['valor_receber'] == 0){
-                    
+
+                if ($row['valor_receber'] == 0) {
+
                     $sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
                         obr.id_status 		= :id_status
     
                         WHERE (id_etapa = :id) AND (id_obra = :id_obra)
                     ");
-    
+
                     $sql->bindValue(':id',   $id_etapa);
                     $sql->bindValue(':id_obra',   $id_obra);
                     $sql->bindValue(':id_status',   RECEBIDO);
-    
+
                     return $sql->execute() ? $valor : false;
                 }
             }
 
             return true;
-      
-        
         } else {
             $sql = $this->db->prepare("UPDATE obra_etapa obr SET
 
@@ -462,7 +659,7 @@ class Financeiro extends model
             'deleteBy' => $id_user,
             'deleteDate' => date('d-m-Y'),
         ];
-        
+
         $sql = $this->db->prepare("UPDATE historico_faturamento histf SET histf.status = 1 WHERE histf.id_obra = :id_obra AND histf.histfa_id = :id_historico");
 
         $sql->bindValue(":id_obra", $id_obra);
@@ -474,14 +671,15 @@ class Financeiro extends model
             controller::setLog($Parametros, 'historico_lançamento', 'delete');
             //$this->deleteEtapasObras($id);
 
-            
+
 
         } else {
             controller::alert('error', 'não foi possivel deletar o lançamento');
         }
     }
 
-    public function getPendentesRecebido(){
+    public function getPendentesRecebido()
+    {
 
         $hoje = date('Y-m-d');
 
@@ -497,8 +695,8 @@ class Financeiro extends model
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
-      
-            $array_faturamento_fat  = $sql->fetchAll();         
+
+            $array_faturamento_fat  = $sql->fetchAll();
 
             foreach ($array_faturamento_fat as $fat) {
 
@@ -506,29 +704,27 @@ class Financeiro extends model
 
                 $vencimento =  date('Y-m-d', strtotime($data));
 
-                if($vencimento <= $hoje){
+                if ($vencimento <= $hoje) {
                     $array_faturamento[] = $fat;
                 }
             }
-
         }
 
         return $array_faturamento;
-
     }
 
     public function add($id_company, $Parametros)
-	{
+    {
 
-		$valor_proposta 		= controller::PriceSituation($Parametros['valor_proposta']);
-		$valor_desconto 		= controller::PriceSituation($Parametros['valor_desconto']);
-		$valor_negociado 		= controller::PriceSituation($Parametros['valor_negociado']);
-        $valor_custo  			= controller::PriceSituation($Parametros['valor_custo']);
-        
+        $valor_proposta         = controller::PriceSituation($Parametros['valor_proposta']);
+        $valor_desconto         = controller::PriceSituation($Parametros['valor_desconto']);
+        $valor_negociado         = controller::PriceSituation($Parametros['valor_negociado']);
+        $valor_custo              = controller::PriceSituation($Parametros['valor_custo']);
+
         $id_obra                = $Parametros['id_obra'];
         $data_envio             = isset($Parametros['data_envio']) ? $Parametros['data_envio'] : '';
 
-		try {
+        try {
             $sql = "INSERT INTO financeiro_obra SET 
 
                 id_company = :id_company,
@@ -539,29 +735,28 @@ class Financeiro extends model
                 data_envio = :data_envio,
                 id_obra = :id_obra
             ";
-            
+
             $sql = $this->db->prepare($sql);
 
             $sql->bindValue(":id_company", $id_company);
-			$sql->bindValue(":valor_proposta", $valor_proposta);
-			$sql->bindValue(":valor_negociado", $valor_negociado);
-			$sql->bindValue(":valor_desconto", $valor_desconto);
-			$sql->bindValue(":valor_custo", $valor_custo);
+            $sql->bindValue(":valor_proposta", $valor_proposta);
+            $sql->bindValue(":valor_negociado", $valor_negociado);
+            $sql->bindValue(":valor_desconto", $valor_desconto);
+            $sql->bindValue(":valor_custo", $valor_custo);
             $sql->bindValue(":data_envio", $data_envio);
-			$sql->bindValue(":id_obra", $id_obra);
-            
+            $sql->bindValue(":id_obra", $id_obra);
+
             $sql->execute() ? controller::alert('success', 'Cadastrado com sucesso') : controller::alert('error', 'erro');
-            
-		} catch (PDOExecption $e) {
-			$sql->rollback();
-			error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
-		}
+        } catch (PDOExecption $e) {
+            $sql->rollback();
+            error_log(print_r("Error!: " . $e->getMessage() . "</br>", 1));
+        }
 
-		return $this->db->lastInsertId();
-
+        return $this->db->lastInsertId();
     }
-    
-    public function verifyFinanceiroObra($id_obra){
+
+    public function verifyFinanceiroObra($id_obra)
+    {
 
         $array_fin = array();
 
@@ -573,6 +768,5 @@ class Financeiro extends model
         $sql->execute();
 
         return ($sql->rowCount() > 0) ? true : false;
-
     }
 }
