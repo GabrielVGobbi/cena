@@ -19,14 +19,14 @@ class Financeiro extends model
     }
     
 
-    public function getAllCountFinanceiroObra($id_company)
+    public function getAllCountFinanceiroObra($filtro,$id_company)
     {
-
+        $where = $this->buildWhere($filtro, $id_company);
         $r = 0;
         $sql = $this->db->prepare("  SELECT COUNT(obr.id) as c FROM financeiro_obra fin
-            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE obr.id_status = 3 AND obr.atv<>2 AND obr.id_company = :id_company
-        ");
-        $sql->bindValue(':id_company', $id_company);
+            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE " . implode(' AND ', $where) 
+        );
+        $this->bindWhere($filtro, $sql);
         $sql->execute();
 
         if ($sql->rowCount() > 0) {
@@ -62,12 +62,16 @@ class Financeiro extends model
         return $this->array;
     }
 
-    public function getAllObrasFinanceiro($id_company, $offset)
+    public function getAllObrasFinanceiro($id_company, $offset, $filtro)
     {
+		$where = $this->buildWhere($filtro, $id_company);
+
         $sql = $this->db->prepare("
             SELECT fin.valor_negociado,obr.obr_razao_social,obr.id as id_obra FROM financeiro_obra fin
-            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE obr.id_status = 3 AND obr.atv<>2 LIMIT {$offset}, 10 
+            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE " . implode(' AND ', $where) . " ORDER BY obr.obr_razao_social LIMIT {$offset}, 10 
         ");
+
+		$this->bindWhere($filtro, $sql);
 
         $sql->execute();
         $total_receber = 0;
@@ -82,8 +86,6 @@ class Financeiro extends model
                 $obr['receber']  = 0;
                 $obr['faturado'] = 0;
 
-
-
                 $id_obra = $obr['id_obra'];
 
                 $obr['recebido'] += $this->totalFaturado($id_obra, 1, RECEBIDO);
@@ -91,17 +93,100 @@ class Financeiro extends model
                 $obr['receber'] += $this->totalReceber($id_obra);
                 $obr['faturado'] += $this->totalFaturado($id_obra, 1, FATURADO);
 
-
-
                 $obrT[] = $obr;
             }
-
 
             $this->dados = $obrT;
         }
 
         return $this->dados;
     }
+
+    public function getHistoricoFaturamentoBySearch($id_company, $offset, $filtro){
+
+        $where = $this->buildWhere($filtro, $id_company);
+
+        $sql = $this->db->prepare("
+            SELECT * FROM historico_faturamento histfa
+            INNER JOIN obra obr ON (obr.id = histfa.id_obra) WHERE " . implode(' AND ', $where) . " ORDER BY obr.obr_razao_social LIMIT {$offset}, 10 
+        ");
+
+		$this->bindWhere($filtro, $sql);
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $obrT = array();
+            $this->dados = $sql->fetchAll();
+
+        }
+
+        return $this->dados;
+
+    }
+
+
+    public function getAllCountFaturamento ($filtro, $id_company)
+    {
+
+        $where = $this->buildWhere($filtro, $id_company);
+
+        $r = 0;
+        $sql = $this->db->prepare("  
+            SELECT COUNT(histfa.histfa_id) as c FROM historico_faturamento histfa
+            INNER JOIN obra obr ON (obr.id = histfa.id_obra) WHERE " . implode(' AND ', $where)
+        );
+		$this->bindWhere($filtro, $sql);
+
+        $sql->execute();
+
+        if ($sql->rowCount() > 0) {
+            $row = $sql->fetch();
+        }
+
+        $r = $row['c'];
+
+        return $r;
+    }
+
+    private function buildWhere($filtro, $id)
+	{
+		$where = array(
+			'obr.id_company=' . $id,
+			'obr.id_status=3',
+			'obr.atv<>2'
+		);
+
+		if (!empty($filtro['nome_obra'])) {
+			if ($filtro['nome_obra'] != '') {
+				$where[] = "obr.obr_razao_social LIKE :nome_obra";
+			}
+        }
+        
+        if (!empty($filtro['nf_n'])) {
+			if ($filtro['nf_n'] != '') {
+				$where[] = "histfa.nf_n LIKE :nf_n";
+			}
+		}
+
+		return $where;
+	}
+
+	private function bindWhere($filtro, &$sql)
+	{
+
+		if (!empty($filtro['nome_obra'])) {
+			if ($filtro['nome_obra'] != '') {
+				$sql->bindValue(":nome_obra", '%' . $filtro['nome_obra'] . '%');
+			}
+        }
+        
+        if (!empty($filtro['nf_n'])) {
+			if ($filtro['nf_n'] != '') {
+				$sql->bindValue(":nf_n", '%' . $filtro['nf_n'] . '%');
+			}
+		}
+		
+	}
 
     public function edit($id_company, $Parametros)
     {

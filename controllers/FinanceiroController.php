@@ -44,21 +44,29 @@ class financeiroController extends controller
             }
         }
 
+        $this->dataInfo['pageController'] = 'financeiro';
+
         $offset = (10 * ($this->dataInfo['p'] - 1));
 
-        $this->dataInfo['tableDados'] = $this->financeiro->getAllObrasFinanceiro($this->user->getCompany(), $offset);
-        
-        $this->dataInfo['getCount']   = $this->financeiro->getAllCountFinanceiroObra($this->user->getCompany());
+        $this->dataInfo['getCount']   = (isset($this->filtro['nf_n']) && $this->filtro['nf_n'] != '') ?  $this->financeiro->getAllCountFaturamento($this->filtro, $this->user->getCompany()) : $this->financeiro->getAllCountFinanceiroObra($this->filtro, $this->user->getCompany());
+
         $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 
         $this->dataInfo['tableTotal'] = $this->financeiro->totalTudo($this->user->getCompany());
 
+        if(isset($this->filtro['nf_n']) && $this->filtro['nf_n'] != ''){
+            $this->dataInfo['tableDados'] = $this->financeiro->getHistoricoFaturamentoBySearch($this->user->getCompany(), $offset, $this->filtro);
+            
+            $this->loadTemplate('financeiro/faturamento', $this->dataInfo);
+        } else {
+            
+            $this->dataInfo['tableDados'] = $this->financeiro->getAllObrasFinanceiro($this->user->getCompany(), $offset, $this->filtro);
+            
+            $this->loadTemplate('financeiro/index', $this->dataInfo);
 
+        }
 
-
-
-
-        $this->loadTemplate('financeiro/index', $this->dataInfo);
+      
 
     }
 

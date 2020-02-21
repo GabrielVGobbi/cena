@@ -315,6 +315,7 @@
     function gethistorico() {
 
         var id_obra = $('#id_obra').val();
+        var getName = '<?php echo isset($_GET['histNota']) ? $_GET['histNota'] : 'none';?>';
 
         $.getJSON(BASE_URL + 'ajax/getHistoricoFaturamento/?search=', {
             id_obra: $('#id_obra').val(),
@@ -327,8 +328,10 @@
 
                     var check = j[i].recebido_status == 1 ? 'checked' : '';
 
+                    var color = (getName == j[i].nf_n) ? 'background-color: #f98e8e;' : '';
+                    console.log(color);
 
-                    options += '<tr>';
+                    options += '<tr style="'+ color + '" >';
                     options += '<td><a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL; ?>financeiro/deleteHistoricoFaturamento/' + j[i].histfa_id + '/' + j[i].id_historico + '/<?php echo $etpF['id_obra']; ?>"><i class="ion ion-trash-a"></i></a></td>';
                     options += '<td>' + j[i].etp_nome + '</td>';
 

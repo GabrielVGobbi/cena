@@ -171,7 +171,6 @@
 
 
 		});
-
 		<?php if(isset($_GET['hist'])): ?>
 			var id = <?php echo $_GET['hist']; ?>;
 			$('#modalHistorico'+id).modal('show');

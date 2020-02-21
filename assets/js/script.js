@@ -550,6 +550,9 @@ function openChat(v) {
     if ($("#colapse").hasClass("collapsed-box")) {
         $('#chat').width('300');
         $('.chat-title').html('Chat');
+        //pisca pisca
+        $('.notificacao-mensagem').removeClass('fa-blink');
+
 
 
         $.ajax({
@@ -557,6 +560,7 @@ function openChat(v) {
             success: function (data) {
                 $('.titlemensagem').html('0');
                 $('.titlemensagem').attr('data-original-title', '0 Nova(s) Mensagen(s)');
+
 
             }
         });
@@ -613,10 +617,11 @@ function getToDo(id_user) {
                     var string = j[i].tar_descricao
                     var length = 40;
                     var trimmedString = string != null ? string.substring(0, length) + '' : '';
+                    var check = j[i].lido == 1 ? 'checked'  : '';
+                    var checked = ($('#checkToDo'+ j[i].id_not_user).is(':checked')) ? 'false' : 'true';
 
                     var obj = j[i].tar_dataJson != null ? JSON.parse(j[i].tar_dataJson) : '';
-                    var obra = obj.type != null && obj.type == 'newObra' ? BASE_URL + "obras/edit/" + obj.id_obra : '';
-                    var check = j[i].lido == 1 ? 'checked'  : '';
+                    var obra = obj.type != null && obj.type == 'newObra' ? BASE_URL + "obras/edit/" + obj.id_obra + '?visto='+checked+'&notId=' + j[i].id_not_user : '';
                     
 
                     //$json->type == 'newObra' ? BASE_URL."obras/edit/".$json->id_obra : '#'
@@ -624,7 +629,6 @@ function getToDo(id_user) {
                     options += '<li>';
                     options += ' <label class="popver_urgencia" data-target="">';   
                     if(obj.type == 'newObra'){
-                        var checked = ($('#checkToDo'+ j[i].id_not_user).is(':checked')) ? 'false' : 'true';
 
                         options += ' <a href="' + obra + '?visto='+checked+'&notId=' + j[i].id_not_user + '">';
                     }
