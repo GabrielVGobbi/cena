@@ -68,7 +68,7 @@ class Financeiro extends model
 
         $sql = $this->db->prepare("
             SELECT fin.valor_negociado,obr.obr_razao_social,obr.id as id_obra FROM financeiro_obra fin
-            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE " . implode(' AND ', $where) . " ORDER BY obr.obr_razao_social LIMIT {$offset}, 10 
+            INNER JOIN obra obr ON (obr.id = fin.id_obra) WHERE " . implode(' AND ', $where) . " ORDER BY obr.obr_razao_social 
         ");
 
 		$this->bindWhere($filtro, $sql);

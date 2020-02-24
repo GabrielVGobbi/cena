@@ -70,7 +70,6 @@ class veiculosController extends controller
 
 			$this->dataInfo['tableInfo'] = $this->veiculos->veiculoInfo;
 
-			error_log(print_r($this->dataInfo['tableInfo'],1));
 
 			$this->loadTemplate($this->dataInfo['pageController'] . "/editar", $this->dataInfo);
 

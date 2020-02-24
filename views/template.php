@@ -143,9 +143,10 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
                     <li>
                       <ul class="menu">
                         <?php if (isset($recebido) && count($recebido) > 0) : ?>
-                          <?php foreach ($recebido as $pdr) : ?>
+                          
+                          <?php foreach ($recebido as $pdr) :  ?>
                             <li>
-                              <a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $pdr['id_obra']; ?>">
+                              <a href="<?php echo BASE_URL; ?>financeiro/obra/<?php echo $pdr['id_obra']; ?>?hist=<?php echo $pdr['histf_id']?>&histNota=<?php echo $pdr['nf_n']; ?>">
                                 <h4>
                                   <?php echo ($pdr['obr_razao_social']); ?>
                                   <!--<small><i class="fa fa-clock-o"></i> 5 mins</small>-->
@@ -370,7 +371,6 @@ if (isset($viewData['tableDados']['obr_razao_social'])) {
           } else {
             $('.notificacao-mensagem').html('0');
             $('.notificacao-mensagem-header').html('Você não tem nenhuma notificação');
-            $('.notificacao-mensagem').removeClass('fa-blink');
           }
 
         }

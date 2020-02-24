@@ -220,10 +220,11 @@
                     toastr.error('o valor de lançamento não pode ser maior que o de receber');
                     $('#valor_faturamento' + id).val('0,00');
                     $(document).ready(valorReceber);
+                    console.log(total);
+
 
                 } else {
                     var total = parseInt(valor_receber) - parseInt(valor_digitado);
-
                     $("#spanValor" + id).html('R$ ' + formata(total));
                     $("#valor_receber" + id).attr('data-value', total);
 
@@ -329,7 +330,7 @@
                     var check = j[i].recebido_status == 1 ? 'checked' : '';
 
                     var color = (getName == j[i].nf_n) ? 'background-color: #f98e8e;' : '';
-                    console.log(color);
+               
 
                     options += '<tr style="'+ color + '" >';
                     options += '<td><a type="button" data-toggle="tooltip" title="" data-original-title="Deletar" class="btn btn-danger" href="<?php echo BASE_URL; ?>financeiro/deleteHistoricoFaturamento/' + j[i].histfa_id + '/' + j[i].id_historico + '/<?php echo $etpF['id_obra']; ?>"><i class="ion ion-trash-a"></i></a></td>';

@@ -3,7 +3,7 @@
 $data_hoje = date('Y-m-d h:i:s');
 
 ?>
-<div class="col-xs-7"> <h1> em teste </h1>
+<div class="col-xs-7" style="display:none"> <h1> em teste </h1>
 	<section class="content">
 
 		<!-- row -->
