@@ -8,6 +8,8 @@
 						<i class="glyphicon glyphicon-search"></i>
 					</button>
 					<a href="<?php echo BASE_URL; ?>financeiro" type="button" class="btn btn-default btn-sm"><i class="fa fa-refresh"></i></a>
+					<a href="<?php echo BASE_URL; ?>financeiro/gerarExel" type="button" class="btn btn-default btn-sm"><i class="fa fa-fw fa-file-excel-o"></i></a>
+
 				</div>
 			</div>
 		</div>

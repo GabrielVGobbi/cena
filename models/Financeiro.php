@@ -62,7 +62,7 @@ class Financeiro extends model
         return $this->array;
     }
 
-    public function getAllObrasFinanceiro($id_company, $offset, $filtro)
+    public function getAllObrasFinanceiro($id_company, $offset = 0, $filtro = array())
     {
 		$where = $this->buildWhere($filtro, $id_company);
 
@@ -841,6 +841,21 @@ class Financeiro extends model
     }
 
     public function verifyFinanceiroObra($id_obra)
+    {
+
+        $array_fin = array();
+
+        $sql = $this->db->prepare("
+            SELECT * FROM financeiro_obra WHERE id_obra = :id_obra 
+        ");
+
+        $sql->bindValue(":id_obra", $id_obra);
+        $sql->execute();
+
+        return ($sql->rowCount() > 0) ? true : false;
+    }
+
+    public function getExcel()
     {
 
         $array_fin = array();
