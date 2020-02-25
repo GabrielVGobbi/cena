@@ -25,16 +25,26 @@ foreach ($tableDados as $k) {
 	$saldo = intval($k['valor_negociado']) - intval($k['faturado']);
 	$html .= '<tr>';
 	$html .= '	<td>' . $k['obr_razao_social'] . '</td>';
-	$html .= '	<td>' . 'R$ '.' '.controller::number_format($k['valor_negociado']) . '</td>';
-	$html .= '	<td>' . 'R$ '.controller::number_format($k['receber'])  . '</td>';
-	$html .= '	<td>' . 'R$ '.controller::number_format($k['recebido'])  . '</td>';
-	$html .= '	<td>' . 'R$ '.controller::number_format($k['faturar'])  . '</td>';
-	$html .= '	<td>' . 'R$ '.controller::number_format($saldo)  . '</td>';
-
-
+	$html .= '	<td>' . controller::number_format($k['valor_negociado']) . '</td>';
+	$html .= '	<td>' . controller::number_format($k['receber'])  . '</td>';
+	$html .= '	<td>' . controller::number_format($k['recebido'])  . '</td>';
+	$html .= '	<td>' . controller::number_format($k['faturar'])  . '</td>';
+	$html .= '	<td>' . controller::number_format($saldo)  . '</td>';
 
 	$html .= '</tr>';
 }
+
+$html .= '<tr>';
+$html .= '	<td>' . 'Total' . '</td>';
+$html .= '	<td>' . $tableTotal['valor_negociado']. '</td>';
+$html .= '	<td>' . $tableTotal['valor_receber']. '</td>';
+$html .= '	<td>' . $tableTotal['recebido']. '</td>';
+$html .= '	<td>' . $tableTotal['faturar']. '</td>';
+$html .= '	<td>' . $tableTotal['saldo']. '</td>';
+
+$html .= '</tr>';
+
+
 
 
 $html .= '</table>';

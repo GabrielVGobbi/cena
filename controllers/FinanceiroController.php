@@ -171,6 +171,9 @@ class financeiroController extends controller
 
         $this->dataInfo['tableDados'] = $this->financeiro->getAllObrasFinanceiro($this->user->getCompany());
 
+        $this->dataInfo['tableTotal'] = $this->financeiro->totalTudo($this->user->getCompany());
+
+
         $this->loadView('financeiro' . "/include/gerarExcel", $this->dataInfo);
         
         exit();
