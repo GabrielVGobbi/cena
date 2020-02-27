@@ -301,7 +301,7 @@ class Obras extends model
 				$order[] = 'obr_us_li.urgencia DESC';
 			}
 		} else {
-			$sql = ("SELECT * FROM 
+			$sql = ("SELECT *, obr.id as id_obra FROM 
 				obra obr
 			");
 		}
@@ -311,7 +311,6 @@ class Obras extends model
 			INNER JOIN cliente cle ON(cle.id = obr.id_cliente)
 			INNER JOIN concessionaria con ON(con.id = obr.id_concessionaria)
 			LEFT JOIN obra_endereco obre ON (obre.id_obra_endereco = obr.id_endereco_obra)
-			LEFT JOIN obra_etapa obtp ON (obr.id = obtp.id_obra)	
 			
 			WHERE obr.id = :id AND obr.id_company = :id_company");
 		$sql = $this->db->prepare($sql);
