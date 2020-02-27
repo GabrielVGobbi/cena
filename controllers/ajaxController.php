@@ -98,7 +98,7 @@ class ajaxController extends controller
         if (isset($chat) && false !== $chat) {
 
             foreach ($chat as $chat) {
-               
+
                 setlocale(LC_TIME, 'pt_BR', 'pt_BR.utf-8', 'pt_BR.utf-8', 'portuguese');
 
                 date_default_timezone_set('America/Sao_Paulo');
@@ -106,17 +106,17 @@ class ajaxController extends controller
                 $date = new DateTime($chat['created_date']);
 
                 $data = date_format($date, 'd,M H:i:s');
-                
+
                 $right = $chat['id_user'] == $this->user->getId() ? 'right' : '';
 
                 $output .= '
-                <div class="direct-chat-msg '.$right.'" style="margin-bottom:0px">
+                <div class="direct-chat-msg ' . $right . '" style="margin-bottom:0px">
                     <div class="direct-chat-info clearfix">
-                    <span class="direct-chat-name pull-left" style="margin-top:10px"> '. $chat['login'] .'</span>
-                    <span class="direct-chat-timestamp pull-right" style="margin-top:10px"> '.$data.'</span>
+                    <span class="direct-chat-name pull-left" style="margin-top:10px"> ' . $chat['login'] . '</span>
+                    <span class="direct-chat-timestamp pull-right" style="margin-top:10px"> ' . $data . '</span>
                 </div>
                 <div class="direct-chat-text" style="margin: 1px 1px 1px 1px">
-                '. $chat['chat_mensagem'].'
+                ' . $chat['chat_mensagem'] . '
                 </div>
                 ';
             }
@@ -129,7 +129,8 @@ class ajaxController extends controller
         echo ($output);
     }
 
-    function newMensageChat(){
+    function newMensageChat()
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -142,7 +143,8 @@ class ajaxController extends controller
         exit();
     }
 
-    function getMensageNaoLidas(){
+    function getMensageNaoLidas()
+    {
 
         $u = new Users();
         $u->setLoggedUser();
@@ -155,8 +157,9 @@ class ajaxController extends controller
         exit();
     }
 
-    function lerMensagesALL(){
-       
+    function lerMensagesALL()
+    {
+
         $u = new Users();
         $u->setLoggedUser();
 
@@ -166,7 +169,6 @@ class ajaxController extends controller
 
         echo json_decode($newChat);
         exit();
-
     }
 
 
@@ -663,7 +665,7 @@ class ajaxController extends controller
 
         if (isset($_POST['id_not_user']) && !empty($_POST['id_not_user'])) {
 
-            $id = $a->checkToDo($_POST['id_not_user'],  $this->id_user,$_POST['lido'] );
+            $id = $a->checkToDo($_POST['id_not_user'],  $this->id_user, $_POST['lido']);
         }
 
         echo json_encode($id);
@@ -742,7 +744,7 @@ class ajaxController extends controller
         $id = false;
         if (isset($_GET['id_obra']) && !empty($_GET['id_obra'])) {
 
-            $id = $o->getVistoObra($_GET['id_obra'],$_GET['notId'], $this->user->getId());
+            $id = $o->getVistoObra($_GET['id_obra'], $_GET['notId'], $this->user->getId());
         }
 
         if ($id != false) {
@@ -889,24 +891,31 @@ class ajaxController extends controller
                                 break;
                         }
 
+
+
                         $fileName = mb_strimwidth($file['docs_nome'], 0, 90, "...");
                         $output .= '
-                            <li>
-                                <span class="mailbox-attachment-icon"><i class="' . $icon . '"></i></span>
-
-                                <div class="mailbox-attachment-info"  style="max-width: 29ch;
-                                overflow: hidden;
-                                text-overflow: ellipsis;
-                                white-space: nowrap;">
-                                    <a href="' . BASE_URL . 'assets/documentos/' . $file['docs_nome'] . '" target="_blank" class="mailbox-attachment-name">' . $fileName . '</a>
-                                    <span class="mailbox-attachment-size">
-                                        ' . $type . '
-                                        <a download href="' . BASE_URL . 'assets/documentos/' . $fileName . '" class="btn btn-default btn-xs pull-right"><i class="fa fa-cloud-download"></i></a>
-                                        <a download onclick="toastAlertDelete(' . $file['id_documento'] . ', ' . $id_obra . ')" class="btn btn-default btn-xs pull-right"><i class="fa fa-trash"></i></a>
-
-                                        </span>
-                                </div>
-                            </li>
+                        <div class="col-md-12">
+                        <div class="input-group" style="    width: 80%;
+                      
+                        border-bottom: 1px solid #d2d6de;
+                        margin-bottom: 6px;
+                        
+                        ">
+                        <a style="cursor:pointer" href="' . BASE_URL . 'assets/documentos/' . $file['docs_nome'] . '" target="_blank" class="mailbox-attachment-name">' . $fileName . '</a>
+                          
+                          <div class="input-group-btn">
+                          <div class="input-group-btn">
+                        <a download href="' . BASE_URL . 'assets/documentos/' . $fileName . '" target="_blank" class="btn btn-info btn-flat" data-toggle="tooltip" title="" data-original-title="Ver Documento">
+                        <i class="fa fa-cloud-download"></i>
+                        </a>
+                        <a download onclick="toastAlertDelete(' . $file['id_documento'] . ', ' . $id_obra . ')" class="btn btn-danger btn-flat" data-toggle="tooltip" title="" data-original-title="Deletar">
+                          <i class="fa fa-trash"></i>
+                        </a>
+                      </div>
+                          </div>
+                        </div>
+                      </div>
                         ';
                     }
                 }
