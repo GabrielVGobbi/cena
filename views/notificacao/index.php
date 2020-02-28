@@ -1,76 +1,54 @@
-<?php
-
-$data_hoje = date('Y-m-d h:i:s');
-
-?>
-<div class="col-xs-7" style="display:none"> <h1> em teste </h1>
-	<section class="content">
-
-		<!-- row -->
-		<div class="row">
-			<div class="col-md-12">
-				<!-- The time line -->
-				<ul class="timeline">
-
-
-					<!-- aqui -->
-
-					<li class="time-label">
-						<span class="bg-red">
-							10 Fev. 2014
-						</span>
-					</li>
-					<li>
-						<i class="fa fa-file-pdf-o bg-blue"></i>
-						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-						</div>
-					</li>
-
-					<li>
-						<i class="fa fa-file-pdf-o bg-blue"></i>
-						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-						</div>
-					</li>
-
-					<li>
-						<i class="fa fa-file-pdf-o bg-blue"></i>
-						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-						</div>
-					</li>
-
-					<li>
-						<i class="fa fa-file-pdf-o bg-blue"></i>
-						<div class="timeline-item">
-							<span class="time"><i class="fa fa-clock-o"></i> 12:05</span>
-							<h3 class="timeline-header"><a href="#">Luana Varella</a> adicionou um novo documento </h3>
-						</div>
-					</li>
-
-
-					<!-- aqui -->
+<?php if ($this->user->getId() == /*63*/46  ) : ?>
+<aside class="skeleton-aside">
+	<div class="asidenav">
+		<div class="asidenav-group">
+			<div class="asidenav-title"><b> Admin </b></div>
+			<div id="myDiv">
+				<ul>
+					<li class="navConfig active" data-id="toDo"><a href="#">Tarefas</a></li>
+					<li class="navConfig" data-id="obrNotVist"><a href="#">Obras não visualizadas</a></li>
+					<li class="navConfig" data-id="log"><a href="#">Log</a></li>
 
 				</ul>
 			</div>
 		</div>
+	</div>
+</aside>
+<?php endif; ?>
+<section class="skeleton-content hide-on-medium-and-down tela" id="toDo" style="display:">
+	<div class="col-xs-12 col-md-12">
+		<div class="box box-primary">
+			<div class="box-header ui-sortable-handle" style="cursor: ;">
+				<i class="ion ion-clipboard"></i>
+				<h3 class="box-title">Lista</h3>
+				<div class="box-tools pull-right">
+					<!--<ul class="pagination pagination-sm inline">
+					<li><a href="#">«</a></li>
+					<li><a href="#">1</a></li>
+					<li><a href="#">2</a></li>
+					<li><a href="#">3</a></li>
+					<li><a href="#">»</a></li>
+				</ul>-->
+				</div>
+			</div>
+			<div class="box-body">
+				<ul class="todo-list ui-sortable" id="toDoDiv">
 
+				</ul>
+			</div>
+			<div class="box-footer clearfix no-border">
+			</div>
+		</div>
+	</div>
+</section>
 
-
-	</section>
-</div>
-
-
-
-<div class="col-xs-5">
+<section class="skeleton-content hide-on-medium-and-down tela" id="obrNotVist" style="display:none">
+	
+<div class="col-xs-12 col-md-12">
 	<div class="box box-primary">
 		<div class="box-header ui-sortable-handle" style="cursor: ;">
 			<i class="ion ion-clipboard"></i>
-			<h3 class="box-title">Lista</h3>
+			<h3 class="box-title">Obras não visualizadas</h3>
 			<div class="box-tools pull-right">
 				<!--<ul class="pagination pagination-sm inline">
 					<li><a href="#">«</a></li>
@@ -82,113 +60,45 @@ $data_hoje = date('Y-m-d h:i:s');
 			</div>
 		</div>
 		<div class="box-body">
-			<ul class="todo-list ui-sortable" id="toDoDiv">
-				
-			</ul>
+			<?php foreach ($obrasNotVist as $obrV) : ?>
+				<?php if (isset($obrV['notificacao']) && count($obrV['notificacao']) != 0) : ?>
+					<blockquote>
+						<p><?php echo ucfirst($obrV['login']); ?></p>
+
+						<?php foreach ($obrV['notificacao'] as $userNotify) : ?>
+							<?php
+							$obra = json_decode($userNotify['tar_dataJson']);
+							$id_obra = $obra->id_obra;
+							$arrayObra = $this->obra->getObraById($id_obra);
+							if (isset($arrayObra) && count($arrayObra) > 0) :
+							?>
+								<h6>Obra não vista: <cite title="Source Title"><?php echo $arrayObra['obr_razao_social']; ?></cite></h6>
+							<?php endif; ?>
+						<?php endforeach; ?>
+
+					</blockquote>
+				<?php endif; ?>
+			<?php endforeach; ?>
 		</div>
+
+
 		<div class="box-footer clearfix no-border">
 		</div>
 	</div>
 </div>
+</section>
+
+
+
 <script>
 	$(document).ready(getToDo(<?php echo $this->user->getId() ?>));
+	$(window).on('load', function() {
+		$('.navConfig').click(function() {
+			$('.navConfig').removeClass('active');
+			$('.tela').hide();
+			$(this).addClass('active');
+			var id = $(this).attr('data-id');
+			$('#' + id).show('slow');
+		});
+	});
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<!-- <div class="box box-primary">
-		<div class="box-header with-border">
-			<h3 class="box-title">Suas Notificações</h3>
-			<div class="box-tools pull-right">
-				<div class="has-feedback">
-
-					<div class="btn-group" data-toggle="btn-toggle">
-						<button type="button" class="btn btn-default btn-sm active" data-toggle="tooltip" title="" data-original-title="Todas"><i class="fa fa-square text-green"></i>
-						</button>
-						<button type="button" class="btn btn-default btn-sm" data-toggle="tooltip" title="" data-original-title="Não lidas"><i class="fa fa-square text-red"></i></button>
-					</div>
-
-
-				</div>
-			</div>
-		</div>
-
-
-		<div class="box box-primary">
-
-			<div class="box-body" style="margin-top:20px;">
-				<ul class="todo-list">
-					<?php if (count($tableDados) > 0) : ?>
-						<?php foreach ($tableDados as $not) : ?>
-							<?php $propriedades = json_decode($not['propriedades']); ?>
-							<?php
-							$data1 = new DateTime($data_hoje);
-							$data2 = new DateTime($not['data_notificacao']);
-
-							$tempo = controller::diferenca($not['data_notificacao']);
-
-							?>
-
-							<li>
-								<a href="<?php echo $not['link']; ?>">
-									<span class="">
-										<i class="fa fa-ellipsis-v"></i>
-										<i class="fa fa-ellipsis-v"></i>
-									</span>
-									<span class="text"><?php echo $propriedades->msg; ?></span>
-									<span class="text">Por: <?php echo $not['nome_usuario']; ?></span>
-
-									<small class="label label-info"><i class="fa fa-clock-o"></i> <?php echo $tempo ?></small>
-									<div class="tools">
-										<i class="fa fa-edit"></i>
-										<i class="fa fa-trash-o"></i>
-									</div>
-								</a>
-
-							</li>
-						<?php endforeach; ?>
-					<?php else : ?>
-
-						<tr>
-							<td style="width: 50%;text-align: center;"> Não foram encontrados resultados </td>
-						</tr>
-					<?php endif; ?>
-				</ul>
-			</div>
-
-		</div>
-
-		<div class="box-footer no-padding">
-			<div class="mailbox-controls">
-				<ul class="pagination pagination-sm pull-right">
-					<?php for ($q = 1; $q <= $p_count; $q++) : ?>
-						<li class="<?php echo ($q == $p) ? 'active' : '' ?> ">
-							<a href="<?php echo BASE_URL; ?>notificacao?p=<?php $w = $_GET;
-																			$w['p'] = $q;
-																			echo http_build_query($w); ?>"><?php echo $q; ?></a>
-						</li>
-					<?php endfor; ?>
-				</ul>
-			</div>
-		</div>
-	</div>-->

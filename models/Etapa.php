@@ -308,7 +308,7 @@ class Etapa extends model
             controller::alert('danger', 'Não foi selecionado nada!!');
         }
     }
-
+    
     public function delete($id_etapa, $id_company)
     {
         $tipo = 'Deletado';
@@ -327,6 +327,36 @@ class Etapa extends model
             } else {
                 controller::alert('danger', 'Erro ao deletar!!');
             }
+        } else {
+            controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
+        }
+    }
+
+    public function deleteEtapaByIn($id_etapa)
+    {
+$certo = false;
+        #$id_etapa = implode(",", $id_etapa);
+
+        if (isset($id_etapa) && $id_etapa != '') {
+
+            for ($i=0; $i < count($id_etapa) ; $i++) { 
+                
+                $sql = $this->db->prepare("DELETE FROM obra_etapa WHERE id_etapa_obra = :id_etapa");
+                $sql->bindValue(":id_etapa", $id_etapa[$i]);
+                $certo = $sql->execute() ? true : false;
+                error_log(print_r($sql,1));
+            }
+        
+            
+            
+            # {
+            #   error_log(print_r($sql,1));
+            #   error_log(print_r($id_etapa,1));
+            #   return true;
+            # else {
+            #   return false;
+            #   controller::alert('danger', 'Erro ao deletar!!');
+            #
         } else {
             controller::alert('danger', 'Não foi selecionado nenhum arquivo!!');
         }

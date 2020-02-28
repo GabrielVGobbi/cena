@@ -25,10 +25,10 @@ $etapa = $array[0]['id_etapa_obra'] - 1;
                         <i class="fa fa-fw fa-trash"></i>
                     </button>
                 </td>
-                <td><?php echo $array[0]['responsavel']; ?></td>
-                <td><?php echo $array[0]['data_programada']; ?></td>
-                <td><?php echo $array[0]['data_iniciada']; ?></td>
-                <td><?php echo $array[0]['tempo_atividade']; ?></td>
+                    <td><?php echo $array[0]['responsavel']; ?></td>
+                    <td><?php echo $array[0]['data_programada']; ?></td>
+                    <td><?php echo $array[0]['data_iniciada']; ?></td>
+                    <td><?php echo $array[0]['tempo_atividade']; ?></td>
 
                 <td>
                     <?php if ($array[0]['parcial_check'] == 0) : ?>

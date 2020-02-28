@@ -33,13 +33,15 @@
 												<th>Saldo</th>
 											</tr>
 											<?php foreach ($tableDados as $inf) : ?>
+												<?php $saldo = intval($inf['valor_negociado']) - intval($inf['faturado']); ?>
+												<?php #if($inf['receber'] == '0' && $saldo == '0'); continue; ?>
 												<tr onclick="javascript:location.href='<?php echo BASE_URL ?>financeiro/obra/<?php echo $inf['id_obra'] ?>'">
 													<td><?php echo $inf['obr_razao_social'] ?></td>
 													<td>R$ <?php echo $inf['valor_negociado'] != '' ? controller::number_format($inf['valor_negociado']) : '0,00' ?></td>
 													<td>R$ <?php echo $inf['receber'] != '' ? controller::number_format($inf['receber']) : '0,00' ?></td>
 													<td>R$ <?php echo $inf['recebido'] != '' ? controller::number_format($inf['recebido']) : '0,00' ?></td>
 													<td>R$ <?php echo $inf['faturar'] != '' ? controller::number_format($inf['faturar']) : '0,00' ?></td>
-													<td>R$ <?php $saldo = intval($inf['valor_negociado']) - intval($inf['faturado']);echo $saldo != '' ? controller::number_format($saldo) : '0,00';?></td>
+													<td>R$ <?php echo $saldo != '' ? controller::number_format($saldo) : '0,00'; ?></td>
 												</tr>
 											<?php endforeach; ?>
 											<tr style="background: aliceblue;">
@@ -50,7 +52,7 @@
 												<td>R$ <?php echo $tableTotal['valor_receber']; ?></td>
 												<td colspan="">R$ <?php echo $tableTotal['recebido']; ?></td>
 												<td>R$ <?php echo $tableTotal['faturar']; ?></td>
-												<td>R$ <?php echo $tableTotal['saldo'];?></td>
+												<td>R$ <?php echo $tableTotal['saldo']; ?></td>
 											</tr>
 										</tbody>
 									</table>

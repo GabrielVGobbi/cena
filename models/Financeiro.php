@@ -88,11 +88,16 @@ class Financeiro extends model
 
                 $id_obra = $obr['id_obra'];
 
-                $obr['recebido'] += $this->totalFaturado($id_obra, 1, RECEBIDO);
-                $obr['faturar'] += $this->totalFaturamento($id_obra, 1, FATURAR);
-                $obr['receber'] += $this->totalReceber($id_obra);
-                $obr['faturado'] += $this->totalFaturado($id_obra, 1, FATURADO);
+                $obr['recebido']  += $this->totalFaturado($id_obra, 1, RECEBIDO);
+                $obr['faturar']   += $this->totalFaturamento($id_obra, 1, FATURAR);
+                $obr['receber']   += $this->totalReceber($id_obra);
+                $obr['faturado']  += $this->totalFaturado($id_obra, 1, FATURADO);
 
+                $saldo = intval($obr['valor_negociado']) - intval($obr['faturado']);
+
+                if($obr['receber'] == '0' && $saldo == '0' )
+                continue;
+                
                 $obrT[] = $obr;
             }
 

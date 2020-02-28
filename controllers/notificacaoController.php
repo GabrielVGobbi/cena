@@ -8,22 +8,21 @@ class NotificacaoController extends controller
         parent::__construct();
 
         $this->user = new Users();
+        $this->user->setLoggedUser();
         $this->notificacao = new Notificacao('notificacoes');
         $this->painel = new Painel();
-        $this->user->setLoggedUser();
-
         if ($this->user->isLogged() == false) {
             header("Location: " . BASE_URL . "login");
             exit();
         }
 
-
+        $this->obra = new Obras();
 
         $this->filtro = array();
         $this->dataInfo = array(
             'pageController' => 'notificacao',
             'nome_tabela'   => 'notificacoes',
-            'titlePage' => 'Notificações'
+            'titlePage' => ''
         );
     }
 
@@ -43,6 +42,9 @@ class NotificacaoController extends controller
         }
 
         $this->dataInfo['tableDados'] = $this->notificacao->getAll($this->filtro, $this->user->getCompany(), $this->user->getId());
+
+        $this->dataInfo['obrasNotVist'] = $this->notificacao->getObrasNotVist();
+
         $this->dataInfo['getCount']   = $this->notificacao->getCount($this->user->getCompany());
         $this->dataInfo['p_count']    = ceil($this->dataInfo['getCount'] / 10);
 

@@ -116,6 +116,10 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 									<h3 class="box-title title-tipo">
 										Etapas
 									</h3>
+									<button type="button" id="modoEdit" class="btn btn-box-tool new_obra"><i class="fa fa-plus-circle"></i> Modo Edição</button>
+									<button type="button" style="display:none" id="exitModoEdit" class="btn btn-box-tool new_obra"><i class="fa fa-plus-circle"></i> Sair do Modo Edição</button>
+									<button type="button" style="display:none" id="deleteSelectionEtapa" class="btn btn-box-tool new_obra"><i class="fa fa-trash"></i> Deletar Selecionados</button>
+
 									<div class="box-tools pull-right select_obras">
 
 										<div class="form-group">
@@ -219,46 +223,46 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 </div>
 
 <div class="modal" id="modalImportar" tabindex="-1" role="dialog">
-  <div class="modal-dialog" role="document">
-    <form action="<?php echo BASE_URL ?>documentos/importar" method="POST" enctype="multipart/form-data">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h2 class="modal-title text-center">Gerar Winrar</h2>
-          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-          </button>
-        </div>
-        <div class="modal-body">
+	<div class="modal-dialog" role="document">
+		<form action="<?php echo BASE_URL ?>documentos/importar" method="POST" enctype="multipart/form-data">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h2 class="modal-title text-center">Gerar Winrar</h2>
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
 
 
-          <div class="box box-danger">
-            <div class="box-header with-border">
-              <h3 class="box-title">Selecione os documentos</h3>
-            </div>
-            <div class="box-body">
-              <div class="row">
+					<div class="box box-danger">
+						<div class="box-header with-border">
+							<h3 class="box-title">Selecione os documentos</h3>
+						</div>
+						<div class="box-body">
+							<div class="row">
 
-                <div class="col-xs-12">
-                  <div class="form-group">
-                    <select class="form-control select2 select2-hidden-accessible" multiple style="width: 100%;" name="documentos[]" id="documentos" data-placeholder="Selecione os documentos">
-					<?php foreach ($documento_obra as $a) : ?>
-                        <option value="<?php echo $a['id']; ?>"><?php echo $a['docs_nome'] ?></option>
-                      <?php endforeach; ?>
-                    </select>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <!-- /.box-body -->
-          </div>
-        </div>
-        <div class="modal-footer">
-          <button type="submit" class="btn btn-primary">Aplicar</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
-        </div>
-      </div>
-    </form>
-  </div>
+								<div class="col-xs-12">
+									<div class="form-group">
+										<select class="form-control select2 select2-hidden-accessible" multiple style="width: 100%;" name="documentos[]" id="documentos" data-placeholder="Selecione os documentos">
+											<?php foreach ($documento_obra as $a) : ?>
+												<option value="<?php echo $a['id']; ?>"><?php echo $a['docs_nome'] ?></option>
+											<?php endforeach; ?>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- /.box-body -->
+					</div>
+				</div>
+				<div class="modal-footer">
+					<button type="submit" class="btn btn-primary">Aplicar</button>
+					<button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+				</div>
+			</div>
+		</form>
+	</div>
 </div>
 
 <script type="text/javascript">
@@ -500,6 +504,57 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 		$("#formobra").click(function() {
 			$("#obra").submit();
+		});
+
+
+
+		$("#deleteSelectionEtapa").on("click", function() {
+			var arr = [];
+			$("#checkMyListObra:checked").each(function() {
+				arr.push($(this).val());
+			});
+
+			$.ajax({
+
+				url: BASE_URL + 'ajax/deleteEtapaByIn',
+				type: 'POST',
+				data: {
+					id_etapa: arr,
+				},
+				dataType: 'json',
+				success: function(json) {
+					$('.icheckbox_flat-blue').css('display', '');
+					$('.popver_myList').css('display', 'none');
+					$('#modoEdit').css('display', '');
+					$('#exitModoEdit').css('display', 'none');
+					$('#deleteSelectionEtapa').css('display', 'none');
+					$(document).ready(gethistorico);
+					var alerta = (json ? toastr.success('Sucesso') : toastr.error('Deletado'));
+				},
+				error: function(xhr, ajaxOptions, thrownError) {
+					toastr.error('Erro contate o administrador');
+				}
+			});
+
+
+		});
+
+		$("#modoEdit").on("click", function() {
+			$('.icheckbox_flat-blue').css('display', 'none');
+			$('.popver_myList').css('display', '');
+			$('#deleteSelectionEtapa').css('display', '');
+			$('#modoEdit').css('display', 'none');
+			$('#exitModoEdit').css('display', '');
+
+
+		});
+		$("#exitModoEdit").on("click", function() {
+			$('.icheckbox_flat-blue').css('display', '');
+			$('.popver_myList').css('display', 'none');
+			$('#modoEdit').css('display', '');
+			$('#exitModoEdit').css('display', 'none');
+			$('#deleteSelectionEtapa').css('display', 'none');
+
 		});
 
 	});

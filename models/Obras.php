@@ -329,7 +329,7 @@ class Obras extends model
 
 	public function getInfoObraCliente($id, $id_company, $id_cliente)
 	{
-		
+
 
 		$array = array();
 
@@ -421,7 +421,7 @@ class Obras extends model
 			$sql->bindValue(":id_cliente", $Parametros['id_cliente']);
 			$sql->bindValue(":data_obra", $data);
 			$sql->bindValue(":id_concessionaria", $Parametros['concessionaria']);
-			$sql->bindValue(":descricao",$descricao);
+			$sql->bindValue(":descricao", $descricao);
 
 
 
@@ -672,7 +672,7 @@ class Obras extends model
 			$sql->bindValue(":id_departamento", $id_departamento);
 			$sql->bindValue(":obr_informacoes", $obr_informacoes);
 			$sql->bindValue(":descricao", $descricao);
-			
+
 
 			$sql->execute();
 
@@ -820,7 +820,7 @@ class Obras extends model
 			if ($sql->rowCount() == 1) {
 				$nome = $sql->fetch();
 			}
-	
+
 			return $nome['obr_razao_social'];
 		}
 	}
@@ -957,7 +957,7 @@ class Obras extends model
 		$sql->bindValue(":id_user", $id_user);
 		$sql->execute();
 
-		if($sql->rowCount() == 1){
+		if ($sql->rowCount() == 1) {
 
 			$sql = $this->db->prepare("UPDATE obra_usuario_lista SET 
 				atv = :checked
@@ -1001,12 +1001,11 @@ class Obras extends model
 		$sql->bindValue(":id_user", $id_user);
 		$sql->bindValue(":lido", $checked);
 
-		if($sql->execute())
+		if ($sql->execute())
 			return $id_not_user;
-		
 	}
 
-	
+
 
 	public function getVistoObra($id_obra, $id_not, $id_user)
 	{
@@ -1039,7 +1038,8 @@ class Obras extends model
 		return $sql->rowCount() == 1 ? $sql->fetch() : false;
 	}
 
-	public function observacoesByObra($id_obra, $id_etapa){
+	public function observacoesByObra($id_obra, $id_etapa)
+	{
 
 
 		$sql = ('SELECT * FROM observacao_usuario obsus
@@ -1055,8 +1055,18 @@ class Obras extends model
 		$sql->execute();
 
 		return $sql->rowCount() > 0 ? $sql->fetchALL() : '';
-
 	}
 
+	public function getObraById($id_obra)
+	{
+		$sql = ('
+			SELECT * FROM obra WHERE id = :id_obra AND atv = 1 LIMIT 1
+		');
 
+		$sql = $this->db->prepare($sql);
+		$sql->bindValue("id_obra", $id_obra);
+		$sql->execute();
+
+		return $sql->rowCount() > 0 ? $sql->fetch() : array();
+	}
 }

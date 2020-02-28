@@ -22,6 +22,8 @@ class obrasController extends controller
         $this->cliente = new Cliente();
         $this->concessionaria = new Concessionaria();
         $this->servico = new Servicos();
+        $this->email = new Email();
+
 
         $this->location = isset($_COOKIE['obras']) ? $_COOKIE['obras'] : 'obras';
 
@@ -43,7 +45,7 @@ class obrasController extends controller
         if ($this->user->hasPermission('obra_view')) {
             $this->dataInfo['concessionaria'] = $this->concessionaria->getAll('', $this->user->getCompany());
             $this->dataInfo['servico'] = $this->servico->getAll('0', '', $this->user->getCompany());
-            $this->dataInfo['fluid'] = true;
+
             $this->loadTemplate($this->dataInfo['pageController'] . "/lista", $this->dataInfo);
             
         } else {

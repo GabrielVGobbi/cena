@@ -64,13 +64,56 @@ class Notificacao extends model
 		return $this->array;
 	}
 
+	public function getObrasNotVist()
+	{
+		$notFy = array();
+		$sql = "
+				SELECT * FROM users WHERE id_cliente IS NULL
+			";
+
+		$sql = $this->db->prepare($sql);
+		$sql->execute();
+
+		if ($sql->rowCount() > 0) {
+			$notFy = $sql->fetchAll();
+
+			for ($i = 0; $i < count($notFy); $i++) {
+				$id_user = $notFy[$i]['id'];
+
+				$sql = "
+					SELECT * FROM notificacao_usuario notuser
+						INNER JOIN tarefas taf ON (taf.id_tarefa = notuser.id_tarefa)
+					WHERE id_user = :id_user AND lido = 0 AND notuser.id_tarefa IS NOT NULL
+				";
+
+				$sql = $this->db->prepare($sql);
+				$sql->bindValue(':id_user', $id_user);
+				$sql->execute();
+
+				if ($sql->rowCount() > 0) {
+					$arrayNotFy = $sql->fetchAll();
+					$notFy[$i]['notificacao'] = array();
+					$notFy[$i]['notificacao'] += $arrayNotFy;
+				} else {
+					$key = array_search($i, $notFy);
+					error_log(print_r($i,1));
+					error_log(print_r($notFy,1));
+
+
+					unset($key);
+				}
+			}
+		}
+		return $notFy;
+	}
+
 	private function buildWhere($filtro, $id, $id_user)
 	{
 
 		$where = array(
 			'usr.id_company=' . $id,
 			'notifu.id_user=' . $id_user,
-			'notifu.id_notificacao IS NOT NULL' 
+			'notifu.id_notificacao IS NOT NULL'
 		);
 
 		if (!empty($filtro['Notificacao'])) {
@@ -213,7 +256,7 @@ class Notificacao extends model
 	public function checkToDo($id_notificao, $id_user, $lido)
 	{
 
-		
+
 		$sql = $this->db->prepare(
 			"UPDATE notificacao_usuario SET 
 					
@@ -265,10 +308,10 @@ class Notificacao extends model
 		$nomeObra = $obr->getNameObra($Parametros['id']);
 
 		$tar_titulo = 'Nova Obra';
-		$tar_descricao = $nomeObra .' criado por '.$u->getName();
+		$tar_descricao = $nomeObra . ' criado por ' . $u->getName();
 		$tar_prioridade = 'ALTA';
 		$tar_prazo = '';
-		$tar_dataJson = json_encode($json,1);
+		$tar_dataJson = json_encode($json, 1);
 
 		try {
 			$datenow = date('Y-m-d H:i:s', strtotime('-1 Hours'));
@@ -316,7 +359,6 @@ class Notificacao extends model
 			}
 
 			return $id_tarefa;
-
 		} catch (PDOExecption $e) {
 
 			$sql->rollback();
@@ -324,7 +366,8 @@ class Notificacao extends model
 		}
 	}
 
-	public function concluirToDo($Parametros, $id_user){
+	public function concluirToDo($Parametros, $id_user)
+	{
 
 
 		$lido = $lido;
@@ -343,7 +386,5 @@ class Notificacao extends model
 		$sql->bindValue(':id_obra',   $id_obra);
 		$sql->bindValue(':id_user',   $id_user);
 		$sql->execute();
-
-
 	}
 }

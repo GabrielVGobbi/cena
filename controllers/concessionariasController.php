@@ -110,7 +110,7 @@ class concessionariasController extends controller
 
                 $result = $this->concessionaria->edit($this->user->getCompany(), $_POST, $_FILES);
 
-                $this->addValicao($result);
+                
 
                 header('Location:' . BASE_URL . $this->dataInfo['pageController'] . '/edit' . '/' . $id);
                 exit();

@@ -79,7 +79,7 @@ class servicosController extends controller
 
             if(!$validator){
 
-                $this->painel->insert($_POST, $this->dataInfo['nome_tabela'], $this->user->getCompany());
+                $this->painel->insert_painel($_POST, $this->dataInfo['nome_tabela'], $this->user->getCompany());
 
             }else {
                 controller::alert('warning', 'Já existe uma serviço com esse nome');

@@ -71,6 +71,19 @@ class ajaxController extends controller
         echo json_encode($etapa);
     }
 
+    function deleteEtapaByIn()
+    {
+
+        $u = new Users();
+        $u->setLoggedUser();
+
+        $e = new Etapa('');
+
+        $etapa = $e->deleteEtapaByIn($_POST['id_etapa']);
+
+        echo json_encode($etapa);
+    }
+
     function deleteObservacaoByObra()
     {
 

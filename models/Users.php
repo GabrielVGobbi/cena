@@ -636,4 +636,6 @@ class Users extends model
 		return $array;
 
 	}
+
+	 
 }

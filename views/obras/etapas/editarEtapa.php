@@ -91,7 +91,7 @@ $data_hoje = date('d/m');
 
 
                       <?php elseif ($array[0]['nome'] === 'COMPRA') : ?>
-                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
+                        <input type="hidden" class="form-control" name="tipo" id="compra" autocomplete="off" value="COMPRA">
 
                         <div class="col-md-12">
                           <div class="form-group">
@@ -137,7 +137,7 @@ $data_hoje = date('d/m');
                         <?php endif; ?>
 
                       <?php elseif ($array[0]['nome'] === 'CONCESSIONARIA') : ?>
-                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+                        <input type="hidden" class="form-control" name="tipo" id="CONCESSIONARIA" autocomplete="off" value="CONCESSIONARIA">
 
                         <div class="col-md-12">
                           <div class="form-group">
