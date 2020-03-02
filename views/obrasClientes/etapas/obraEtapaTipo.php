@@ -77,7 +77,7 @@ $data_hoje = date('d/m');
                                             </div>
 
                                             <div id="COMPRA" style="display: none">
-                                                <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
+                                                <input type="hidden" class="form-control" name="tipo" id="compra" autocomplete="off" value="COMPRA">
 
                                                 <div class="col-md-3">
                                                     <div class="form-group">
@@ -104,7 +104,7 @@ $data_hoje = date('d/m');
                                             </div>
 
                                             <div id="CONCESSIONARIA" style="display: none">
-                                                <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+                                                <input type="hidden" class="form-control" name="tipo" id="CONCESSIONARIA" autocomplete="off" value="CONCESSIONARIA">
 
                                                 <div class="col-md-2">
                                                     <div class="form-group">

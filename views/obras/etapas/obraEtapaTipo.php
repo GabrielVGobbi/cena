@@ -419,6 +419,8 @@ $data_hoje = date('d/m');
                     options += '     <ul class="todo-list">'
                     options += '        <li>';
                     options += '            <div class="icheckbox_flat-blue ' + checked + '" onclick="checkEtapa(' + id_etapa + ',' + check + ')" aria-checked="true" aria-disabled="false" style="position: relative;"><input id="checkEtapa" class="flat-blue" type="checkbox"  value="' + id_etapa_obra + '" style="position: absolute; opacity: 0;"><ins class="iCheck-helper" style="position: absolute; top: 0%; left: 0%; display: block; width: 100%; height: 100%; margin: 0px; padding: 0px; background: rgb(255, 255, 255); border: 0px; opacity: 0;"></ins></div>'
+                    options += '            <label class="popver_myList" style="display:none;"><input type="checkbox" id="checkMyListObra" class="checkbox_desgn red" name="etapa[]" value="' + j[i].id_etapa_obra + '"><span style="    padding: 10px 0 2px 32px;">	<span class="icon red unchecked">		<span class="mdi mdi-check blue"></span></label>'
+                    
                     options += '            <a href="javascript:;" onclick="edit_etapa(' + j[i].id_etapa_obra + ')" >';
                     options += '                <span class="text">' + etp_nome_etapa_obra + '</span>';
                     options += info;

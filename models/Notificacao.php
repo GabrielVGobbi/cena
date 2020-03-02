@@ -96,9 +96,7 @@ class Notificacao extends model
 					$notFy[$i]['notificacao'] += $arrayNotFy;
 				} else {
 					$key = array_search($i, $notFy);
-					error_log(print_r($i,1));
-					error_log(print_r($notFy,1));
-
+		
 
 					unset($key);
 				}

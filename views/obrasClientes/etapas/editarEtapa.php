@@ -70,7 +70,7 @@
 
 
                       <?php elseif ($etp['tipo'] == CONCESSIONARIA) : ?>
-                        <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="CONCESSIONARIA">
+                        <input type="hidden" class="form-control" name="tipo" id="CONCESSIONARIA" autocomplete="off" value="CONCESSIONARIA">
 
                         <div class="col-md-12">
                           <div class="form-group">

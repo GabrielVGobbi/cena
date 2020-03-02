@@ -344,10 +344,8 @@ $certo = false;
                 $sql = $this->db->prepare("DELETE FROM obra_etapa WHERE id_etapa_obra = :id_etapa");
                 $sql->bindValue(":id_etapa", $id_etapa[$i]);
                 $certo = $sql->execute() ? true : false;
-                error_log(print_r($sql,1));
             }
         
-            
             
             # {
             #   error_log(print_r($sql,1));

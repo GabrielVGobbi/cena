@@ -27,7 +27,7 @@
                                         </div>
                                         <div class="box-body" style="">
 
-                                            <input type="hidden" class="form-control" name="tipo" id="" autocomplete="off" value="COMPRA">
+                                            <input type="hidden" class="form-control" name="tipo" id="compra" autocomplete="off" value="COMPRA">
 
                                             <div class="col-md-12">
                                                 <div class="form-group">

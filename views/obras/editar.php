@@ -509,37 +509,46 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 
 		$("#deleteSelectionEtapa").on("click", function() {
+
 			var arr = [];
 			$("#checkMyListObra:checked").each(function() {
 				arr.push($(this).val());
 			});
 
-			$.ajax({
+			if (arr != '') {
 
-				url: BASE_URL + 'ajax/deleteEtapaByIn',
-				type: 'POST',
-				data: {
-					id_etapa: arr,
-				},
-				dataType: 'json',
-				success: function(json) {
-					$('.icheckbox_flat-blue').css('display', '');
-					$('.popver_myList').css('display', 'none');
-					$('#modoEdit').css('display', '');
-					$('#exitModoEdit').css('display', 'none');
-					$('#deleteSelectionEtapa').css('display', 'none');
-					$(document).ready(gethistorico);
-					var alerta = (json ? toastr.success('Sucesso') : toastr.error('Deletado'));
-				},
-				error: function(xhr, ajaxOptions, thrownError) {
-					toastr.error('Erro contate o administrador');
-				}
-			});
+				$.ajax({
+
+					url: BASE_URL + 'ajax/deleteEtapaByIn',
+					type: 'POST',
+					data: {
+						id_etapa: arr,
+					},
+					dataType: 'json',
+					success: function(json) {
+						$('.icheckbox_flat-blue').css('display', '');
+						$('.popver_myList').css('display', 'none');
+						$('#modoEdit').css('display', '');
+						$('#exitModoEdit').css('display', 'none');
+						$('#deleteSelectionEtapa').css('display', 'none');
+						$(document).ready(gethistorico);
+						var alerta = (json ? toastr.success('Sucesso') : toastr.error('Deletado'));
+					},
+					error: function(xhr, ajaxOptions, thrownError) {
+						toastr.error('Erro contate o administrador');
+					}
+				});
+			} else {
+				toastr.error('selecione alguma etapa')
+			}
+
 
 
 		});
 
 		$("#modoEdit").on("click", function() {
+			toastr.warning('CUIDADO! modo edição ativado')
+
 			$('.icheckbox_flat-blue').css('display', 'none');
 			$('.popver_myList').css('display', '');
 			$('#deleteSelectionEtapa').css('display', '');
@@ -549,6 +558,8 @@ $_GET['tipo'] = isset($_COOKIE['select_etapas']) ? $_COOKIE['select_etapas'] : '
 
 		});
 		$("#exitModoEdit").on("click", function() {
+			toastr.success('Modo edição desativado')
+
 			$('.icheckbox_flat-blue').css('display', '');
 			$('.popver_myList').css('display', 'none');
 			$('#modoEdit').css('display', '');

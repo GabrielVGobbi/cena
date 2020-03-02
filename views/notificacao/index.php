@@ -1,4 +1,4 @@
-<?php if ($this->user->getId() == /*63*/46  ) : ?>
+<?php if ($this->user->getId() == 46  ) : ?>
 <aside class="skeleton-aside">
 	<div class="asidenav">
 		<div class="asidenav-group">
